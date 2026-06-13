@@ -4,7 +4,6 @@
 **Version:** 2.0 (Post-Cleanup)
 
 ---
-
 ## 📌 Ringkasan Aplikasi
 
 **DUKOPS** adalah aplikasi web statis untuk pelaporan aktivitas militer (Babinsa) dengan fitur:
