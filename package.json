@@ -1,0 +1,15 @@
+{
+  "name": "dukops-local",
+  "version": "1.0.0",
+  "description": "Local scaffold for DUKOPS app — static server and simple build",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "start:dist": "NODE_ENV=production node server.js dist",
+    "build": "node build.js",
+    "clean": "node build.js --clean"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
