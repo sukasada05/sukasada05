@@ -957,273 +957,16 @@
             }
         }
 
-        /* ============ FLOATING CHAT WIDGET ============ */
-        .floating-chat-wrapper {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .chat-toggle-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-            animation: floatPulse 2s infinite;
-        }
-        @keyframes floatPulse {
-            0%, 100% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
-            50% { box-shadow: 0 4px 25px rgba(37, 211, 102, 0.7); }
-        }
-        .chat-toggle-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
-        }
-        .chat-toggle-btn i {
-            color: white;
-            font-size: 28px;
-        }
-        .chat-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            border: 2px solid white;
-            animation: badgePop 0.3s ease;
-        }
-        @keyframes badgePop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
-        .chat-status-indicator {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            width: 14px;
-            height: 14px;
-            background: #4CAF50;
-            border-radius: 50%;
-            border: 2px solid white;
-            animation: statusPulse 2s infinite;
-        }
-        @keyframes statusPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-            50% { box-shadow: 0 0 0 6px rgba(76, 175, 80, 0); }
-        }
-        .chat-panel {
-            position: absolute;
-            bottom: 75px;
-            right: 0;
-            width: 320px;
-            height: 420px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            animation: slideUp 0.3s ease;
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .chat-panel.active {
-            display: flex;
-        }
-        .chat-header {
-            background: linear-gradient(135deg, #075E54, #128C7E);
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-        }
-        .chat-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        .chat-header-info {
-            flex: 1;
-        }
-        .chat-header-name {
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .chat-header-status {
-            font-size: 11px;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .chat-header-status .online-dot {
-            width: 8px;
-            height: 8px;
-            background: #4CAF50;
-            border-radius: 50%;
-        }
-        .chat-close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-        .chat-close-btn:hover {
-            opacity: 1;
-        }
-        .chat-body {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: #e5ddd5;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .chat-message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            animation: msgIn 0.3s ease;
-        }
-        @keyframes msgIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .chat-message.received {
-            background: #2a2a2a;
-            color: #ffd700;
-            align-self: flex-start;
-            border-top-left-radius: 2px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .chat-message.sent {
-            background: #1a3a1a;
-            color: #ffffff;
-            align-self: flex-end;
-            border-top-right-radius: 2px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .chat-time {
-            font-size: 10px;
-            color: #4dff4d;
-            text-align: right;
-            margin-top: 3px;
-        }
-        .chat-footer {
-            padding: 10px 15px;
-            background: #f0f0f0;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            border-top: 1px solid #ddd;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-            font-size: 13px;
-            transition: border-color 0.3s;
-        }
-        .chat-input:focus {
-            border-color: #128C7E;
-        }
-        .chat-send-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #25D366;
-            border: none;
-            cursor: pointer;
-            color: white;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .chat-send-btn:hover {
-            background: #128C7E;
-            transform: scale(1.05);
-        }
-        .chat-tooltip {
-            position: absolute;
-            bottom: 70px;
-            right: 10px;
-            background: black;
-            padding: 10px 15px;
-            border-radius: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            font-size: 13px;
-            white-space: nowrap;
-            animation: tooltipIn 0.3s ease;
-            display: none;
-        }
-        .chat-tooltip::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            right: 20px;
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid white;
-        }
-        @keyframes tooltipIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media screen and (max-width: 480px) {
-            .chat-panel { width: 290px; height: 380px; right: -10px; }
-            .chat-toggle-btn { width: 50px; height: 50px; }
-            .chat-toggle-btn i { font-size: 24px; }
-        }
-
 /* ================= DUKOPS ANNOUNCEMENT BAR ================= */
 
 .dukops-announcement-bar{
     width:100%;
-    background:linear-gradient(90deg,#006400,#008000,#006400);
+    background: #transparant;
     color:#ffffff;
     overflow:hidden;
     white-space:nowrap;
     padding:10px 0;
-    border-bottom:3px solid #FFD700;
+    border-bottom:3px solid #transparant;
     box-shadow:0 2px 8px rgba(0,0,0,0.25);
     font-size:14px;
     font-weight:bold;
@@ -1248,12 +991,12 @@
 </head>
 
 <body>
-    <!-- ================= SPLASH SCREEN MODERN UDAYANA (SEMUA CENTER) ================= -->
-    <div id="splashScreen" class="splash-container-modern">
-        <div class="splash-content">
-            <div class="splash-logo-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/Lambang_Kodam_Udayana.svg"
-                    alt="Lambang Kodam Udayana">
+<!-- ================= SPLASH SCREEN MODERN UDAYANA (SEMUA CENTER) ================= -->
+ <div id="splashScreen" class="splash-container-modern">
+    <div class="splash-content">
+        <div class="splash-logo-center">
+            <img src="favicon.svg"
+                alt="Lambang Kodam Udayana">
             </div>
             <div class="splash-title-center">DUKOPS</div>
 			<div class="splash-title-center">BABINSA SUKASADA</div>
@@ -1305,7 +1048,9 @@
 
         <!-- ========== RUNNING TEXT PENERIMA PESAN DARI TELEGRAM ========== -->
         <div class="telegram-running-container">
-            <div class="telegram-running-text" id="telegramRunningMessage"></div>
+            <div class="telegram-running-text" id="telegramRunningMessage">
+                Pengiriman Ke telegram dalam perbaikan...
+            </div>
         </div>
 
         <div class="nav-buttons">
@@ -1345,7 +1090,7 @@
                 <div class="narasi-wrapper">
                     <textarea id="narasi" rows="20" placeholder="Masukkan narasi kegiatan..." oninput="checkInputCompletion()"></textarea>
                     <div class="ai-icon-corner" id="aiTemplateBtn">
-<i class="far fa-square"></i>
+                        <i class="fas fa-robot"></i>
                     </div>
                 </div>
 
@@ -1476,33 +1221,6 @@
             <div class="modal-ai-tabs" id="modalTabs"></div>
             <div class="modal-ai-body" id="modalBody"></div>
         </div>
-    </div>
-
-    <!-- ==================== FLOATING CHAT WIDGET ==================== -->
-    <div class="floating-chat-wrapper" id="floatingChat">
-        <div class="chat-tooltip" id="chatTooltip">💬 Ada yang bisa dibantu? <strong>🟢 Siap Online</strong></div>
-        <div class="chat-panel" id="chatPanel">
-            <div class="chat-header">
-                <div class="chat-avatar">🪖</div>
-                <div class="chat-header-info">
-                    <div class="chat-header-name">Admin DUKOPS</div>
-                    <div class="chat-header-status"><span class="online-dot"></span> <span id="chatOnlineText">Online Sekarang</span></div>
-                </div>
-                <button class="chat-close-btn" onclick="toggleChat()">✕</button>
-            </div>
-            <div class="chat-body" id="chatBody">
-                <div class="chat-message received">Selamat datang di DUKOPS BABINSA! Koramil 1609-05/Sukasada 🎯<br>Kami <strong>🟢 siap online</strong> 24/7.<br>Ada yang bisa kami bantu?<div class="chat-time" id="welcomeTime"></div></div>
-            </div>
-            <div class="chat-footer">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter')sendChatMessage()">
-                <button class="chat-send-btn" id="chatSendButton" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-        <button class="chat-toggle-btn" id="chatToggleBtn" onclick="toggleChat()">
-            <i class="fas fa-comment-dots"></i>
-            <span class="chat-status-indicator" title="Siap Online"></span>
-            <span class="chat-badge" id="chatBadge" style="display: none;">0</span>
-        </button>
     </div>
 
     <script>
@@ -2063,138 +1781,33 @@
     window.shareAsPNGAbsen=async function(){if(!currentDataAbsen)return;if(screenshotAreaAbsen)screenshotAreaAbsen.innerHTML=(function(){var d=currentDataAbsen,t=d.total_desa||0,p=t>0?Math.round((d.desa_lengkap/t)*100):0,tg=new Date().toLocaleDateString('id-ID'),lh='';for(var i=0;i<d.details.length;i++){var de=d.details[i],w=(de.status==='LENGKAP')?'#4caf50':((de.status==='BELUM_LENGKAP')?'#ff9800':'#f44336'),em=(de.status==='LENGKAP')?'✅':((de.status==='BELUM_LENGKAP')?'⚠️':'❌'),st=(de.status==='LENGKAP')?'LENGKAP':((de.status==='BELUM_LENGKAP')?'BL':'BELUM'),sb=(de.status==='LENGKAP')?'#e8f5e9':((de.status==='BELUM_LENGKAP')?'#fff3e0':'#ffebee');lh+='<div class="png-desa-item"><div style="width:24px;font-size:10px;">'+em+'</div><div style="flex:2;font-size:10px;font-weight:500;color:#000;">'+escapeHtmlAbsen(de.nama)+'</div><div style="width:35px;font-size:9px;text-align:center;color:#000;">'+de.jumlah_file+'/9</div><div style="width:50px;"><div style="background:#e0e0e0;border-radius:6px;height:4px;"><div style="background:'+w+';width:'+de.persentase+'%;height:4px;border-radius:6px;"></div></div></div><div style="width:45px;font-size:8px;text-align:center;padding:2px 4px;border-radius:8px;background:'+sb+';color:'+w+';">'+st+'</div></div>';} return '<div class="png-container"><div class="png-header"><div style="font-size:16px;font-weight:bold;">📊 ABSENSI DUKOPS</div><div style="font-size:8px;">Koramil Monitoring</div></div><div style="padding:10px;"><div style="text-align:center;margin-bottom:8px;"><div style="font-size:14px;font-weight:bold;color:#000;">'+(d.nama_bulan||'')+' '+(d.tahun||'')+'</div><div style="font-size:7px;color:#666;">'+tg+'</div></div><div class="png-stats"><div class="png-stat-card"><div style="font-size:12px;font-weight:bold;color:#1a73e8;">'+d.total_desa+'</div><div style="font-size:7px;">DESA</div></div><div class="png-stat-card"><div style="font-size:12px;font-weight:bold;color:#4caf50;">'+d.desa_lengkap+'</div><div style="font-size:7px;">LENGKAP</div></div><div class="png-stat-card"><div style="font-size:12px;font-weight:bold;color:#ff9800;">'+d.desa_belum_lengkap+'</div><div style="font-size:7px;">BL</div></div><div class="png-stat-card"><div style="font-size:12px;font-weight:bold;color:#f44336;">'+d.desa_belum+'</div><div style="font-size:7px;">BELUM</div></div></div><div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:8px;color:#000;"><span>PROGRESS</span><span><b>'+p+'%</b></span></div><div class="png-progress-bar"><div class="png-progress-fill" style="width:'+p+'%"></div></div></div><div style="font-size:9px;font-weight:bold;margin:6px 0 4px;color:#000;">📋 DAFTAR DESA ('+d.total_desa+')</div><div style="max-height:550px;overflow:hidden;">'+lh+'</div></div></div>'; })(); var el=screenshotAreaAbsen?screenshotAreaAbsen.firstChild:null;if(!el)return;try{var canvas=await html2canvas(el,{scale:2,backgroundColor:'#ffffff'});var link=document.createElement('a');link.download='Absensi_'+(currentDataAbsen.nama_bulan||'')+'_'+(currentDataAbsen.tahun||'')+'.png';link.href=canvas.toDataURL('image/png');link.click();}catch(e){}setTimeout(function(){if(screenshotAreaAbsen)screenshotAreaAbsen.innerHTML='';},500);};
     window.loadAbsenTahun = loadAbsenTahun; })();
     </script>
-
-    <!-- ============ SUPABASE CHAT SCRIPT (DENGAN ANTI DOUBLE CHAT) ============ -->
-    <script>
-    (function() {
-        const SUPABASE_URL = 'https://qthoexsadattfnnzcawh.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0aG9leHNhZGF0dGZubnpjYXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1NTMzNTAsImV4cCI6MjA5NjEyOTM1MH0.qZBFjrN8F8vwxoaPKIPLDQIOWbt58BNlPWLOn4J_5_4';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log('✅ Chat Supabase terhubung!');
-
-        let isChatOpen = false;
-        let unreadCount = 0;
-        let isSending = false; // ANTI DOUBLE CHAT
-
-        function getCurrentTime() { const n = new Date(); return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0'); }
-        function getUserName() { const d = document.getElementById('selectDesa'); return (d && d.value) ? d.options[d.selectedIndex].text : 'Babinsa'; }
-
-        function addMessage(text, type, timestamp, sender) {
-            const div = document.createElement('div');
-            div.className = 'chat-message ' + type;
-            const time = timestamp ? new Date(timestamp).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}) : getCurrentTime();
-            div.innerHTML = (sender && sender !== 'Admin DUKOPS' ? '<div style="font-size:10px;color:#ffd700;margin-bottom:3px;">'+sender+'</div>' : '') + text + '<div class="chat-time">'+time+'</div>';
-            document.getElementById('chatBody').appendChild(div);
-            document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
-        }
-
-        async function loadChat() {
-            try {
-                const { data, error } = await supabase.from('live_chat').select('*').order('created_at',{ascending:true}).limit(50);
-                if (error) throw error;
-                document.getElementById('chatBody').innerHTML = '';
-                if (!data || data.length === 0) {
-                    addMessage('Selamat datang di DUKOPS BABINSA! 🎯<br>Kami <strong>🟢 siap online</strong> 24/7.<br>Ada yang bisa kami bantu?', 'received', new Date().toISOString(), 'Admin DUKOPS');
-                } else {
-                    data.forEach(msg => { const isAdmin = msg.username === 'Admin DUKOPS'; addMessage(msg.message, isAdmin ? 'received' : 'sent', msg.created_at, msg.username || 'Babinsa'); });
-                }
-            } catch(e) { console.error('Gagal load chat:', e); }
-        }
-
-        window.sendChatMessage = async function() {
-            // ANTI DOUBLE CHAT - CEK JIKA SEDANG MENGIRIM
-            if (isSending) {
-                console.log('⚠️ Masih mengirim pesan sebelumnya, cegah double chat');
-                return;
-            }
-            
-            const input = document.getElementById('chatInput');
-            const sendBtn = document.getElementById('chatSendButton');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            // LOCK - CEK DOUBLE CHAT
-            isSending = true;
-            
-            // DISABLE TOMBOL SEMENTARA
-            if (sendBtn) {
-                sendBtn.disabled = true;
-                sendBtn.style.opacity = '0.5';
-                sendBtn.style.cursor = 'not-allowed';
-            }
-            
-            // DISABLE INPUT SEMENTARA
-            input.disabled = true;
-            input.style.opacity = '0.7';
-            
-            const username = getUserName();
-            addMessage(message, 'sent', new Date().toISOString(), username);
-            input.value = '';
-            
-            try { 
-                const { error } = await supabase.from('live_chat').insert([{ 
-                    username, 
-                    message, 
-                    created_at: new Date().toISOString() 
-                }]); 
-                if (error) throw error; 
-                console.log('✅ Pesan terkirim');
-            } catch(e) { 
-                console.error('Gagal kirim:', e);
-                // TAMPILKAN PESAN ERROR DI CHAT
-                addMessage('⚠️ Gagal mengirim pesan. Coba lagi.', 'received', new Date().toISOString(), 'System');
-            } finally {
-                // UNLOCK SETELAH 1 DETIK (CEGAH DOUBLE KLIK CEPAT)
-                setTimeout(() => {
-                    isSending = false;
-                    if (sendBtn) {
-                        sendBtn.disabled = false;
-                        sendBtn.style.opacity = '1';
-                        sendBtn.style.cursor = 'pointer';
-                    }
-                    input.disabled = false;
-                    input.style.opacity = '1';
-                    input.focus();
-                }, 1000);
-            }
-        };
-
-        window.toggleChat = function() {
-            isChatOpen = !isChatOpen;
-            document.getElementById('chatPanel').classList.toggle('active', isChatOpen);
-            document.getElementById('chatToggleBtn').style.transform = isChatOpen ? 'rotate(360deg)' : 'rotate(0deg)';
-            document.getElementById('chatTooltip').style.display = 'none';
-            if (isChatOpen) { 
-                unreadCount = 0; 
-                document.getElementById('chatBadge').style.display = 'none'; 
-                setTimeout(() => document.getElementById('chatInput').focus(), 300); 
-                loadChat(); 
-            }
-        };
-
-        supabase.channel('chat-realtime').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'live_chat' }, (payload) => {
-            const msg = payload.new;
-            const isAdmin = msg.username === 'Admin DUKOPS';
-            // JANGAN TAMPILKAN PESAN SENDIRI DUA KALI
-            if (msg.username === getUserName() && !isAdmin) return;
-            addMessage(msg.message, isAdmin ? 'received' : 'sent', msg.created_at, msg.username);
-            if (!isChatOpen && isAdmin) { 
-                unreadCount++; 
-                const b = document.getElementById('chatBadge'); 
-                b.style.display = 'flex'; 
-                b.textContent = unreadCount > 99 ? '99+' : unreadCount; 
-            }
-        }).subscribe();
-
-        document.getElementById('welcomeTime').textContent = getCurrentTime();
-        setTimeout(() => { document.getElementById('chatTooltip').style.display = 'block'; }, 2000);
-        setTimeout(() => { document.getElementById('chatTooltip').style.display = 'none'; }, 7000);
-        loadChat();
-        console.log('✅ Chat siap! 🟢 Siap Online - Proteksi Double Chat AKTIF');
-    })();
-    </script>
     <!-- ============ SUPABASE JADWAL INTEGRATION ============ -->
-    <script src="supabase-integration.js"></script>	
+    <script src="supabase-integration.js"></script>
+    <script>
+    // PLAY MP3 SETIAP KLIK TAB - UNIVERSAL
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (typeof window.triggerPlayMusic === 'function') {
+                    window.triggerPlayMusic();
+                }
+            });
+        });
+    });
+    </script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a30fb4f12c0871d504f8992/1jr7lbc08';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 </body>
 </html>
