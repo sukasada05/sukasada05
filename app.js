@@ -1862,8 +1862,8 @@ function updateJadwalPreview() {
     };
 
     let result = "=======================\n" +
-        "KORAMIL 1609-05/SUKASADA\n" +
-        "    JADWAL DINAS DALAM\n" +
+        "*KORAMIL 1609-05/SUKASADA*\n" +
+        "    *JADWAL DINAS DALAM*\n" +
         "=======================\n\n";
 
     const sections = [
