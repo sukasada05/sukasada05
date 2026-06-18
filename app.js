@@ -1934,10 +1934,10 @@ function updateJadwalPreview() {
     });
 
     if (JadwalData.currentHanpangan) {
-        result += "- Jadwal Hanpangan hari ini : " + JadwalData.currentHanpangan + "\n\n";
+        result += "*🌾Jadwal Hanpangan hari ini :* " + JadwalData.currentHanpangan + "\n\n";
     }
 
-    result += "Demikian MMP.";
+    result += "*Demikian MMP.*";
 
     document.getElementById('j_hasilPesan').value = result;
 }
