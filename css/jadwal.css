@@ -49,6 +49,7 @@
 
 /* ================================================================
    SUPERPOWER CENTER - SEMUA LABEL PASTI TENGAH
+   (kecuali textarea preview, biar rata kiri)
    ================================================================ */
 .jadwal-section,
 .jadwal-section *,
@@ -138,7 +139,7 @@ h3.section-title-makodim {
 }
 
 /* ================================================================
-   BOX OUTPUT PESAN
+   BOX OUTPUT PESAN (PREVIEW) - TETAP RATA KIRI SEPERTI AWAL
    ================================================================ */
 #j_hasilPesanBaru {
     width: 100%;
@@ -155,6 +156,7 @@ h3.section-title-makodim {
     margin-top: 10px;
     white-space: pre-wrap;
     overflow-y: auto;
+    text-align: left !important;   /* ✅ PENGECUALIAN: preview tetap rata kiri */
 }
 
 #j_hasilPesanBaru:focus {
