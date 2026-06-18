@@ -1,0 +1,91 @@
+/* ================= BUTTONS ================= */
+button {
+    margin-top: 20px;
+    padding: 12px 15px;
+    background: #2b4d2b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+button:hover:not(:disabled) {
+    background: #3e704a;
+}
+
+button:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.action-buttons button {
+    width: auto;
+    flex: 1;
+    min-width: 140px;
+}
+
+/* ================= SHARE ICONS ================= */
+.share-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.share-icons i {
+    font-size: 24px;
+}
+
+/* ================= INSTALL BUTTON ================= */
+#installButton {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+#installButton:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.fa-spin {
+    animation: spin 1s infinite linear;
+}
+
+/* ================= LOG BUTTON ================= */
+.log-btn {
+    background: #3498db;
+    border: none;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.log-btn:hover {
+    background: #2980b9;
+}

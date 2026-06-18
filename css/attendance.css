@@ -1,0 +1,137 @@
+/* ================= ATTENDANCE PANEL ================= */
+#showAttendanceBtn {
+    background: #3a4f41;
+    margin-top: 10px;
+}
+
+#showAttendanceBtn:hover {
+    background: #4a6f5a;
+}
+
+#attendancePanel {
+    margin-top: 20px;
+    background: #1d1f1d;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #3a4f41;
+}
+
+.attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3a4f41;
+}
+
+.attendance-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.attendance-filters select,
+.attendance-filters input {
+    flex: 1;
+}
+
+.attendance-filters button {
+    margin-top: 5px;
+    padding: 8px 15px;
+    width: auto;
+}
+
+.attendance-summary {
+    background: #2a3a2e;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.progress-container {
+    background: #333;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s;
+}
+
+.desa-card {
+    background: #2a3a2e;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border-left: 4px solid #4CAF50;
+}
+
+.desa-card.incomplete {
+    border-left-color: #FF9800;
+}
+
+.desa-header {
+    padding: 10px 15px;
+    background: #3a4f41;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.desa-name {
+    font-weight: bold;
+    color: #9fd49f;
+    font-size: 16px;
+}
+
+.desa-count {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.desa-files {
+    padding: 10px 15px;
+    max-height: none;
+    overflow-y: visible;
+}
+
+.file-link {
+    color: #b2d8b2;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.attendance-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.attendance-actions button {
+    flex: 1;
+    margin-top: 0;
+    padding: 10px;
+}
+
+/* ================= CANVAS ================= */
+canvas {
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    border: 1px solid #444;
+    background: #000;
+}

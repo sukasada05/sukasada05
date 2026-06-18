@@ -1,0 +1,39 @@
+/* ================================================================
+   MAIN.CSS - Import Semua File CSS Modular
+   ================================================================ */
+
+/* Base & Reset */
+@import url('base.css');
+
+/* Splash Screen */
+@import url('splash.css');
+
+/* Navigation */
+@import url('navigation.css');
+
+/* Header */
+@import url('header.css');
+
+/* Form Elements */
+@import url('form.css');
+
+/* Buttons */
+@import url('buttons.css');
+
+/* Notifications */
+@import url('notification.css');
+
+/* Jadwal Piket */
+@import url('jadwal.css');
+
+/* Attendance */
+@import url('attendance.css');
+
+/* Popup */
+@import url('popup.css');
+
+/* LED Effects */
+@import url('led-effects.css');
+
+/* Responsive */
+@import url('responsive.css');

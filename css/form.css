@@ -1,0 +1,97 @@
+/* ================= FORM ELEMENTS ================= */
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #b2d8b2;
+}
+
+select,
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: none;
+    background: #333;
+    color: #f5f5f5;
+    font-size: 16px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.counter-value {
+    font-size: 60px;
+    font-weight: bold;
+    color: #9fd49f;
+}
+
+.previewBox {
+    font-size: 14px;
+    color: #a5a5a5;
+    margin-top: 5px;
+    min-height: 1em;
+}
+
+/* ================= ROW & COL ================= */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.col {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ================= TELEGRAM GROUP SELECTOR ================= */
+.telegram-group-selector {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(0, 80, 0, 0.5);
+    border-radius: 5px;
+    border-left: 3px solid #0088cc;
+}
+
+.telegram-group-selector label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #00ccff;
+}
+
+.telegram-group-selector select {
+    background-color: rgba(0, 40, 0, 0.8);
+    color: #e6ffe6;
+    border: 1px solid #0088cc;
+}
+
+/* ================= SECTION CONTENT ================= */
+.section-content {
+    display: block;
+}
+
+@media screen and (min-width: 601px) {
+    .section-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    .section-content>div {
+        flex: 1;
+        min-width: 250px;
+    }
+}
+
+.app-loading {
+    text-align: center;
+    padding: 10px;
+    color: #4dff4d;
+    display: none;
+}
