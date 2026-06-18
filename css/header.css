@@ -1,35 +1,54 @@
-/* ================= HEADER ================= */
-.header-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #3a4f41;
+/* ================= COUNTER STYLE ================= */
+.counter-value {
+    /* === POSISI === */
+    display: inline-block;
+    text-align: center;
+    
+    /* === UKURAN FONT === */
+    font-size: 18px;          /* Ubah: 14px, 16px, 18px, 20px, 24px, 30px, 40px, 60px */
+    
+    /* === WARNA FONT === */
+    color: #ffcc00;           /* Ubah: #ffcc00 (kuning), #FFD700 (emas), #ffffff (putih), #4CAF50 (hijau), #ff0000 (merah), #00ccff (biru) */
+    
+    /* === BACKGROUND === */
+    background: rgba(0, 0, 0, 0.5);  /* Ubah: rgba(0,0,0,0.5) gelap transparan, #1a472a hijau, #333 abu-abu, transparent */
+    
+    /* === BORDER === */
+    border: 2px solid #ffcc00;       /* Ubah: 2px solid #ffcc00, none, 1px solid #4CAF50 */
+    border-radius: 20px;             /* Ubah: 0 (kotak), 5px, 10px, 20px, 50px (oval) */
+    
+    /* === PADDING (ruang dalam) === */
+    padding: 5px 18px;              /* Ubah: 2px 10px, 8px 20px, 10px 30px */
+    
+    /* === MARGIN (jarak luar) === */
+    margin-top: 8px;                /* Ubah: 0, 5px, 10px, 15px */
+    
+    /* === FONT LAINNYA === */
+    font-weight: bold;              /* Ubah: normal, bold, 900 */
+    font-family: 'Courier New', monospace;  /* Ubah: Arial, 'Segoe UI', 'Times New Roman' */
+    letter-spacing: 1px;            /* Ubah: 0, 1px, 2px, 3px */
+    
+    /* === SHADOW (bayangan) === */
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);  /* Ubah: 0 0 10px rgba(255,204,0,0.3), none */
+    text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);  /* Ubah: none, 0 0 5px #ffcc00 */
+    
+    /* === TRANSISI (animasi halus) === */
+    transition: all 0.3s ease;
 }
 
-.header-image {
-    height: 150px;
-    width: 150px;
-    border: 1px solid #3a4f41;
-    border-radius: 5px;
-    object-fit: contain;
+/* Hover effect - saat mouse di atas counter */
+.counter-value:hover {
+    transform: scale(1.1);          /* Ubah: scale(1.1), scale(1.2), none */
+    background: rgba(255, 204, 0, 0.2);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
 }
 
-.header-text {
-    flex: 1;
-    min-width: 0;
+/* Animasi berdenyut (opsional) */
+.counter-value.pulse {
+    animation: counterPulse 2s ease-in-out infinite;
 }
 
-.header-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: #b2d8b2;
-    line-height: 1.3;
-}
-
-.header-subtitle {
-    font-size: 12px;
-    margin-top: 5px;
-    color: #9fd49f;
+@keyframes counterPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
