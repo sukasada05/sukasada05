@@ -68,46 +68,73 @@
    HEADING JADWAL - STYLE UPGRADE
    ================================================================ */
 .jadwal-section h3 {
-    margin: 4px 0 12px 0 !important;
+    margin: 8px 0 12px 0 !important;
     font-size: 16px !important;
     font-weight: 700 !important;
     letter-spacing: 1px !important;
     text-align: center !important;
     text-transform: uppercase;
+    display: block !important;
+    width: 100% !important;
 }
 
 /* ================================================================
-   WARNA LABEL DIBEDAKAN TAJAM
+   WARNA LABEL DIBEDAKAN TAJAM (DENGAN GLOW)
    ================================================================ */
 
 /* 🟢 PIKET KORAMIL - HIJAU TERANG */
 .section-title-koramil,
-h3.section-title-koramil,
-.jadwal-section:nth-of-type(1) h3,
-.jadwal-section:has(h3:contains("Koramil")) h3,
-div:has(> h3:contains("Koramil")) h3 {
+h3.section-title-koramil {
     color: #4dff4d !important;
-    text-shadow: 0 0 15px rgba(77, 255, 77, 0.3);
+    text-shadow: 0 0 15px rgba(77, 255, 77, 0.4);
 }
 
 /* 🟡 JAGA KEDIAMAN - EMAS */
 .section-title-kediaman,
-h3.section-title-kediaman,
-.jadwal-section:nth-of-type(2) h3,
-.jadwal-section:has(h3:contains("Kediaman")) h3,
-div:has(> h3:contains("Kediaman")) h3 {
+h3.section-title-kediaman {
     color: #FFD700 !important;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 /* 🔵 PIKET MAKODIM - BIRU ELEKTRIK */
 .section-title-makodim,
-h3.section-title-makodim,
-.jadwal-section:nth-of-type(3) h3,
-.jadwal-section:has(h3:contains("Makodim")) h3,
-div:has(> h3:contains("Makodim")) h3 {
+h3.section-title-makodim {
     color: #00ccff !important;
-    text-shadow: 0 0 15px rgba(0, 204, 255, 0.3);
+    text-shadow: 0 0 15px rgba(0, 204, 255, 0.4);
+}
+
+/* ================================================================
+   ROW DAN COL UNTUK SELECT (TETAP RAPI)
+   ================================================================ */
+.jadwal-section .section-content {
+    display: block;
+    width: 100%;
+}
+
+.jadwal-section .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.jadwal-section .col {
+    flex: 1 1 140px;
+    max-width: 200px;
+    text-align: center;
+}
+
+.jadwal-section select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #0f1f0f;
+    color: #e0ffe0;
+    border: 1px solid rgba(76, 175, 80, 0.25);
+    font-size: 13px;
+    cursor: pointer;
+    outline: none;
 }
 
 /* ================================================================
@@ -148,5 +175,8 @@ div:has(> h3:contains("Makodim")) h3 {
     }
     .jadwal-title {
         font-size: 18px;
+    }
+    .jadwal-section .col {
+        min-width: 120px;
     }
 }
