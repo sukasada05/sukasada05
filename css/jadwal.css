@@ -1,5 +1,5 @@
 /* ================================================================
-   JADWAL.CSS - JADWAL PIKET
+   JADWAL.CSS - JADWAL PIKET (UPGRADED)
    ================================================================ */
 
 .jadwal-header {
@@ -52,14 +52,23 @@
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.5px;
+    text-align: center;   /* ✅ SEMUA LABEL JADWAL AUTO CENTER */
 }
 
-.section-title-koramil { color: #4dff4d; }
-text-align: center; 
-.section-title-kediaman { color: #FFD700; }
-text-align: center; 
-.section-title-makodim { color: #00ccff; }
-text-align: center; 
+.section-title-koramil {
+    color: #4dff4d;
+    text-align: center;
+}
+
+.section-title-kediaman {
+    color: #FFD700;
+    text-align: center;
+}
+
+.section-title-makodim {
+    color: #00ccff;
+    text-align: center;
+}
 
 #j_hasilPesanBaru {
     width: 100%;
