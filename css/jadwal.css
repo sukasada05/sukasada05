@@ -55,8 +55,11 @@
 }
 
 .section-title-koramil { color: #4dff4d; }
+text-align: center; 
 .section-title-kediaman { color: #FFD700; }
+text-align: center; 
 .section-title-makodim { color: #00ccff; }
+text-align: center; 
 
 #j_hasilPesanBaru {
     width: 100%;
