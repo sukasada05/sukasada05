@@ -131,15 +131,9 @@
         font-size: 12px;
     }
     
-    .telegram-running-container {
-        padding: 8px 14px;
-        border-radius: 30px;
-    }
-    
-    .telegram-running-text {
-        font-size: 11px;
-        animation-duration: 12s;
-    }
+    /* ================================================================
+       TELEGRAM RESPONSIVE - DIHAPUS
+       ================================================================ */
     
     .dukops-announcement-bar {
         font-size: 10px;

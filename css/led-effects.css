@@ -1,0 +1,440 @@
+/* ================================================================
+   LED-EFFECTS.CSS - LED EFFECTS UNTUK JUDUL
+   ================================================================ */
+
+/* ================================================================
+   1. LED JUDUL UTAMA - EFFECT BERKEDIP
+   ================================================================ */
+.led-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-family: 'Courier New', 'Segoe UI', monospace;
+    text-align: center;
+    padding: 15px 20px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    border-radius: 16px;
+    border: 2px solid rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.05);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* LED Border Animasi */
+.led-title::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        #ff0000, #ff8800, #ffff00, #00ff00, 
+        #0088ff, #8800ff, #ff00ff, #ff0000
+    );
+    background-size: 300% 100%;
+    animation: ledBorderMove 3s linear infinite;
+}
+
+@keyframes ledBorderMove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 300% 0%; }
+}
+
+/* LED Letter Effect */
+.led-title .led-char {
+    display: inline-block;
+    animation: ledBlinkChar 0.8s ease-in-out infinite alternate;
+    padding: 0 2px;
+}
+
+.led-title .led-char:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+.led-title .led-char:nth-child(3n) {
+    animation-delay: 0.3s;
+}
+
+.led-title .led-char:nth-child(5n+2) {
+    animation-delay: 0.5s;
+}
+
+@keyframes ledBlinkChar {
+    0% { 
+        opacity: 0.4; 
+        text-shadow: 0 0 5px currentColor;
+    }
+    100% { 
+        opacity: 1; 
+        text-shadow: 
+            0 0 10px currentColor,
+            0 0 20px currentColor,
+            0 0 40px currentColor;
+    }
+}
+
+/* Warna LED untuk judul */
+.led-title-red .led-char { color: #ff0000; }
+.led-title-green .led-char { color: #00ff00; }
+.led-title-blue .led-char { color: #0088ff; }
+.led-title-gold .led-char { color: #ffd700; }
+.led-title-cyan .led-char { color: #00ffff; }
+.led-title-magenta .led-char { color: #ff00ff; }
+.led-title-orange .led-char { color: #ff8800; }
+.led-title-white .led-char { color: #ffffff; }
+.led-title-rainbow .led-char {
+    animation: rainbowColors 2s linear infinite;
+}
+
+@keyframes rainbowColors {
+    0% { color: #ff0000; }
+    17% { color: #ff8800; }
+    33% { color: #ffff00; }
+    50% { color: #00ff00; }
+    67% { color: #0088ff; }
+    83% { color: #8800ff; }
+    100% { color: #ff0000; }
+}
+
+/* ================================================================
+   2. LED JUDUL SUB - EFFECT SCROLLING
+   ================================================================ */
+.led-subtitle-scroll {
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 10px 0;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.06);
+}
+
+.led-subtitle-scroll .scroll-text {
+    display: inline-block;
+    animation: ledScroll 12s linear infinite;
+    padding-right: 50px;
+}
+
+@keyframes ledScroll {
+    0% { transform: translateX(100%); }
+    50% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
+.led-subtitle-scroll:hover .scroll-text {
+    animation-play-state: paused;
+}
+
+/* ================================================================
+   3. LED GLOW EFFECT - UNTUK HEADER
+   ================================================================ */
+.led-glow-header {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    padding: 12px 20px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: ledGlowPulse 1.5s ease-in-out infinite;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.led-glow-header.glow-red { color: #ff0000; text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 80px #ff0000; }
+.led-glow-header.glow-green { color: #00ff00; text-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00, 0 0 80px #00ff00; }
+.led-glow-header.glow-gold { color: #ffd700; text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 80px #ffd700; }
+.led-glow-header.glow-blue { color: #0088ff; text-shadow: 0 0 20px #0088ff, 0 0 40px #0088ff, 0 0 80px #0088ff; }
+.led-glow-header.glow-cyan { color: #00ffff; text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 80px #00ffff; }
+.led-glow-header.glow-magenta { color: #ff00ff; text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 80px #ff00ff; }
+.led-glow-header.glow-orange { color: #ff8800; text-shadow: 0 0 20px #ff8800, 0 0 40px #ff8800, 0 0 80px #ff8800; }
+.led-glow-header.glow-white { color: #ffffff; text-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 0 0 80px rgba(255,255,255,0.3); }
+
+@keyframes ledGlowPulse {
+    0% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 0.8; transform: scale(1); }
+}
+
+/* ================================================================
+   4. LED MATRIX EFFECT - HURUF BERGERAK
+   ================================================================ */
+.led-matrix {
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    padding: 15px 20px;
+    background: #000;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 0, 0.1);
+    color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    letter-spacing: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.led-matrix::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.05), transparent);
+    animation: matrixScan 3s ease-in-out infinite;
+}
+
+@keyframes matrixScan {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+/* ================================================================
+   5. LED NEON EFFECT - BORDER BERCAHAYA
+   ================================================================ */
+.led-neon-box {
+    padding: 15px 25px;
+    border-radius: 16px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.4);
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.led-neon-box.neon-red {
+    color: #ff0000;
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.2), inset 0 0 20px rgba(255, 0, 0, 0.05);
+    animation: neonPulseRed 1.5s ease-in-out infinite;
+}
+
+.led-neon-box.neon-green {
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2), inset 0 0 20px rgba(0, 255, 0, 0.05);
+    animation: neonPulseGreen 1.5s ease-in-out infinite;
+}
+
+.led-neon-box.neon-gold {
+    color: #ffd700;
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
+    animation: neonPulseGold 1.5s ease-in-out infinite;
+}
+
+.led-neon-box.neon-blue {
+    color: #0088ff;
+    border: 2px solid #0088ff;
+    box-shadow: 0 0 20px rgba(0, 136, 255, 0.2), inset 0 0 20px rgba(0, 136, 255, 0.05);
+    animation: neonPulseBlue 1.5s ease-in-out infinite;
+}
+
+.led-neon-box.neon-rainbow {
+    border: 2px solid transparent;
+    background: linear-gradient(#000, #000) padding-box,
+                linear-gradient(90deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff, #ff0000) border-box;
+    animation: neonPulseRainbow 2s ease-in-out infinite;
+}
+
+@keyframes neonPulseRed {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.2), inset 0 0 20px rgba(255, 0, 0, 0.05); }
+    50% { box-shadow: 0 0 40px rgba(255, 0, 0, 0.4), inset 0 0 40px rgba(255, 0, 0, 0.1); }
+}
+
+@keyframes neonPulseGreen {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.2), inset 0 0 20px rgba(0, 255, 0, 0.05); }
+    50% { box-shadow: 0 0 40px rgba(0, 255, 0, 0.4), inset 0 0 40px rgba(0, 255, 0, 0.1); }
+}
+
+@keyframes neonPulseGold {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05); }
+    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.4), inset 0 0 40px rgba(255, 215, 0, 0.1); }
+}
+
+@keyframes neonPulseBlue {
+    0%, 100% { box-shadow: 0 0 20px rgba(0, 136, 255, 0.2), inset 0 0 20px rgba(0, 136, 255, 0.05); }
+    50% { box-shadow: 0 0 40px rgba(0, 136, 255, 0.4), inset 0 0 40px rgba(0, 136, 255, 0.1); }
+}
+
+@keyframes neonPulseRainbow {
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.3); }
+    17% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.3); }
+    33% { box-shadow: 0 0 30px rgba(255, 255, 0, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.3); }
+    67% { box-shadow: 0 0 30px rgba(0, 136, 255, 0.3); }
+    83% { box-shadow: 0 0 30px rgba(136, 0, 255, 0.3); }
+}
+
+/* ================================================================
+   6. LED KETIK (TYPEWRITER) EFFECT
+   ================================================================ */
+.led-typewriter {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: #00ff00;
+    text-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    text-align: center;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 0, 0.06);
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.led-typewriter .type-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background: #00ff00;
+    animation: cursorBlink 0.8s step-end infinite;
+    vertical-align: text-bottom;
+    margin-left: 2px;
+}
+
+@keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ================================================================
+   7. LED SPARKLE EFFECT
+   ================================================================ */
+.led-sparkle {
+    font-size: 2.2rem;
+    font-weight: 900;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+}
+
+.led-sparkle .sparkle-char {
+    display: inline-block;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.led-sparkle .sparkle-char:nth-child(odd) { animation-delay: 0.1s; }
+.led-sparkle .sparkle-char:nth-child(3n) { animation-delay: 0.3s; }
+.led-sparkle .sparkle-char:nth-child(5n+2) { animation-delay: 0.5s; }
+.led-sparkle .sparkle-char:nth-child(7n+4) { animation-delay: 0.7s; }
+
+@keyframes sparkle {
+    0%, 100% { 
+        opacity: 0.3; 
+        text-shadow: 0 0 5px currentColor;
+        transform: scale(0.9);
+    }
+    50% { 
+        opacity: 1; 
+        text-shadow: 
+            0 0 15px currentColor,
+            0 0 30px currentColor;
+        transform: scale(1.05);
+    }
+}
+
+.led-sparkle.sparkle-gold .sparkle-char { color: #ffd700; }
+.led-sparkle.sparkle-red .sparkle-char { color: #ff0000; }
+.led-sparkle.sparkle-green .sparkle-char { color: #00ff00; }
+.led-sparkle.sparkle-blue .sparkle-char { color: #0088ff; }
+.led-sparkle.sparkle-rainbow .sparkle-char {
+    animation: sparkleRainbow 2s linear infinite;
+}
+
+@keyframes sparkleRainbow {
+    0% { color: #ff0000; }
+    17% { color: #ff8800; }
+    33% { color: #ffff00; }
+    50% { color: #00ff00; }
+    67% { color: #0088ff; }
+    83% { color: #8800ff; }
+    100% { color: #ff0000; }
+}
+
+/* ================================================================
+   8. RESPONSIVE
+   ================================================================ */
+@media (max-width: 768px) {
+    .led-title {
+        font-size: 1.8rem;
+        padding: 10px 15px;
+        letter-spacing: 2px;
+    }
+    .led-glow-header {
+        font-size: 1.5rem;
+        padding: 10px 15px;
+    }
+    .led-neon-box {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+    }
+    .led-matrix {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+    }
+    .led-typewriter {
+        font-size: 1.3rem;
+        padding: 10px 15px;
+    }
+    .led-sparkle {
+        font-size: 1.5rem;
+        padding: 10px 15px;
+    }
+    .led-subtitle-scroll {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .led-title {
+        font-size: 1.4rem;
+        padding: 8px 12px;
+        letter-spacing: 1px;
+    }
+    .led-glow-header {
+        font-size: 1.2rem;
+        padding: 8px 12px;
+    }
+    .led-neon-box {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+    .led-matrix {
+        font-size: 1rem;
+        padding: 8px 12px;
+        letter-spacing: 3px;
+    }
+    .led-typewriter {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+    .led-sparkle {
+        font-size: 1.2rem;
+        padding: 8px 12px;
+        letter-spacing: 2px;
+    }
+}
