@@ -1,159 +1,340 @@
-/* ================= RESPONSIVE ================= */
-@media (max-width: 600px) {
-    .jadwal-btn {
-        min-width: 200px;
-        max-width: 100%;
-        padding: 20px;
-    }
+/* ================================================================
+   RESPONSIVE.CSS - RESPONSIVE
+   ================================================================ */
 
-    .jadwal-toast {
-        white-space: normal;
-        width: 90%;
-        bottom: 100px;
-        font-size: 11px;
+@media (max-width: 768px) {
+    .container {
+        padding: 14px;
+        border-radius: 14px;
+        margin: 10px;
     }
-
-    .update-status-badge {
-        font-size: 7px;
-        padding: 2px 6px;
-        top: -6px;
-    }
-
-    .led-letter {
-        font-size: 18px;
-        padding: 0 2px;
-    }
-
-    .led-running-text {
-        animation-duration: 8s;
-    }
-
-    .knight-rider-text {
-        font-size: 12px;
-    }
-
-    .knight-rider-container {
-        padding: 8px 15px;
-    }
-
-    .splash-title {
-        font-size: 24px;
-    }
-
-    .splash-subtitle {
-        font-size: 14px;
-    }
-
-    .splash-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .splash-btn {
-        min-height: 80px;
-        width: 100%;
-    }
-
-    .splash-btn i {
-        font-size: 32px;
-    }
-
-    .nav-buttons {
-        flex-wrap: wrap;
-    }
-
-    .nav-btn {
-        font-size: 12px;
-        padding: 10px 8px;
-        flex: 1 1 30%;
-    }
-
-    .header-container {
+    
+    .dukops-header-row {
         flex-direction: column;
         text-align: center;
+        gap: 12px;
     }
-
-    .header-image {
-        width: 100px;
-        height: 100px;
+    
+    .dukops-title-area {
+        text-align: center;
     }
-
-    .action-buttons button {
-        min-width: 100px;
-        font-size: 12px;
+    
+    .dukops-profile-area {
+        width: 80px;
     }
-
-    .container {
-        padding: 12px;
+    
+    .dukops-profile-img {
+        height: 70px;
     }
-
-    .attendance-filters {
-        flex-direction: column;
+    
+    .dukops-header-title {
+        font-size: 16px;
     }
-
-    .attendance-actions {
-        flex-direction: column;
+    
+    .dukops-header-title:last-of-type {
+        font-size: 13px;
     }
-
+    
+    .nav-buttons {
+        gap: 6px;
+        padding: 4px;
+    }
+    
+    .nav-btn {
+        font-size: 11px;
+        padding: 10px 12px;
+    }
+    
+    .nav-btn i {
+        font-size: 14px;
+    }
+    
+    .absen-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .splash-title-center {
+        font-size: 26px;
+    }
+    
+    .splash-title-center:last-of-type {
+        font-size: 18px;
+    }
+    
     .thankyou-content {
-        padding: 20px;
-        width: 95%;
+        padding: 24px;
+        width: 92%;
     }
 }
 
-@media (max-width: 400px) {
-    .nav-btn {
-        font-size: 10px;
-        padding: 8px 4px;
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+        border-radius: 12px;
+        margin: 6px;
+    }
+    
+    .dukops-header {
+        padding: 12px 14px;
+    }
+    
+    .dukops-profile-area {
+        width: 70px;
+        padding: 4px;
+    }
+    
+    .dukops-profile-img {
+        height: 60px;
+    }
+    
+    .dukops-profile-name {
+        font-size: 9px;
+    }
+    
+    .dukops-header-title {
+        font-size: 14px;
+    }
+    
+    .dukops-header-title:last-of-type {
+        font-size: 12px;
+    }
+    
+    .dukops-header-address {
+        font-size: 9px;
+    }
+    
+    .audio-control-wrapper {
+        padding: 2px 8px;
+    }
+    
+    .audio-volume-slider {
+        width: 60px;
+    }
+    
+    .counter-value {
+        font-size: 14px;
+        padding: 1px 10px;
+    }
+    
+    .nav-buttons {
+        flex-wrap: wrap;
         gap: 4px;
     }
-
+    
+    .nav-btn {
+        font-size: 10px;
+        padding: 8px 10px;
+        flex: 1 1 30%;
+    }
+    
     .nav-btn i {
         font-size: 12px;
     }
-
-    .splash-title {
-        font-size: 20px;
+    
+    .telegram-running-container {
+        padding: 8px 14px;
+        border-radius: 30px;
     }
-
-    .splash-circle {
-        width: 120px;
-        height: 120px;
+    
+    .telegram-running-text {
+        font-size: 11px;
+        animation-duration: 12s;
     }
-
-    .jadwal-title {
-        font-size: 18px;
+    
+    .dukops-announcement-bar {
+        font-size: 10px;
+        padding: 6px 0;
     }
-
+    
+    .dukops-announcement-text {
+        animation-duration: 25s;
+    }
+    
+    .running-text-container {
+        padding: 6px 12px;
+    }
+    
+    .running-text {
+        font-size: 11px;
+        animation-duration: 10s;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons button {
+        width: 100%;
+        min-width: auto;
+        font-size: 12px;
+    }
+    
+    .jadwal-section {
+        padding: 12px;
+    }
+    
     .jadwal-section h3 {
         font-size: 13px;
     }
-
-    #j_hasilPesan {
+    
+    .jadwal-title {
+        font-size: 18px;
+    }
+    
+    #j_hasilPesanBaru {
         font-size: 11px;
-        min-height: 150px;
+        min-height: 120px;
+        padding: 10px;
     }
-
-    .counter-value {
-        font-size: 40px;
+    
+    .absen-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
     }
-
-    .whatsapp-icon,
-    .telegram-icon {
-        width: 40px;
-        height: 40px;
+    
+    .absen-stat-value {
+        font-size: 1.1rem;
     }
-
-    .whatsapp-icon i,
-    .telegram-icon i {
+    
+    .absen-desa-item {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px 8px;
+    }
+    
+    .absen-desa-name {
+        flex: 1 1 100%;
+        font-size: 0.7rem;
+    }
+    
+    .absen-desa-progress {
+        min-width: 50px;
+    }
+    
+    .absen-status-badge {
+        font-size: 0.5rem;
+        min-width: 50px;
+        padding: 1px 6px;
+    }
+    
+    .splash-title-center {
+        font-size: 22px;
+    }
+    
+    .splash-title-center:last-of-type {
+        font-size: 16px;
+    }
+    
+    .splash-logo-center img {
+        width: 60px;
+    }
+    
+    .splash-progress-center {
+        width: 150px;
+    }
+    
+    .modal-ai-content {
+        width: 98%;
+        height: 90vh;
+        border-radius: 14px;
+    }
+    
+    .modal-template-text {
+        font-size: 0.7rem;
+    }
+    
+    .modal-ai-header h3 {
+        font-size: 1rem;
+    }
+    
+    #categorySelect {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+    
+    .thankyou-content {
+        padding: 20px;
+    }
+    
+    .thankyou-content .icon {
+        font-size: 48px;
+    }
+    
+    .thankyou-content h2 {
         font-size: 20px;
     }
-
-    .platform-name {
-        font-size: 14px;
+    
+    .thankyou-content p {
+        font-size: 13px;
     }
+    
+    .led-letter {
+        font-size: 16px;
+        padding: 0 2px;
+    }
+    
+    .led-running-text {
+        animation-duration: 10s;
+    }
+    
+    .knight-rider-text {
+        font-size: 12px;
+    }
+    
+    .knight-rider-container {
+        padding: 6px 12px;
+        border-radius: 20px;
+    }
+}
 
-    .platform-desc {
+@media (max-width: 360px) {
+    .dukops-profile-area {
+        width: 60px;
+    }
+    
+    .dukops-profile-img {
+        height: 50px;
+    }
+    
+    .dukops-header-title {
+        font-size: 12px;
+    }
+    
+    .dukops-header-title:last-of-type {
         font-size: 10px;
+    }
+    
+    .dukops-header-address {
+        font-size: 8px;
+    }
+    
+    .counter-value {
+        font-size: 12px;
+        padding: 1px 8px;
+    }
+    
+    .audio-control-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+    }
+    
+    .nav-btn {
+        font-size: 9px;
+        padding: 6px 6px;
+        gap: 3px;
+    }
+    
+    .nav-btn i {
+        font-size: 10px;
+    }
+    
+    .absen-btn {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+    
+    .jadwal-title {
+        font-size: 16px;
     }
 }

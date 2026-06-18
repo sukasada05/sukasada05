@@ -1,54 +1,280 @@
-/* ================= COUNTER STYLE ================= */
-.counter-value {
-    /* === POSISI === */
-    display: inline-block;
+/* ================================================================
+   HEADER.CSS - HEADER + ANNOUNCEMENT + RUNNING TEXT
+   ================================================================ */
+
+.dukops-header {
+    background: url('header/header-background.png') center/cover no-repeat;
+    background-color: #0d1f0d;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 215, 0, 0.12);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dukops-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #FFD700, #FFA500, #FFD700, transparent);
+    animation: headerGoldLine 3s ease-in-out infinite;
+    background-size: 200% 100%;
+}
+
+@keyframes headerGoldLine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.dukops-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.15), transparent);
+}
+
+.dukops-header-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.dukops-profile-area {
+    flex-shrink: 0;
     text-align: center;
-    
-    /* === UKURAN FONT === */
-    font-size: 18px;          /* Ubah: 14px, 16px, 18px, 20px, 24px, 30px, 40px, 60px */
-    
-    /* === WARNA FONT === */
-    color: #ffcc00;           /* Ubah: #ffcc00 (kuning), #FFD700 (emas), #ffffff (putih), #4CAF50 (hijau), #ff0000 (merah), #00ccff (biru) */
-    
-    /* === BACKGROUND === */
-    background: rgba(0, 0, 0, 0.5);  /* Ubah: rgba(0,0,0,0.5) gelap transparan, #1a472a hijau, #333 abu-abu, transparent */
-    
-    /* === BORDER === */
-    border: 2px solid #ffcc00;       /* Ubah: 2px solid #ffcc00, none, 1px solid #4CAF50 */
-    border-radius: 20px;             /* Ubah: 0 (kotak), 5px, 10px, 20px, 50px (oval) */
-    
-    /* === PADDING (ruang dalam) === */
-    padding: 5px 18px;              /* Ubah: 2px 10px, 8px 20px, 10px 30px */
-    
-    /* === MARGIN (jarak luar) === */
-    margin-top: 8px;                /* Ubah: 0, 5px, 10px, 15px */
-    
-    /* === FONT LAINNYA === */
-    font-weight: bold;              /* Ubah: normal, bold, 900 */
-    font-family: 'Courier New', monospace;  /* Ubah: Arial, 'Segoe UI', 'Times New Roman' */
-    letter-spacing: 1px;            /* Ubah: 0, 1px, 2px, 3px */
-    
-    /* === SHADOW (bayangan) === */
-    box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);  /* Ubah: 0 0 10px rgba(255,204,0,0.3), none */
-    text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);  /* Ubah: none, 0 0 5px #ffcc00 */
-    
-    /* === TRANSISI (animasi halus) === */
+    background: rgba(255, 255, 255, 0.04);
+    padding: 8px;
+    border-radius: 16px;
+    width: 100px;
+    border: 1px solid rgba(255, 215, 0, 0.08);
     transition: all 0.3s ease;
 }
 
-/* Hover effect - saat mouse di atas counter */
-.counter-value:hover {
-    transform: scale(1.1);          /* Ubah: scale(1.1), scale(1.2), none */
-    background: rgba(255, 204, 0, 0.2);
-    box-shadow: 0 0 20px rgba(255, 204, 0, 0.5);
+.dukops-profile-area:hover {
+    border-color: rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
 }
 
-/* Animasi berdenyut (opsional) */
-.counter-value.pulse {
-    animation: counterPulse 2s ease-in-out infinite;
+.dukops-profile-img {
+    width: 100%;
+    height: 85px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 215, 0, 0.12);
+    object-fit: cover;
+    background: linear-gradient(135deg, #0d1f0d, #1a3a1a);
+    transition: all 0.3s ease;
 }
 
-@keyframes counterPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+.dukops-profile-img:hover {
+    border-color: #FFD700;
+    transform: scale(1.02);
+}
+
+.dukops-profile-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: #FFD700;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+.dukops-title-area {
+    flex: 1;
+    min-width: 180px;
+}
+
+.dukops-header-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFD700;
+    margin: 1px 0;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.08);
+}
+
+.dukops-header-title:last-of-type {
+    font-size: 14px;
+    color: #FFC107;
+    font-weight: 600;
+}
+
+.dukops-header-address {
+    font-size: 10px;
+    color: #88dd88;
+    margin-top: 4px;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dukops-header-address i {
+    color: #FFD700;
+    font-size: 11px;
+}
+
+.audio-control-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 12px 4px 8px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 215, 0, 0.06);
+}
+
+.audio-control-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ddeedd;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 13px;
+}
+
+.audio-control-btn:hover {
+    background: rgba(255, 215, 0, 0.12);
+    color: #FFD700;
+    transform: scale(1.05);
+}
+
+.audio-volume-slider {
+    display: none;
+    width: 80px;
+    height: 3px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    outline: none;
+}
+
+.audio-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #FFD700;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.counter-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFD700;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.08);
+    font-family: 'Courier New', monospace;
+    min-width: 30px;
+    text-align: center;
+}
+
+.telegram-running-container {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 40px;
+    padding: 10px 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 215, 0, 0.08);
+    overflow: hidden;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+}
+
+.telegram-running-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: telegramMarquee 15s linear infinite;
+    color: #ffdd44;
+    font-weight: 600;
+    font-size: 13px;
+    padding-right: 50px;
+}
+
+@keyframes telegramMarquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.telegram-running-container:hover .telegram-running-text {
+    animation-play-state: paused;
+}
+
+.running-text-container {
+    background: rgba(0, 30, 0, 0.4);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin: 10px 0;
+    border: 1px solid rgba(255, 204, 0, 0.08);
+    overflow: hidden;
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+}
+
+.running-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: marquee 12s linear infinite;
+    color: #FFD700;
+    font-weight: 600;
+    font-size: 13px;
+    padding-right: 50px;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    50% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+}
+
+.running-text-container:hover .running-text {
+    animation-play-state: paused;
+}
+
+.dukops-announcement-bar {
+    width: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.03), transparent);
+    color: #ffffff;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.04);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.dukops-announcement-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: dukops-running-text 35s linear infinite;
+    color: #88dd88;
+    letter-spacing: 0.5px;
+}
+
+@keyframes dukops-running-text {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
 }

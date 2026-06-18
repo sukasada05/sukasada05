@@ -1,80 +1,106 @@
-/* ================= ATTENDANCE PANEL ================= */
-#showAttendanceBtn {
-    background: #3a4f41;
-    margin-top: 10px;
-}
-
-#showAttendanceBtn:hover {
-    background: #4a6f5a;
-}
+/* ================================================================
+   ATTENDANCE.CSS - ABSENSI
+   ================================================================ */
 
 #attendancePanel {
     margin-top: 20px;
-    background: #1d1f1d;
-    padding: 15px;
-    border-radius: 5px;
-    border: 1px solid #3a4f41;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .attendance-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #3a4f41;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.attendance-header button {
+    margin: 0;
+    padding: 8px 16px;
+    background: rgba(255, 50, 50, 0.08);
+    border: 1px solid rgba(255, 50, 50, 0.1);
+    border-radius: 8px;
+    color: #ff6b6b;
+    font-size: 12px;
+    width: auto;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.attendance-header button:hover {
+    background: rgba(255, 50, 50, 0.15);
 }
 
 .attendance-filters {
     display: flex;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
 .attendance-filters select,
 .attendance-filters input {
     flex: 1;
-}
-
-.attendance-filters button {
-    margin-top: 5px;
-    padding: 8px 15px;
-    width: auto;
+    min-width: 120px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.2);
+    color: #ddeedd;
+    font-size: 12px;
 }
 
 .attendance-summary {
-    background: #2a3a2e;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 5px;
+    padding: 4px 0;
+    font-size: 13px;
+}
+
+.summary-row span:last-child {
+    font-weight: 600;
+    color: #FFD700;
 }
 
 .progress-container {
-    background: #333;
-    height: 10px;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.04);
+    height: 6px;
+    border-radius: 10px;
     overflow: hidden;
     margin-top: 10px;
 }
 
 .progress-bar {
     height: 100%;
-    background: #4CAF50;
-    transition: width 0.3s;
+    background: linear-gradient(90deg, #4CAF50, #8bc34a);
+    transition: width 0.6s ease;
+    border-radius: 10px;
 }
 
 .desa-card {
-    background: #2a3a2e;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
     margin-bottom: 10px;
     overflow: hidden;
-    border-left: 4px solid #4CAF50;
+    border-left: 3px solid #4CAF50;
+    transition: all 0.3s ease;
+}
+
+.desa-card:hover {
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .desa-card.incomplete {
@@ -82,56 +108,42 @@
 }
 
 .desa-header {
-    padding: 10px 15px;
-    background: #3a4f41;
+    padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 
 .desa-name {
-    font-weight: bold;
-    color: #9fd49f;
-    font-size: 16px;
-}
-
-.desa-count {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 5px 10px;
-    border-radius: 20px;
+    font-weight: 600;
+    color: #b2d8b2;
     font-size: 14px;
 }
 
+.desa-count {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #889988;
+}
+
 .desa-files {
-    padding: 10px 15px;
-    max-height: none;
-    overflow-y: visible;
+    padding: 8px 14px 14px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .file-link {
-    color: #b2d8b2;
+    color: #4CAF50;
     text-decoration: none;
-    margin-left: 10px;
+    font-size: 12px;
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
-.attendance-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.attendance-actions button {
-    flex: 1;
-    margin-top: 0;
-    padding: 10px;
-}
-
-/* ================= CANVAS ================= */
-canvas {
-    display: block;
-    margin-top: 20px;
-    width: 100%;
-    height: auto;
-    border: 1px solid #444;
-    background: #000;
+.file-link:hover {
+    background: rgba(76, 175, 80, 0.05);
 }

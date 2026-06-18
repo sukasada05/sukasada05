@@ -1934,7 +1934,7 @@ function updateJadwalPreview() {
     });
 
     if (JadwalData.currentHanpangan) {
-        result += "*🌾Jadwal Hanpangan hari ini :* " + JadwalData.currentHanpangan + "\n\n";
+        result += "*-Jadwal Hanpangan hari ini :* " + JadwalData.currentHanpangan + "\n\n";
     }
 
     result += "*Demikian MMP.*";
