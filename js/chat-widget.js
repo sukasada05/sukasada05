@@ -1,6 +1,6 @@
 /**
  * CHAT WIDGET — Supabase Live Chat untuk DUKOPS
- * Tema Hijau terintegrasi dengan aplikasi DUKOPS
+ * Floating Bottom-Right dengan Tema Hijau
  */
 
 (function() {
@@ -9,8 +9,9 @@
     // ================================================================
     // 1️⃣ KONFIGURASI SUPABASE — GANTI DENGAN MILIKMU!
     // ================================================================
-    const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+    const SUPABASE_URL = 'https://xlpmsxcxkcznswwgpcof.supabase.co';
+    const SUPABASE_ANON_KEY =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhscG1zeGN4a2N6bnN3d2dwY29mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4NzQ0NzEsImV4cCI6MjA5NzQ1MDQ3MX0.32yiGrcybThwIcc2VQoI981DYZ_fKgXY_lxKMhIycZU';
 
     // ================================================================
     // 2️⃣ INISIALISASI
@@ -40,13 +41,14 @@
     // 3️⃣ USERNAME
     // ================================================================
     function getOrCreateUsername() {
-        let username = localStorage.getItem('chat_widget_username');
+        let username = localStorage.getItem('dukops_chat_username');
         if (!username) {
-            const names = ['Budi', 'Siti', 'Andi', 'Rina', 'Doni', 'Maya', 'Joko', 'Dewi', 'Agus', 'Nina'];
+            const names = ['Budi', 'Siti', 'Andi', 'Rina', 'Doni', 'Maya', 'Joko', 'Dewi', 'Agus', 'Nina', 'Rizki',
+                'Putri'];
             const randomName = names[Math.floor(Math.random() * names.length)];
             const randomNum = Math.floor(Math.random() * 1000);
             username = `${randomName}_${randomNum}`;
-            localStorage.setItem('chat_widget_username', username);
+            localStorage.setItem('dukops_chat_username', username);
         }
         return username;
     }
@@ -164,18 +166,33 @@
                 .from('chat_messages')
                 .select('*')
                 .order('created_at', { ascending: true })
-                .limit(50);
+                .limit(100);
 
-            if (error) throw error;
+            if (error) {
+                if (error.message && error.message.includes('relation "chat_messages" does not exist')) {
+                    appendSystemMessage('⚠️ Tabel chat_messages belum dibuat!');
+                    return;
+                }
+                throw error;
+            }
 
             if (messagesArea) {
+                // Hapus semua kecuali pesan sistem
+                const systemMsg = messagesArea.querySelector('.chat-msg-system');
                 messagesArea.innerHTML = '';
+                if (systemMsg) messagesArea.appendChild(systemMsg);
             }
 
             if (!data || data.length === 0) {
-                appendSystemMessage('🚀 Selamat datang di Live Chat DUKOPS!');
+                if (!messagesArea.querySelector('.chat-msg-system')) {
+                    appendSystemMessage('🚀 Selamat datang di Live Chat DUKOPS!');
+                }
                 return;
             }
+
+            // Hapus pesan sistem
+            const systemMsg = messagesArea.querySelector('.chat-msg-system');
+            if (systemMsg) systemMsg.remove();
 
             data.forEach(msg => {
                 const isOwn = msg.username === myUsername;
@@ -211,7 +228,13 @@
                     created_at: new Date().toISOString()
                 }]);
 
-            if (error) throw error;
+            if (error) {
+                if (error.message && error.message.includes('relation "chat_messages" does not exist')) {
+                    appendSystemMessage('❌ Tabel chat_messages belum dibuat!');
+                    return;
+                }
+                throw error;
+            }
 
             messageInput.value = '';
             messageInput.focus();
@@ -219,7 +242,7 @@
 
         } catch (error) {
             console.error('Gagal kirim pesan chat:', error);
-            alert('❌ Gagal mengirim pesan.');
+            appendSystemMessage('❌ Gagal mengirim pesan.');
         } finally {
             if (sendButton) {
                 sendButton.disabled = false;
@@ -232,7 +255,7 @@
     // 9️⃣ REAL-TIME SUBSCRIBE
     // ================================================================
     function subscribeMessages() {
-        const channel = supabase
+        messagesChannel = supabase
             .channel('chat-db-changes')
             .on(
                 'postgres_changes', {
@@ -261,7 +284,7 @@
             )
             .subscribe();
 
-        return channel;
+        return messagesChannel;
     }
 
     // ================================================================
@@ -309,7 +332,7 @@
     // 1️⃣1️⃣ ONLINE USERS (Presence)
     // ================================================================
     function setupPresence() {
-        const presenceChannel = supabase.channel('chat-online-users');
+        presenceChannel = supabase.channel('chat-online-users');
 
         presenceChannel.on('presence', { event: 'sync' }, () => {
             const state = presenceChannel.presenceState();
@@ -341,7 +364,7 @@
             setupTyping();
             presenceChannel = setupPresence();
 
-            // Buka chat otomatis setelah 1 detik (hanya pertama kali)
+            // Buka chat otomatis setelah 1 detik
             setTimeout(() => {
                 openChat();
             }, 1500);
@@ -379,7 +402,6 @@
     // ================================================================
     // 1️⃣5️⃣ JALANKAN!
     // ================================================================
-    // Tunggu DOM ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initChat);
     } else {
