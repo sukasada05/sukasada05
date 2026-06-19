@@ -1066,13 +1066,13 @@
 
                 <div id="attendancePanel" style="display: none;">
                     <div class="attendance-header">
-                        <button onclick="hideAttendance()" style="background: #9fd49f; border: none; color: #9fd49f; cursor: pointer;">EXIT</button>
+                        <button onclick="hideAttendance()" style="background: black; border: blue; color: red; cursor: pointer;">EXIT</button>
                     </div>
                     <div class="attendance-filters">
                         <select id="attendanceDesaFilter" onchange="loadAttendanceData()"><option value="">Semua Desa</option></select>
                         <input type="month" id="attendanceMonthFilter" onchange="loadAttendanceData()">
                     </div>
-                    <div id="attendanceLoading" style="display: none; text-align: center; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> 🪖 Tunggu..laporan akan di tampilkan</div>
+                    <div id="attendanceLoading" style="display: show; text-align: center; padding: 50px;">proses<i class="fas fa-spinner fa-spin">tunggu</i>🪖Tunggu..laporan akan di tampilkan</div>
                     <div id="attendanceSummary" class="attendance-summary" style="display: none;">
                         <div class="summary-row"><span>Total Laporan:</span><span id="totalReports" style="font-weight: bold; color: #9fd49f;">0</span></div>
                         <div class="summary-row"><span>Total Desa:</span><span id="totalDesa" style="font-weight: bold; color: #9fd49f;">0</span></div>
