@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <!-- ========== INSTRUKSI NOINDEX UNTUK MESIN PENCARI ========== -->
     <meta name="robots" content="noindex, nofollow">
 
+    <!-- PWA Configuration -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,23 +17,29 @@
     <title>SISTEM PELAPORAN DUKOPS BABINSA dan JADWAL PIKET KORAMIL</title>
     <meta name="theme-color" content="#0a1a3a">
 
+    <!-- ========== FAVICON ========== -->
     <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
+    <!-- ============================= -->
 
+    <!-- External Libraries -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/main.css">
 
+    <!-- html2canvas untuk fitur screenshot -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
     </script>
 
@@ -1219,6 +1227,76 @@
         }
 
         /* ================================================================
+           PREVIEW BOX
+           ================================================================ */
+        .previewBox {
+            background: rgba(0, 30, 0, 0.5);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid rgba(77, 255, 77, 0.1);
+            min-height: 40px;
+            color: #b8d9b8;
+            font-size: 13px;
+            word-wrap: break-word;
+        }
+
+        .previewBox img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+
+        /* ================================================================
+           ACTION BUTTONS
+           ================================================================ */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        #submitBtn {
+            background: linear-gradient(145deg, #1a472a, #2d6a3e);
+            color: #f4f5c8;
+            border: 1px solid #4dff4d;
+        }
+
+        #submitBtn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        #submitBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #resetBtn {
+            background: #4a2a2a;
+            color: #f4f5c8;
+            border: 1px solid #ff6b6b;
+        }
+
+        #resetBtn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        /* ================================================================
            CHAT WIDGET — FLOATING BOTTOM-RIGHT TEMA HIJAU DUKOPS
            ================================================================ */
 
@@ -2021,6 +2099,7 @@
 
         let daftarDesaGlobal = [];
         let profileImagesGlobal = {};
+        let koordinatData = {};
 
         // ============ DESA FUNCTIONS ============
         async function loadDesaListFromGitHub() {
@@ -2032,7 +2111,7 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 daftarDesaGlobal = data.desaList || [];
-                console.log("✅ Daftar desa berhasil dimuat dari lokal:", daftarDesaGlobal.length, "desa");
+                console.log("✅ Daftar desa berhasil dimuat:", daftarDesaGlobal.length, "desa");
 
                 daftarDesaGlobal.forEach(desa => {
                     let fileName = desa.toLowerCase() + '.png';
@@ -2042,7 +2121,7 @@
                 populateDesaDropdown();
 
             } catch (error) {
-                console.error("Gagal memuat daftar desa lokal:", error);
+                console.error("Gagal memuat daftar desa:", error);
                 if (loadingDesa) {
                     loadingDesa.innerHTML =
                         '<i class="fas fa-exclamation-triangle"></i> Gagal memuat daftar desa. Cek koneksi internet!';
@@ -2319,14 +2398,284 @@
             }
         })();
 
-        // ============ FUNGSI ASLI loadSelectedDesa ============
+        // ============ FUNGSI KOORDINAT DARI JSON ============
+        async function loadKoordinatFromJSON(namaDesa) {
+            const previewKoordinat = document.getElementById('previewKordinat');
+            const loadingKoordinat = document.getElementById('loadingKoordinat');
+
+            if (!namaDesa || namaDesa === "") {
+                if (previewKoordinat) {
+                    previewKoordinat.innerHTML = '📍 Pilih desa terlebih dahulu.';
+                    previewKoordinat.style.color = '#b8d9b8';
+                }
+                if (loadingKoordinat) {
+                    loadingKoordinat.innerHTML = '';
+                }
+                return;
+            }
+
+            if (loadingKoordinat) {
+                loadingKoordinat.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memuat koordinat...';
+                loadingKoordinat.style.color = '#ffcc00';
+            }
+
+            try {
+                const fileName = namaDesa + '.json';
+                const url = 'data/coordinates/' + fileName + '?t=' + Date.now();
+
+                console.log('📡 Mencari koordinat di:', url);
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`File tidak ditemukan untuk desa ${namaDesa}`);
+                }
+
+                const data = await response.json();
+                console.log('📄 Data koordinat:', data);
+
+                let koordinatTampilan = '';
+                let koordinatArray = [];
+
+                // Cek format JSON: { "desa": "...", "coordinates": [ { "lat": ..., "lon": ..., "elevation": "..." } ] }
+                if (data.coordinates && Array.isArray(data.coordinates) && data.coordinates.length > 0) {
+                    koordinatArray = data.coordinates;
+
+                    const first = koordinatArray[0];
+                    const last = koordinatArray[koordinatArray.length - 1];
+
+                    if (first.lat && first.lon) {
+                        koordinatTampilan = first.lat + ',' + first.lon;
+                        if (first.elevation) {
+                            koordinatTampilan += ' (' + first.elevation + ')';
+                        }
+
+                        if (koordinatArray.length > 1 && last.lat && last.lon) {
+                            koordinatTampilan += ' → ' + last.lat + ',' + last.lon;
+                            if (last.elevation) {
+                                koordinatTampilan += ' (' + last.elevation + ')';
+                            }
+                            koordinatTampilan += ' (' + koordinatArray.length + ' titik)';
+                        }
+                    }
+                }
+                // Cek format lain: array langsung
+                else if (Array.isArray(data) && data.length > 0) {
+                    koordinatArray = data;
+                    const first = data[0];
+                    const last = data[data.length - 1];
+
+                    if (first.lat && first.lon) {
+                        koordinatTampilan = first.lat + ',' + first.lon;
+                        if (first.elevation) {
+                            koordinatTampilan += ' (' + first.elevation + ')';
+                        }
+                        if (data.length > 1 && last.lat && last.lon) {
+                            koordinatTampilan += ' → ' + last.lat + ',' + last.lon;
+                            if (last.elevation) {
+                                koordinatTampilan += ' (' + last.elevation + ')';
+                            }
+                            koordinatTampilan += ' (' + data.length + ' titik)';
+                        }
+                    }
+                }
+                // Cek format string langsung
+                else if (typeof data === 'string' && data.includes(',')) {
+                    koordinatTampilan = data;
+                }
+
+                if (koordinatTampilan) {
+                    window.koordinatTerakhir = koordinatTampilan;
+                    window.koordinatArray = koordinatArray;
+                    window.koordinatData = data;
+
+                    if (previewKoordinat) {
+                        previewKoordinat.innerHTML = '📍 <strong>Koordinat:</strong> ' + koordinatTampilan;
+                        previewKoordinat.style.color = '#4dff4d';
+                        previewKoordinat.title = 'Total ' + (koordinatArray.length || 1) + ' titik koordinat';
+                    }
+                    if (loadingKoordinat) {
+                        const totalTitik = koordinatArray.length || 1;
+                        loadingKoordinat.innerHTML = '✅ ' + totalTitik + ' titik koordinat ditemukan';
+                        loadingKoordinat.style.color = '#4dff4d';
+                    }
+                    console.log('✅ Koordinat ditemukan:', koordinatTampilan);
+                } else {
+                    if (previewKoordinat) {
+                        previewKoordinat.innerHTML = '⚠️ Koordinat tidak ditemukan untuk desa ' + namaDesa;
+                        previewKoordinat.style.color = '#ff6666';
+                    }
+                    if (loadingKoordinat) {
+                        loadingKoordinat.innerHTML = '❌ Koordinat tidak tersedia';
+                        loadingKoordinat.style.color = '#ff6666';
+                    }
+                }
+
+            } catch (error) {
+                console.error('Gagal memuat koordinat:', error);
+                if (previewKoordinat) {
+                    previewKoordinat.innerHTML = '⚠️ Gagal memuat koordinat: ' + error.message;
+                    previewKoordinat.style.color = '#ff6666';
+                }
+                if (loadingKoordinat) {
+                    loadingKoordinat.innerHTML = '❌ ' + error.message;
+                    loadingKoordinat.style.color = '#ff6666';
+                }
+            }
+        }
+
+        // ============ FUNGSI LOAD SELECTED DESA ============
         window.loadSelectedDesa = function() {
             const selectDesa = document.getElementById('selectDesa');
             const selectedText = selectDesa.options[selectDesa.selectedIndex]?.text || "";
             updateDesaProfile(selectedText);
+            updatePreviewDesa(selectedText);
+
+            if (selectedText) {
+                loadKoordinatFromJSON(selectedText);
+            } else {
+                const previewKoordinat = document.getElementById('previewKordinat');
+                const loadingKoordinat = document.getElementById('loadingKoordinat');
+                if (previewKoordinat) {
+                    previewKoordinat.innerHTML = '📍 Pilih desa terlebih dahulu.';
+                    previewKoordinat.style.color = '#b8d9b8';
+                }
+                if (loadingKoordinat) {
+                    loadingKoordinat.innerHTML = '';
+                }
+                window.koordinatTerakhir = null;
+                window.koordinatArray = null;
+                window.koordinatData = null;
+            }
+
             if (typeof window.triggerPlayMusic === 'function') {
                 window.triggerPlayMusic();
             }
+        };
+
+        // ============ FUNGSI UPDATE PREVIEW DESA ============
+        window.updatePreviewDesa = function(namaDesa) {
+            const previewDesa = document.getElementById('previewDesa');
+            if (previewDesa) {
+                if (namaDesa && namaDesa !== "") {
+                    previewDesa.innerHTML = '🏘️ <strong>Desa:</strong> ' + namaDesa;
+                    previewDesa.style.color = '#4dff4d';
+                } else {
+                    previewDesa.innerHTML = '🏘️ Belum ada desa dipilih.';
+                    previewDesa.style.color = '#b8d9b8';
+                }
+            }
+        };
+
+        // ============ FUNGSI PREVIEW GAMBAR ============
+        window.previewImage = function() {
+            const input = document.getElementById('gambar');
+            const preview = document.getElementById('previewGambar');
+
+            if (!input || !preview) return;
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview Gambar">';
+                    preview.style.color = '#4dff4d';
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.innerHTML = '📷 Belum ada gambar dipilih.';
+                preview.style.color = '#b8d9b8';
+            }
+        };
+
+        // ============ FUNGSI UPDATE PREVIEW TANGGAL ============
+        window.updateDatePreview = function() {
+            const input = document.getElementById('tanggalWaktu');
+            const preview = document.getElementById('previewTanggal');
+
+            if (!input || !preview) return;
+
+            if (input.value) {
+                const date = new Date(input.value);
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                preview.innerHTML = '📅 <strong>Tanggal:</strong> ' + date.toLocaleDateString('id-ID', options);
+                preview.style.color = '#4dff4d';
+            } else {
+                preview.innerHTML = '📅 Belum ada tanggal dipilih.';
+                preview.style.color = '#b8d9b8';
+            }
+        };
+
+        // ============ FUNGSI CHECK INPUT COMPLETION ============
+        window.checkInputCompletion = function() {
+            const submitBtn = document.getElementById('submitBtn');
+            const desa = document.getElementById('selectDesa');
+            const gambar = document.getElementById('gambar');
+            const tanggal = document.getElementById('tanggalWaktu');
+            const narasi = document.getElementById('narasi');
+
+            if (!submitBtn) return;
+
+            const isComplete = desa && desa.value !== "" &&
+                gambar && gambar.files && gambar.files.length > 0 &&
+                tanggal && tanggal.value !== "" &&
+                narasi && narasi.value.trim() !== "";
+
+            submitBtn.disabled = !isComplete;
+        };
+
+        // ============ FUNGSI RESET ALL ============
+        window.resetAll = function() {
+            document.getElementById('selectDesa').value = "";
+            document.getElementById('gambar').value = "";
+            document.getElementById('tanggalWaktu').value = "";
+            document.getElementById('narasi').value = "";
+
+            document.getElementById('previewDesa').innerHTML = '';
+            document.getElementById('previewGambar').innerHTML = '📷 Belum ada gambar dipilih.';
+            document.getElementById('previewTanggal').innerHTML = '📅 Belum ada tanggal dipilih.';
+            document.getElementById('previewKordinat').innerHTML = '';
+
+            document.getElementById('loadingKoordinat').innerHTML = '';
+            document.getElementById('submitBtn').disabled = true;
+
+            window.koordinatTerakhir = null;
+            window.koordinatArray = null;
+            window.koordinatData = null;
+
+            if (typeof window.triggerPlayMusic === 'function') {
+                window.triggerPlayMusic();
+            }
+        };
+
+        // ============ FUNGSI PROCESS SUBMISSION ============
+        window.processSubmission = function() {
+            console.log('Proses submission...');
+            alert('Fungsi submit sedang dalam pengembangan. Silakan tambahkan logika kirim ke Drive.');
+        };
+
+        // ============ FUNGSI SHOW ATTENDANCE ============
+        window.showAttendance = function() {
+            const panel = document.getElementById('attendancePanel');
+            if (panel) {
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            }
+            if (typeof window.triggerPlayMusic === 'function') {
+                window.triggerPlayMusic();
+            }
+        };
+
+        window.hideAttendance = function() {
+            document.getElementById('attendancePanel').style.display = 'none';
+        };
+
+        window.loadAttendanceData = function() {
+            console.log('loadAttendanceData called');
         };
 
         // ============ DOM READY ============
@@ -2339,8 +2688,40 @@
                 selectDesa.addEventListener('change', function() {
                     const selectedText = this.options[this.selectedIndex]?.text || "";
                     updateDesaProfile(selectedText);
+                    updatePreviewDesa(selectedText);
+
+                    if (selectedText) {
+                        loadKoordinatFromJSON(selectedText);
+                    } else {
+                        const previewKoordinat = document.getElementById('previewKordinat');
+                        const loadingKoordinat = document.getElementById('loadingKoordinat');
+                        if (previewKoordinat) {
+                            previewKoordinat.innerHTML = '📍 Pilih desa terlebih dahulu.';
+                            previewKoordinat.style.color = '#b8d9b8';
+                        }
+                        if (loadingKoordinat) {
+                            loadingKoordinat.innerHTML = '';
+                        }
+                        window.koordinatTerakhir = null;
+                        window.koordinatArray = null;
+                        window.koordinatData = null;
+                    }
+
+                    if (typeof window.triggerPlayMusic === 'function') {
+                        window.triggerPlayMusic();
+                    }
                 });
             }
+
+            // Event listener untuk check input
+            const inputs = ['selectDesa', 'gambar', 'tanggalWaktu', 'narasi'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', checkInputCompletion);
+                    el.addEventListener('input', checkInputCompletion);
+                }
+            });
         });
 
         // ============ JADWAL PIKET FUNCTIONS ============
@@ -2351,7 +2732,6 @@
             document.getElementById('btnDukops').classList.remove('active');
             document.getElementById('btnJadwal').classList.add('active');
             document.getElementById('btnAbsen').classList.remove('active');
-            // Panggil init jika ada
             if (typeof initJadwalBaru === 'function') initJadwalBaru();
         };
 
@@ -2373,23 +2753,6 @@
             document.getElementById('btnAbsen').classList.add('active');
             if (typeof loadAbsenTahun === 'function') loadAbsenTahun();
         };
-
-        // ============ PLACEHOLDER FUNCTIONS ============
-        function previewImage() { console.log('previewImage called'); }
-
-        function updateDatePreview() { console.log('updateDatePreview called'); }
-
-        function checkInputCompletion() { console.log('checkInputCompletion called'); }
-
-        function processSubmission() { console.log('processSubmission called'); }
-
-        function resetAll() { console.log('resetAll called'); }
-
-        function showAttendance() { console.log('showAttendance called'); }
-
-        function hideAttendance() { document.getElementById('attendancePanel').style.display = 'none'; }
-
-        function loadAttendanceData() { console.log('loadAttendanceData called'); }
     </script>
 
     <!-- ============ AI TEMPLATE SCRIPT ============ -->
@@ -2416,10 +2779,10 @@
                     if (categoryKeys.length > 0) {
                         activeTab = categoryKeys[0];
                     }
-                    console.log("✅ Template AI berhasil dimuat dari GitHub");
+                    console.log("✅ Template AI berhasil dimuat");
                     return true;
                 } catch (error) {
-                    console.error("", error);
+                    console.error("Gagal memuat template AI:", error);
                     return false;
                 }
             }
@@ -2428,7 +2791,7 @@
                 modalTabs.innerHTML = "";
                 if (!categoryKeys.length) {
                     modalTabs.innerHTML =
-                    '<div style="color:#999; padding:8px; text-align:center;">Memuat kategori...</div>';
+                        '<div style="color:#999; padding:8px; text-align:center;">Memuat kategori...</div>';
                     return;
                 }
 
@@ -2497,14 +2860,14 @@
             openModalBtn.onclick = async () => {
                 if (!templateData) {
                     modalBody.innerHTML =
-                        '<div class="loading-templates"><i class="fas fa-spinner fa-pulse"></i> Memuat template lokal...</div>';
+                        '<div class="loading-templates"><i class="fas fa-spinner fa-pulse"></i> Memuat template...</div>';
                     modal.classList.add('show');
                     const success = await loadTemplatesFromGitHub();
                     if (success && templateData) {
                         renderModalTabs();
                         renderModalTemplateList();
                     } else {
-                        modalBody.innerHTML = '<div class="loading-templates">❌ Gagal memuat template lokal.</div>';
+                        modalBody.innerHTML = '<div class="loading-templates">❌ Gagal memuat template.</div>';
                     }
                 } else {
                     renderModalTabs();
@@ -2533,7 +2896,7 @@
 
             function updateRunningText() { const el = document.getElementById('runningTextJadwalBaru'); if (el) el
                     .textContent = JadwalData.currentHanpangan ?
-                    '🌾 JADWAL HANPANGAN HARI INI: ' + JadwalData.currentHanpangan + '🌾' :
+                    '🌾 JADWAL HANPANGAN HARI INI: ' + JadwalData.currentHanpangan + ' 🌾' :
                     '🌾 Memuat jadwal hanpangan...🌾'; }
 
             function fetchFromGitHub(url) { return new Promise(resolve => { fetch(url + '?t=' + new Date().getTime())
@@ -2667,7 +3030,6 @@
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initJadwalBaru);
             else initJadwalBaru();
 
-            // Expose untuk tombol navigasi
             window.initJadwalBaru = initJadwalBaru;
         })();
     </script>
