@@ -1,5 +1,5 @@
 /* ================================================================
-   CHAT WIDGET — TEMA HIJAU DUKOPS
+   CHAT WIDGET — FLOATING BOTTOM-RIGHT TEMA HIJAU DUKOPS
    ================================================================ */
 
 /* ----- Container Widget ----- */
@@ -199,7 +199,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Pesan sendiri (hijau) */
 .chat-msg-own {
     background: linear-gradient(145deg, #1a472a, #2d6a3e);
     color: #f4f5c8;
@@ -208,7 +207,6 @@
     border: 1px solid rgba(77, 255, 77, 0.2);
 }
 
-/* Pesan orang lain (abu-abu) */
 .chat-msg-other {
     background: rgba(30, 50, 30, 0.8);
     color: #d4e6d4;
@@ -217,7 +215,6 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Pesan sistem */
 .chat-msg-system {
     background: rgba(77, 255, 77, 0.08);
     color: #9fd49f;
@@ -343,13 +340,13 @@
     white-space: nowrap;
 }
 
-.chat-input-area button:hover {
+.chat-input-area button:hover:not(:disabled) {
     transform: scale(1.03);
     box-shadow: 0 4px 15px rgba(46, 125, 50, 0.35);
     background: linear-gradient(145deg, #2d6a3e, #1a472a);
 }
 
-.chat-input-area button:active {
+.chat-input-area button:active:not(:disabled) {
     transform: scale(0.96);
 }
 
