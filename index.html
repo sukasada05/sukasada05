@@ -582,7 +582,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             startSplashProgress();
             loadDesaListFromGitHub();
-
+            
+            // 🔽 TAMBAHKAN INI - RESET CANVAS DENGAN GAMBAR DEFAULT 🔽
+            resetCanvas();
+            
             const selectDesa = document.getElementById('selectDesa');
             if (selectDesa) {
                 selectDesa.addEventListener('change', function() {
@@ -820,11 +823,11 @@
                     const escapedTemplate = template.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
                     const displayTemplate = template.length > 120 ? template.substring(0, 120) + '...' : template;
                     html += `
-                            <div class="modal-template-item" onclick="window.selectTemplate('${escapedTemplate}')">
-                                <div style="font-size:0.6rem;color:#2ecc71;margin-bottom:4px;">#${idx + 1}</div>
-                                <div class="modal-template-text">${displayTemplate}</div>
-                            </div>
-                        `;
+                        <div class="modal-template-item" onclick="window.selectTemplate('${escapedTemplate}')">
+                            <div style="font-size:0.6rem;color:#2ecc71;margin-bottom:4px;">#${idx + 1}</div>
+                            <div class="modal-template-text">${displayTemplate}</div>
+                        </div>
+                    `;
                 });
                 html += '</div>';
                 modalBody.innerHTML = html;
@@ -1240,6 +1243,49 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <!-- ============ RESET CANVAS ============ -->
+    <script>
+        function resetCanvas() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set ukuran canvas
+            canvas.width = 800;
+            canvas.height = Math.round(canvas.width / (16 / 9));
+            
+            // Buat gambar background dari header-background.png
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = 'header/header-background.png';
+            
+            img.onload = function() {
+                // Gambar header-background.png sebagai background canvas
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                // Tambahkan watermark teks
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
+                ctx.font = '24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('📸 DUKOPS BABINSA', canvas.width / 2, canvas.height - 30);
+            };
+            
+            img.onerror = function() {
+                // Fallback jika gambar tidak ditemukan
+                ctx.fillStyle = '#0a1a0a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#4CAF50';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('📸 Preview gambar akan muncul di sini', canvas.width / 2, canvas.height / 2);
+            };
+        }
+
+        // Panggil resetCanvas saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            resetCanvas();
         });
     </script>
 
