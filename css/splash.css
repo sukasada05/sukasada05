@@ -2,6 +2,10 @@
    SPLASH.CSS - SPLASH SCREEN
    ================================================================ */
 
+/* ============================================================
+   SPLASH 1 - MODERN UDAYANA (YANG SUDAH ADA)
+   ============================================================ */
+
 .splash-container-modern {
     position: fixed;
     top: 0;
@@ -143,4 +147,183 @@
     color: #FFD700;
     font-weight: bold;
     letter-spacing: 1px;
+}
+
+/* ============================================================
+   RESPONSIF SPLASH 1
+   ============================================================ */
+@media screen and (max-width: 480px) {
+    .splash-title-center {
+        font-size: 26px;
+        letter-spacing: 2px;
+    }
+    .splash-title-center:last-of-type {
+        font-size: 16px;
+    }
+    .splash-logo-center img {
+        width: 65px;
+    }
+    .splash-content {
+        padding: 15px;
+    }
+    .splash-progress-center {
+        width: 150px;
+    }
+}
+
+/* ============================================================
+   SPLASH 2 - TENTARA + UDAYANA (BARU)
+   ============================================================ */
+
+#splashTentara {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background: linear-gradient(135deg, #0a1a3a 0%, #1a3a6a 50%, #0a2a4a 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.9s ease, visibility 0.9s ease;
+    opacity: 1;
+    visibility: visible;
+}
+
+#splashTentara.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Logo Udayana di splash tentara */
+#splashTentara .splash-logo-udayana {
+    width: 80px;
+    height: auto;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    animation: splashPulse 2s ease-in-out infinite;
+    margin-bottom: 5px;
+}
+
+/* GIF Tentara */
+.splash-tentara-gif {
+    width: 200px;
+    height: 200px;
+    margin: 10px 0 15px;
+    filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.3));
+    animation: apung 2.8s ease-in-out infinite;
+}
+
+.splash-tentara-gif img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+@keyframes apung {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Teks Splash Tentara */
+.splash-tentara-judul {
+    color: #FFD700;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin: 2px 0;
+}
+
+.splash-tentara-judul2 {
+    color: #FFD700;
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin: -6px 0 2px;
+}
+
+.splash-tentara-sub {
+    color: #CCCCCC;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-top: 6px;
+}
+
+.splash-tentara-unit {
+    color: #FFFFFF;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.splash-tentara-kodim {
+    color: #B0C4DE;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.splash-tentara-progress {
+    width: 200px;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    margin: 25px auto 10px;
+    overflow: hidden;
+}
+
+.splash-tentara-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.splash-tentara-status {
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+
+/* ============================================================
+   RESPONSIF SPLASH 2 - TENTARA
+   ============================================================ */
+@media screen and (max-width: 480px) {
+    .splash-tentara-judul {
+        font-size: 22px;
+    }
+    .splash-tentara-judul2 {
+        font-size: 18px;
+    }
+    .splash-tentara-sub {
+        font-size: 9px;
+    }
+    .splash-tentara-gif {
+        width: 150px;
+        height: 150px;
+    }
+    #splashTentara .splash-logo-udayana {
+        width: 60px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .splash-tentara-judul {
+        font-size: 18px;
+    }
+    .splash-tentara-judul2 {
+        font-size: 15px;
+    }
+    .splash-tentara-gif {
+        width: 120px;
+        height: 120px;
+    }
+    .splash-tentara-progress {
+        width: 150px;
+    }
 }
