@@ -1,7 +1,35 @@
 /* ============================================================
    WHATSAPP BUTTON - KIRIM KE WHATSAPP
    ============================================================ */
+/* ============================================================
+   WHATSAPP BORDER GLOW (Tambahan Opsional)
+   ============================================================ */
 
+.whatsapp-transparent-btn::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(45deg, #25D366, #128C7E, #25D366, #128C7E, #25D366);
+    background-size: 400% 400%;
+    border-radius: 15px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    animation: borderGlowWhatsapp 3s linear infinite;
+}
+
+@keyframes borderGlowWhatsapp {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.whatsapp-transparent-btn:hover::before {
+    opacity: 1;
+}
 .whatsapp-transparent-btn {
     /* === POSITION & LAYOUT === */
     position: relative;
