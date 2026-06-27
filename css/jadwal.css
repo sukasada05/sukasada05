@@ -1,184 +1,194 @@
 /* ================================================================
-   JADWAL.CSS - JADWAL PIKET (FULL UPGRADE - SIAP PAKAI)
+   JADWAL.CSS - JADWAL PIKET & TOMBOL WHATSAPP
    ================================================================ */
 
-.jadwal-header {
-    text-align: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
+/* ============================================================
+   WHATSAPP BUTTON - KIRIM KE WHATSAPP
+   ============================================================ */
 
-.jadwal-title {
-    color: #FFD700;
-    font-size: 22px;
+.whatsapp-transparent-btn {
+    /* === POSITION & LAYOUT === */
+    position: relative;
+    width: 100%;
+    padding: 16px 24px;
+    margin: 12px 0;
+    z-index: 1;
+    overflow: hidden;
+
+    /* === TYPOGRAPHY === */
+    font-family: 'Chakra Petch', 'Oxanium', sans-serif;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-    text-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
-}
+    letter-spacing: 1.5px;
+    color: #25D366;
 
-.jadwal-logo {
-    max-width: 100%;
-    height: auto;
-    max-height: 80px;
+    /* === BORDER & BACKGROUND === */
+    border: 2px solid #25D366;
     border-radius: 12px;
-    border: 1px solid rgba(76, 175, 80, 0.1);
-    margin-bottom: 8px;
-}
-
-.jadwal-header p {
-    font-size: 12px;
-    color: #889988;
-    letter-spacing: 0.5px;
-}
-
-.jadwal-section {
-    background: rgba(0, 40, 0, 0.3);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 14px;
-    border: 1px solid rgba(76, 175, 80, 0.06);
-    backdrop-filter: blur(4px);
-    transition: all 0.3s ease;
-}
-
-.jadwal-section:hover {
-    border-color: rgba(76, 175, 80, 0.1);
-}
-
-/* ================================================================
-   SUPERPOWER CENTER - SEMUA LABEL PASTI TENGAH
-   (kecuali textarea preview, biar rata kiri)
-   ================================================================ */
-.jadwal-section,
-.jadwal-section *,
-.jadwal-section h3,
-.jadwal-section p,
-.jadwal-section div,
-.jadwal-section span,
-.jadwal-section label,
-.jadwal-section li,
-.section-title-koramil,
-.section-title-kediaman,
-.section-title-makodim {
-    text-align: center !important;
-}
-
-/* ================================================================
-   HEADING JADWAL - STYLE UPGRADE
-   ================================================================ */
-.jadwal-section h3 {
-    margin: 8px 0 12px 0 !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    letter-spacing: 1px !important;
-    text-align: center !important;
-    text-transform: uppercase;
-    display: block !important;
-    width: 100% !important;
-}
-
-/* ================================================================
-   WARNA LABEL DIBEDAKAN TAJAM (DENGAN GLOW)
-   ================================================================ */
-
-/* 🟢 PIKET KORAMIL - HIJAU TERANG */
-.section-title-koramil,
-h3.section-title-koramil {
-    color: #4dff4d !important;
-    text-shadow: 0 0 15px rgba(77, 255, 77, 0.4);
-}
-
-/* 🟡 JAGA KEDIAMAN - EMAS */
-.section-title-kediaman,
-h3.section-title-kediaman {
-    color: #FFD700 !important;
-    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-}
-
-/* 🔵 PIKET MAKODIM - BIRU ELEKTRIK */
-.section-title-makodim,
-h3.section-title-makodim {
-    color: #00ccff !important;
-    text-shadow: 0 0 15px rgba(0, 204, 255, 0.4);
-}
-
-/* ================================================================
-   ROW DAN COL UNTUK SELECT (TETAP RAPI)
-   ================================================================ */
-.jadwal-section .section-content {
-    display: block;
-    width: 100%;
-}
-
-.jadwal-section .row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 6px;
-}
-
-.jadwal-section .col {
-    flex: 1 1 140px;
-    max-width: 200px;
-    text-align: center;
-}
-
-.jadwal-section select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: #0f1f0f;
-    color: #e0ffe0;
-    border: 1px solid rgba(76, 175, 80, 0.25);
-    font-size: 13px;
+    background: rgba(37, 211, 102, 0.05);
+    
+    /* === SHADOW === */
+    box-shadow: 0 2px 10px rgba(37, 211, 102, 0.1);
+    
+    /* === CURSOR & TRANSITION === */
     cursor: pointer;
-    outline: none;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* === DISPLAY === */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
-/* ================================================================
-   BOX OUTPUT PESAN (PREVIEW) - TETAP RATA KIRI SEPERTI AWAL
-   ================================================================ */
-#j_hasilPesanBaru {
+/* ============================================================
+   WHATSAPP ICON
+   ============================================================ */
+
+.whatsapp-transparent-btn i {
+    font-size: 32px;
+    color: #25D366;
+    pointer-events: none;
+    transition: all 0.4s ease;
+}
+
+.whatsapp-transparent-btn span {
+    font-size: 14px;
+    color: #25D366;
+    font-weight: 700;
+    pointer-events: none;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+}
+
+/* ============================================================
+   WHATSAPP HOVER EFFECT
+   ============================================================ */
+
+.whatsapp-transparent-btn:hover {
+    background: rgba(37, 211, 102, 0.12);
+    border-color: #128C7E;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.25);
+}
+
+.whatsapp-transparent-btn:hover i {
+    color: #128C7E;
+    animation: whatsappBounce 0.8s ease infinite;
+}
+
+.whatsapp-transparent-btn:hover span {
+    color: #128C7E;
+}
+
+/* ============================================================
+   WHATSAPP ANIMATIONS
+   ============================================================ */
+
+@keyframes whatsappBounce {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(-3deg); }
+    75% { transform: scale(1.1) rotate(3deg); }
+}
+
+/* ============================================================
+   WHATSAPP SHINE EFFECT
+   ============================================================ */
+
+.whatsapp-transparent-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
     width: 100%;
-    min-height: 200px;
-    padding: 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 136, 204, 0.08);
-    background: rgba(0, 0, 0, 0.3);
-    color: #ddeedd;
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.7;
-    resize: vertical;
-    margin-top: 10px;
-    white-space: pre-wrap;
-    overflow-y: auto;
-    text-align: left !important;   /* ✅ PENGECUALIAN: preview tetap rata kiri */
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(37, 211, 102, 0.08), transparent);
+    transform: skewX(-25deg);
+    transition: all 0.6s ease;
+    pointer-events: none;
 }
 
-#j_hasilPesanBaru:focus {
-    outline: none;
-    border-color: rgba(0, 136, 204, 0.2);
+.whatsapp-transparent-btn:hover::after {
+    left: 100%;
 }
 
-/* ================================================================
-   RESPONSIVE - MOBILE
-   ================================================================ */
-@media (max-width: 600px) {
-    .jadwal-section {
-        padding: 12px;
-        margin-bottom: 10px;
+/* ============================================================
+   WHATSAPP PULSE RING
+   ============================================================ */
+
+.whatsapp-transparent-btn .pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: rgba(37, 211, 102, 0.1);
+}
+
+.whatsapp-transparent-btn:hover .pulse-ring {
+    opacity: 1;
+    animation: pulseRingWhatsapp 2s ease-in-out infinite;
+}
+
+@keyframes pulseRingWhatsapp {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 0.8;
     }
-    .jadwal-section h3 {
-        font-size: 14px !important;
+    100% {
+        width: 300%;
+        height: 300%;
+        opacity: 0;
     }
-    .jadwal-title {
-        font-size: 18px;
+}
+
+/* ============================================================
+   WHATSAPP ACTIVE - SAAT DIKLIK
+   ============================================================ */
+
+.whatsapp-transparent-btn:active {
+    transform: scale(0.95);
+    background: rgba(37, 211, 102, 0.2);
+    box-shadow: 0 2px 10px rgba(37, 211, 102, 0.15);
+}
+
+/* ============================================================
+   WHATSAPP RESPONSIF
+   ============================================================ */
+
+@media (max-width: 480px) {
+    .whatsapp-transparent-btn {
+        padding: 14px 16px;
+        font-size: 14px;
+        border-radius: 10px;
     }
-    .jadwal-section .col {
-        min-width: 120px;
+    
+    .whatsapp-transparent-btn i {
+        font-size: 28px;
+    }
+    
+    .whatsapp-transparent-btn span {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 380px) {
+    .whatsapp-transparent-btn {
+        padding: 12px 14px;
+    }
+    
+    .whatsapp-transparent-btn i {
+        font-size: 24px;
+    }
+    
+    .whatsapp-transparent-btn span {
+        font-size: 12px;
     }
 }
