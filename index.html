@@ -820,11 +820,11 @@
                     const escapedTemplate = template.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
                     const displayTemplate = template.length > 120 ? template.substring(0, 120) + '...' : template;
                     html += `
-                        <div class="modal-template-item" onclick="window.selectTemplate('${escapedTemplate}')">
-                            <div style="font-size:0.6rem;color:#2ecc71;margin-bottom:4px;">#${idx + 1}</div>
-                            <div class="modal-template-text">${displayTemplate}</div>
-                        </div>
-                    `;
+                            <div class="modal-template-item" onclick="window.selectTemplate('${escapedTemplate}')">
+                                <div style="font-size:0.6rem;color:#2ecc71;margin-bottom:4px;">#${idx + 1}</div>
+                                <div class="modal-template-text">${displayTemplate}</div>
+                            </div>
+                        `;
                 });
                 html += '</div>';
                 modalBody.innerHTML = html;
