@@ -29,15 +29,14 @@
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 1px;
-    color: #889988;
+    color: #ffffff;
 
     /* === BORDER & BACKGROUND === */
     border: none;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
     
     /* === SHADOW === */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     
     /* === CURSOR & TRANSITION === */
     cursor: pointer;
@@ -56,24 +55,34 @@
 }
 
 /* ============================================================
-   GRADIENT MOVE - Animasi Background Bergerak (SEPERTI LOGIN)
+   WARNA DASAR PER TAB - TANPA HOVER SUDAH BERWARNA
    ============================================================ */
+
+/* DUKOPS - Hijau */
 .nav-btn-dukops {
-    background: linear-gradient(135deg, #1a3a1a, #2d5a2d, #1a3a1a);
+    background: linear-gradient(135deg, #1a5a1a, #2d7a2d, #1a5a1a);
     background-size: 300% 300%;
     animation: gradientMove 4s ease-in-out infinite;
+    color: #d4ffd4;
+    border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
+/* PIKET - Orange */
 .nav-btn-piket {
-    background: linear-gradient(135deg, #3a2a1a, #5a4a2d, #3a2a1a);
+    background: linear-gradient(135deg, #6a3a1a, #8a5a2d, #6a3a1a);
     background-size: 300% 300%;
     animation: gradientMove 4s ease-in-out infinite;
+    color: #ffddbb;
+    border: 1px solid rgba(255, 165, 0, 0.3);
 }
 
+/* ABSEN - Biru */
 .nav-btn-absen {
-    background: linear-gradient(135deg, #1a2a3a, #2d4a5a, #1a2a3a);
+    background: linear-gradient(135deg, #1a2a5a, #2d4a7a, #1a2a5a);
     background-size: 300% 300%;
     animation: gradientMove 4s ease-in-out infinite;
+    color: #bbddff;
+    border: 1px solid rgba(52, 152, 219, 0.3);
 }
 
 @keyframes gradientMove {
@@ -82,7 +91,82 @@
 }
 
 /* ============================================================
-   BORDER GLOW SPIN - Efek Border Berputar (SEPERTI LOGIN)
+   HOVER - PERBAIKAN WARNA SAAT HOVER
+   ============================================================ */
+.nav-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+}
+
+.nav-btn-dukops:hover {
+    background: linear-gradient(135deg, #2a6a2a, #3d8a3d, #2a6a2a);
+    background-size: 300% 300%;
+    animation: gradientMove 3s ease-in-out infinite;
+    border-color: rgba(76, 175, 80, 0.6);
+}
+
+.nav-btn-piket:hover {
+    background: linear-gradient(135deg, #8a4a2a, #aa6a3d, #8a4a2a);
+    background-size: 300% 300%;
+    animation: gradientMove 3s ease-in-out infinite;
+    border-color: rgba(255, 165, 0, 0.6);
+}
+
+.nav-btn-absen:hover {
+    background: linear-gradient(135deg, #2a3a6a, #3d5a8a, #2a3a6a);
+    background-size: 300% 300%;
+    animation: gradientMove 3s ease-in-out infinite;
+    border-color: rgba(52, 152, 219, 0.6);
+}
+
+.nav-btn:hover i {
+    transform: translateY(-2px) scale(1.1);
+}
+
+/* ============================================================
+   ACTIVE STATE - TOMBOL AKTIF (DIPILIH)
+   ============================================================ */
+.nav-btn.active {
+    transform: translateY(0) scale(1);
+    color: #ffffff;
+    animation: navPulse 0.5s ease;
+    border-color: transparent;
+}
+
+/* Warna active lebih terang */
+.nav-btn-dukops.active {
+    background: linear-gradient(135deg, #00ff88, #00cc77, #00ff88);
+    background-size: 300% 300%;
+    animation: gradientMove 2s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    border-color: #00ff88;
+}
+
+.nav-btn-piket.active {
+    background: linear-gradient(135deg, #ff8800, #ffaa00, #ff8800);
+    background-size: 300% 300%;
+    animation: gradientMove 2s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
+    border-color: #ff8800;
+}
+
+.nav-btn-absen.active {
+    background: linear-gradient(135deg, #0088ff, #00aaff, #0088ff);
+    background-size: 300% 300%;
+    animation: gradientMove 2s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(0, 136, 255, 0.3);
+    border-color: #0088ff;
+}
+
+@keyframes navPulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* ============================================================
+   BORDER GLOW - EFEK BORDER BERPUTAR (SAAT HOVER)
    ============================================================ */
 .nav-btn::before {
     content: '';
@@ -97,7 +181,6 @@
     transition: opacity 0.4s ease;
 }
 
-/* Warna border glow per tab (seperti login-btn) */
 .nav-btn-dukops::before {
     background: linear-gradient(45deg, #00ff88, #4caf50, #00ff88, #4caf50, #00ff88);
     background-size: 400% 400%;
@@ -122,13 +205,17 @@
     100% { background-position: 0% 50%; }
 }
 
-/* Munculkan border glow saat hover (seperti login-btn) */
 .nav-btn:hover::before {
     opacity: 1;
 }
 
+/* Active - matikan border glow */
+.nav-btn.active::before {
+    opacity: 0 !important;
+}
+
 /* ============================================================
-   SHINE EFFECT - Garis Cahaya Melintas (SEPERTI LOGIN)
+   SHINE EFFECT - GARIS CAHAYA MELINTAS
    ============================================================ */
 .nav-btn::after {
     content: '';
@@ -137,43 +224,23 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
     transform: skewX(-25deg);
     transition: all 0.6s ease;
     z-index: 0;
     pointer-events: none;
 }
 
-/* Shine melintas saat hover (seperti login-btn) */
 .nav-btn:hover::after {
     left: 100%;
 }
 
-/* ============================================================
-   TEXT CONTAINER (SEPERTI LOGIN)
-   ============================================================ */
-.nav-btn .btn-text {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-/* Icon bounce saat hover (seperti login-btn) */
-.nav-btn:hover .btn-text i {
-    animation: iconBounce 0.6s ease infinite;
-}
-
-@keyframes iconBounce {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
+.nav-btn.active::after {
+    display: none !important;
 }
 
 /* ============================================================
-   PULSE RING - Cincin Berdenyut (SEPERTI LOGIN)
+   PULSE RING - CINCIN BERDENYUT (SAAT HOVER)
    ============================================================ */
 .nav-btn .pulse-ring {
     position: absolute;
@@ -190,13 +257,11 @@
     transition: opacity 0.4s ease;
 }
 
-/* Aktifkan pulse ring saat hover (seperti login-btn) */
 .nav-btn:hover .pulse-ring {
     opacity: 1;
     animation: pulseRing 2s ease-in-out infinite;
 }
 
-/* Warna pulse ring per tab */
 .nav-btn-dukops .pulse-ring {
     background: rgba(0, 255, 136, 0.15);
 }
@@ -222,8 +287,13 @@
     }
 }
 
+.nav-btn.active .pulse-ring {
+    opacity: 0 !important;
+    animation: none !important;
+}
+
 /* ============================================================
-   PARTICLE BURST - Partikel Meledak Saat Hover (SEPERTI LOGIN)
+   PARTICLE BURST - PARTIKEL MELEDAK (SAAT HOVER)
    ============================================================ */
 .nav-btn .btn-particles {
     position: absolute;
@@ -245,7 +315,6 @@
     transition: all 0.6s ease;
 }
 
-/* Warna partikel per tab */
 .nav-btn-dukops .btn-particles span {
     background: #00ff88;
     box-shadow: 0 0 10px #00ff88;
@@ -261,7 +330,6 @@
     box-shadow: 0 0 10px #0088ff;
 }
 
-/* Partikel meledak saat hover (seperti login-btn) */
 .nav-btn:hover .btn-particles span {
     opacity: 1;
     animation: particleBurst 0.8s ease-out forwards;
@@ -278,68 +346,12 @@
     }
 }
 
-/* ============================================================
-   HOVER EFFECTS - Efek Saat Mouse di Atas Tombol (SEPERTI LOGIN)
-   ============================================================ */
-.nav-btn:hover {
-    transform: translateY(-3px) scale(1.02);
-    color: #ffffff;
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
-}
-
-/* ============================================================
-   ACTIVE EFFECT - Tombol Aktif (SEPERTI LOGIN)
-   ============================================================ */
-.nav-btn.active {
-    color: #ffffff;
-    transform: translateY(0) scale(1);
-    animation: navPulse 0.5s ease;
-}
-
-/* Warna background active per tab */
-.nav-btn-dukops.active {
-    background: linear-gradient(135deg, #00ff88, #00cc77, #00ff88);
-    background-size: 300% 300%;
-    animation: gradientMove 3s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
-}
-
-.nav-btn-piket.active {
-    background: linear-gradient(135deg, #ff8800, #ffcc00, #ff8800);
-    background-size: 300% 300%;
-    animation: gradientMove 3s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(255, 136, 0, 0.2);
-}
-
-.nav-btn-absen.active {
-    background: linear-gradient(135deg, #0088ff, #00ccff, #0088ff);
-    background-size: 300% 300%;
-    animation: gradientMove 3s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(0, 136, 255, 0.2);
-}
-
-/* Active - matikan border glow, shine, pulse ring (seperti login-btn disabled) */
-.nav-btn.active::before {
-    opacity: 0 !important;
-}
-
-.nav-btn.active::after {
+.nav-btn.active .btn-particles {
     display: none !important;
 }
 
-.nav-btn.active .pulse-ring {
-    opacity: 0 !important;
-    animation: none !important;
-}
-
-@keyframes navPulse {
-    0% { transform: scale(0.95); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
-}
-
 /* ============================================================
-   RIPPLE EFFECT - Efek Riak Saat Diklik (via JavaScript)
+   RIPPLE EFFECT - EFEK RIAK SAAT DIKLIK
    ============================================================ */
 .ripple {
     position: absolute;
@@ -359,7 +371,7 @@
 }
 
 /* ============================================================
-   RESPONSIF - Untuk Layar Kecil
+   RESPONSIF - UNTUK LAYAR KECIL
    ============================================================ */
 @media (max-width: 480px) {
     .nav-buttons {
