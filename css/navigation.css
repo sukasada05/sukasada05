@@ -1,5 +1,5 @@
 /* ================================================================
-   NAVIGATION.CSS - NAVIGASI
+   NAVIGATION.CSS - NAVIGASI DENGAN BORDER MERAH
    ================================================================ */
 
 .nav-buttons {
@@ -15,7 +15,7 @@
 .nav-btn {
     flex: 1;
     padding: 12px 16px;
-    border: 2px solid transparent;
+    border: 2px solid #ff4444; /* 🔴 BORDER MERAH */
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
@@ -27,7 +27,7 @@
     gap: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(255, 255, 255, 0.04);
-    color: #889988;
+    color: #ff6666; /* 🔴 TEKS MERAH */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -36,22 +36,24 @@
     transition: transform 0.3s ease;
 }
 
+/* HOVER - saat mouse di atas tombol */
 .nav-btn:hover {
-    color: #ddeedd;
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.1);
+    color: #ff8888;
+    background: rgba(255, 0, 0, 0.08);
+    border-color: #ff6666;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
 }
 
 .nav-btn:hover i {
     transform: translateY(-2px) scale(1.1);
 }
 
+/* ACTIVE - tombol yang sedang dipilih (hilang border merah) */
 .nav-btn.active {
     color: #fff;
     transform: translateY(0);
-    border-color: transparent;
+    border-color: transparent; /* Border merah hilang saat aktif */
 }
 
 /* ========== WARNA ACTIVE PER TAB ========== */
@@ -61,6 +63,7 @@
     background: linear-gradient(135deg, #1a4a1a, #2d6a2d);
     box-shadow: 0 4px 20px rgba(76, 175, 80, 0.25);
     border-color: #4caf50;
+    color: #ffffff;
 }
 
 /* PIKET - Orange/Kuning */
@@ -68,6 +71,7 @@
     background: linear-gradient(135deg, #6a4a1a, #8a6a2d);
     box-shadow: 0 4px 20px rgba(255, 165, 0, 0.2);
     border-color: #ff9800;
+    color: #ffffff;
 }
 
 /* ABSEN - Biru */
@@ -75,6 +79,7 @@
     background: linear-gradient(135deg, #1a2a4a, #2d4a6a);
     box-shadow: 0 4px 20px rgba(52, 152, 219, 0.2);
     border-color: #3498db;
+    color: #ffffff;
 }
 
 /* ========== RESPONSIVE MOBILE ========== */
@@ -90,6 +95,7 @@
         padding: 10px 8px;
         gap: 4px;
         border-radius: 8px;
+        border-width: 1.5px;
     }
 
     .nav-btn i {
