@@ -41,27 +41,141 @@
 
     <style>
         /* CSS sudah dipindahkan ke file terpisah di folder css/ */
+
+        /* ============ SPLASH SCREEN TENTARA + UDAYANA ============ */
+        #splashTentara {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            background: linear-gradient(135deg, #0a1a3a 0%, #1a3a6a 50%, #0a2a4a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.9s ease, visibility 0.9s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+        #splashTentara.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .splash-tentara-gif {
+            width: 200px;
+            height: 200px;
+            margin: 10px 0 15px;
+            filter: drop-shadow(0 0 40px rgba(96, 165, 250, 0.3));
+            animation: apung 2.8s ease-in-out infinite;
+        }
+        .splash-tentara-gif img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        @keyframes apung {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .splash-tentara-judul {
+            color: #FFD700;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 2px 0;
+        }
+        .splash-tentara-judul2 {
+            color: #FFD700;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: -6px 0 2px;
+        }
+        .splash-tentara-sub {
+            color: #CCCCCC;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+        .splash-tentara-unit {
+            color: #FFFFFF;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .splash-tentara-kodim {
+            color: #B0C4DE;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        .splash-tentara-progress {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            margin: 25px auto 10px;
+            overflow: hidden;
+        }
+        .splash-tentara-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .splash-tentara-status {
+            color: rgba(255,255,255,0.5);
+            font-size: 11px;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        @media screen and (max-width: 480px) {
+            .splash-tentara-judul {
+                font-size: 22px;
+            }
+            .splash-tentara-judul2 {
+                font-size: 18px;
+            }
+            .splash-tentara-sub {
+                font-size: 9px;
+            }
+            .splash-tentara-gif {
+                width: 150px;
+                height: 150px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- ================= SPLASH SCREEN ================= -->
-    <div id="splashScreen" class="splash-container-modern">
-        <div class="splash-content">
-            <div class="splash-logo-center">
-                <img src="favicon.svg" alt="Lambang Kodam Udayana">
-            </div>
-            <div class="splash-title-center">DUKOPS</div>
-            <div class="splash-title-center">BABINSA SUKASADA</div>
-            <div class="splash-divider-center"></div>
-            <div class="splash-subtitle-center">KODIM 1609/BULELENG</div>
-            <div class="splash-unit-center">KORAMIL 1609-05/SUKASADA</div>
-            <div class="splash-kodim-center">Sistem Pelaporan Digitalisasi Babinsa</div>
-            <div class="splash-progress-center">
-                <div class="splash-progress-bar-center" id="splashProgressBar"></div>
-            </div>
-            <div class="splash-percentage-center" id="progressPercentage">20%</div>
+    <!-- ================= SPLASH SCREEN TENTARA + UDAYANA ================= -->
+    <div id="splashTentara">
+        <!-- Logo Udayana dari favicon lokal -->
+        <div style="text-align: center; margin-bottom: 5px;">
+            <img src="favicon.svg" alt="Logo Kodam Udayana" style="width: 80px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));">
         </div>
+        <div class="splash-tentara-gif">
+            <img 
+                src="https://raw.githubusercontent.com/sukasada05/dukops4/refs/heads/main/army.gif" 
+                alt="Tentara berjalan"
+                id="gifTentara"
+            >
+        </div>
+        <div class="splash-tentara-judul">DUKOPS</div>
+        <div class="splash-tentara-judul2">BABINSA SUKASADA</div>
+        <div class="splash-tentara-sub">KODIM 1609/BULELENG</div>
+        <div class="splash-tentara-unit">KORAMIL 1609-05/SUKASADA</div>
+        <div class="splash-tentara-kodim">Sistem Pelaporan Digitalisasi Babinsa</div>
+        <div class="splash-tentara-progress">
+            <div class="splash-tentara-progress-fill" id="progressTentara"></div>
+        </div>
+        <div class="splash-tentara-status" id="statusTentara"></div>
     </div>
 
     <!-- ================= BACKGROUND MP3 PLAYER ================= -->
@@ -532,58 +646,72 @@
         };
     </script>
 
-    <!-- ============ SPLASH SCREEN ============ -->
+    <!-- ============ SPLASH SCREEN TENTARA ============ -->
     <script>
-        let splashProgress = 0;
-        let splashInterval;
-        let loadingComplete = false;
+        // ============ SPLASH TENTARA (SATU-SATUNYA SPLASH) ============
+        function tampilkanSplashTentara() {
+            const splash = document.getElementById('splashTentara');
+            
+            const gif = document.getElementById('gifTentara');
+            const progressFill = document.getElementById('progressTentara');
+            const statusText = document.getElementById('statusTentara');
 
-        function startSplashProgress() {
-            const progressBar = document.getElementById('splashProgressBar');
-            const percentageText = document.getElementById('progressPercentage');
+            const DURASI = 6000; // 6 detik
+            let startTime = Date.now();
 
-            if (!progressBar || !percentageText) return;
-
-            splashInterval = setInterval(function() {
-                if (splashProgress < 100) {
-                    splashProgress += Math.floor(Math.random() * 15) + 5;
-                    if (splashProgress > 100) splashProgress = 100;
-                    progressBar.style.width = splashProgress + '%';
-                    percentageText.textContent = splashProgress + '%';
-                }
-
-                if (splashProgress === 100 && !loadingComplete) {
-                    clearInterval(splashInterval);
-                    loadingComplete = true;
+            function updateProgress() {
+                const elapsed = Date.now() - startTime;
+                const percent = Math.min((elapsed / DURASI) * 100, 100);
+                progressFill.style.width = percent + '%';
+                if (elapsed < DURASI) {
+                    requestAnimationFrame(updateProgress);
+                } else {
+                    // Selesai, sembunyikan splash dan tampilkan aplikasi
+                    splash.classList.add('hide');
                     setTimeout(function() {
-                        const splash = document.getElementById('splashScreen');
+                        splash.style.display = 'none';
                         const appContainer = document.getElementById('appContainer');
-
-                        if (splash) {
-                            splash.style.opacity = '0';
-                            setTimeout(function() {
-                                splash.style.display = 'none';
-                                if (appContainer) {
-                                    appContainer.style.display = 'block';
-                                    setTimeout(function() {
-                                        appContainer.style.opacity = '1';
-                                    }, 50);
-                                }
-                                if (typeof window.triggerPlayMusic === 'function') {
-                                    window.triggerPlayMusic();
-                                }
-                            }, 500);
+                        appContainer.style.display = 'block';
+                        setTimeout(function() {
+                            appContainer.style.opacity = '1';
+                        }, 50);
+                        if (typeof window.triggerPlayMusic === 'function') {
+                            window.triggerPlayMusic();
                         }
                     }, 500);
                 }
-            }, 100);
+            }
+
+            // Tunggu GIF termuat atau gagal
+            if (gif.complete) {
+                if (gif.naturalWidth === 0 && gif.naturalHeight === 0) {
+                    statusText.textContent = '⚠️ GIF gagal dimuat, lanjutkan ...';
+                } else {
+                    statusText.textContent = '';
+                }
+                startTime = Date.now();
+                updateProgress();
+            } else {
+                statusText.textContent = '⏳ Memuat GIF ...';
+                gif.addEventListener('load', function() {
+                    statusText.textContent = '✅ GIF siap!';
+                    startTime = Date.now();
+                    updateProgress();
+                });
+                gif.addEventListener('error', function() {
+                    statusText.textContent = '⚠️ GIF gagal dimuat, lanjutkan ...';
+                    startTime = Date.now();
+                    updateProgress();
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            startSplashProgress();
+            // Langsung tampilkan splash tentara
+            tampilkanSplashTentara();
             loadDesaListFromGitHub();
             
-            // 🔽 TAMBAHKAN INI - RESET CANVAS DENGAN GAMBAR DEFAULT 🔽
+            // 🔽 RESET CANVAS DENGAN GAMBAR DEFAULT 🔽
             resetCanvas();
             
             const selectDesa = document.getElementById('selectDesa');
