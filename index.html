@@ -685,21 +685,21 @@
             // Tunggu GIF termuat atau gagal
             if (gif.complete) {
                 if (gif.naturalWidth === 0 && gif.naturalHeight === 0) {
-                    statusText.textContent = '⚠️ GIF gagal dimuat, lanjutkan ...';
+                    statusText.textContent = '';
                 } else {
                     statusText.textContent = '';
                 }
                 startTime = Date.now();
                 updateProgress();
             } else {
-                statusText.textContent = '⏳ Memuat GIF ...';
+                statusText.textContent = '.';
                 gif.addEventListener('load', function() {
-                    statusText.textContent = '✅ GIF siap!';
+                    statusText.textContent = '';
                     startTime = Date.now();
                     updateProgress();
                 });
                 gif.addEventListener('error', function() {
-                    statusText.textContent = '⚠️ GIF gagal dimuat, lanjutkan ...';
+                    statusText.textContent = '';
                     startTime = Date.now();
                     updateProgress();
                 });
