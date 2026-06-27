@@ -15,7 +15,7 @@
 .nav-btn {
     flex: 1;
     padding: 12px 16px;
-    border: 2px solid #ff4444; /* 🔴 BORDER MERAH */
+    border: 2px solid #ff4444;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
@@ -27,7 +27,7 @@
     gap: 8px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: rgba(255, 255, 255, 0.04);
-    color: #ff6666; /* 🔴 TEKS MERAH */
+    color: #ff6666;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -35,6 +35,79 @@
     font-size: 16px;
     transition: transform 0.3s ease;
 }
+
+/* ========== HOVER ========== */
+.nav-btn:hover {
+    color: #ff8888;
+    background: rgba(255, 0, 0, 0.08);
+    border-color: #ff6666;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+}
+
+.nav-btn:hover i {
+    transform: translateY(-2px) scale(1.1);
+}
+
+/* ========== ACTIVE ========== */
+.nav-btn.active {
+    color: #ffffff;
+    transform: translateY(0);
+    border-color: transparent;
+}
+
+/* DUKOPS - Hijau */
+.nav-btn-dukops.active {
+    background: linear-gradient(135deg, #1a4a1a, #2d6a2d);
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.25);
+    border-color: #4caf50;
+}
+
+/* PIKET - Orange/Kuning */
+.nav-btn-piket.active {
+    background: linear-gradient(135deg, #6a4a1a, #8a6a2d);
+    box-shadow: 0 4px 20px rgba(255, 165, 0, 0.2);
+    border-color: #ff9800;
+}
+
+/* ABSEN - Biru */
+.nav-btn-absen.active {
+    background: linear-gradient(135deg, #1a2a4a, #2d4a6a);
+    box-shadow: 0 4px 20px rgba(52, 152, 219, 0.2);
+    border-color: #3498db;
+}
+
+/* ========== ANIMASI ACTIVE ========== */
+.nav-btn.active {
+    animation: navPulse 0.5s ease;
+}
+
+@keyframes navPulse {
+    0% { transform: scale(0.95); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* ========== RESPONSIVE MOBILE ========== */
+@media screen and (max-width: 480px) {
+    .nav-buttons {
+        gap: 4px;
+        padding: 3px;
+        border-radius: 10px;
+    }
+
+    .nav-btn {
+        font-size: 11px;
+        padding: 10px 8px;
+        gap: 4px;
+        border-radius: 8px;
+        border-width: 1.5px;
+    }
+
+    .nav-btn i {
+        font-size: 13px;
+    }
+}}
 
 /* HOVER - saat mouse di atas tombol */
 .nav-btn:hover {
