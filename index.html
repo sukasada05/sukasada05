@@ -23,7 +23,6 @@
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
-    <link rel="stylesheet" href="css/navigation.css">
     <!-- ============================= -->
 
     <!-- External Libraries -->
@@ -36,12 +35,147 @@
 
     <!-- ========== CSS MODULAR ========== -->
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/navigation.css">
 
     <!-- html2canvas -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
-        /* CSS sudah dipindahkan ke file terpisah di folder css/ */
+        /* ============================================================
+           INSTALL BUTTON - Default Sembunyi
+           ============================================================ */
+        #installButton {
+            display: none;
+            width: 100%;
+            padding: 14px 24px;
+            margin-bottom: 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #1a3a6a, #2d5a8a, #1a3a6a);
+            background-size: 300% 300%;
+            animation: gradientMoveInstall 3s ease-in-out infinite;
+            color: #ffffff;
+            font-family: 'Chakra Petch', 'Oxanium', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.25);
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #installButton.show {
+            display: flex;
+        }
+
+        #installButton:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 30px rgba(52, 152, 219, 0.4);
+        }
+
+        #installButton:active {
+            transform: scale(0.96);
+        }
+
+        @keyframes gradientMoveInstall {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Preview Desa + Koordinat Gabungan */
+        #previewDesa {
+            margin: 8px 0 12px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            min-height: auto;
+        }
+
+        #previewDesa .coord-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 8px 10px;
+            background: rgba(0, 40, 0, 0.5);
+            border-radius: 6px;
+            border-left: 3px solid #4dff4d;
+        }
+
+        #previewDesa .coord-preview.error {
+            border-left-color: #ff6666;
+        }
+
+        #previewDesa .coord-preview .desa-name {
+            font-weight: bold;
+            color: #e6ffe6;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        #previewDesa .coord-preview .coord-value {
+            font-family: monospace;
+            color: #4dff4d;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        #previewDesa .coord-preview .coord-value.error {
+            color: #ff6666;
+        }
+
+        #previewDesa .coord-preview .coord-meta {
+            font-size: 10px;
+            color: #888;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #previewDesa .coord-preview .acak-btn {
+            padding: 2px 10px;
+            background: #1a3a1a;
+            border: 1px solid #4dff4d;
+            border-radius: 4px;
+            color: #e6ffe6;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.3s ease;
+        }
+
+        #previewDesa .coord-preview .acak-btn:hover {
+            background: #2a5a2a;
+            border-color: #7dff7d;
+        }
+
+        /* Sembunyikan previewKordinat karena sudah digabung */
+        #previewKordinat {
+            display: none !important;
+        }
+
+        #loadingKoordinat {
+            display: none !important;
+        }
+
+        @media (max-width: 480px) {
+            #installButton {
+                padding: 12px 16px;
+                font-size: 12px;
+            }
+            #previewDesa .coord-preview .desa-name {
+                font-size: 12px;
+            }
+            #previewDesa .coord-preview .coord-value {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
@@ -135,7 +269,6 @@
                 <div id="loadingDesa" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
                 <div class="previewBox" id="previewDesa"></div>
 
-                <label><i class="fas fa-map-pin"></i> Koordinat:</label>
                 <div id="loadingKoordinat" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
                 <div class="previewBox" id="previewKordinat"></div>
 
@@ -331,26 +464,19 @@
 
         const runningTextEl = document.getElementById('telegramRunningMessage');
 
-        // ========== UPDATE RUNNING TEXT ==========
         function updateRunningText(message) {
             if (runningTextEl) {
                 let displayMsg = message.length > 100 ? message.substring(0, 97) + '...' : message;
                 runningTextEl.textContent = `📨 ${displayMsg}`;
-
-                // Reset animasi agar tetap berjalan
                 runningTextEl.style.animation = 'none';
                 void runningTextEl.offsetWidth;
                 runningTextEl.style.animation = 'telegramMarquee 20s linear infinite';
-
                 console.log("✅ Running text diperbarui:", displayMsg);
             }
         }
 
-        // ========== AMBIL PESAN DARI TELEGRAM ==========
         async function fetchTelegramMessages() {
-            if (!USE_REAL_BOT) {
-                return;
-            }
+            if (!USE_REAL_BOT) return;
             try {
                 const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=-1&limit=1`;
                 const response = await fetch(url);
@@ -366,7 +492,6 @@
             }
         }
 
-        // ========== AUTO-ROUTE PESAN LOKAL (FALLBACK) ==========
         (function() {
             const messages = [
                 "📨 🔄 Terima Kasih Telah Mengirim Laporan DUKOPS dengan tepat waktu dan lengkap",
@@ -382,10 +507,8 @@
             function rotateMessage() {
                 if (!runningTextEl) return;
                 if (isBotActive) return;
-
                 currentIndex = (currentIndex + 1) % messages.length;
                 runningTextEl.textContent = messages[currentIndex];
-
                 runningTextEl.style.animation = 'none';
                 void runningTextEl.offsetWidth;
                 runningTextEl.style.animation = 'telegramMarquee 20s linear infinite';
@@ -459,7 +582,6 @@
         function populateDesaDropdown() {
             const selectDesa = document.getElementById('selectDesa');
             if (!selectDesa) return;
-
             selectDesa.disabled = false;
             selectDesa.innerHTML = '<option value="">-- Pilih Desa/Kelurahan --</option>';
             daftarDesaGlobal.forEach(desa => {
@@ -468,7 +590,6 @@
                 option.textContent = desa;
                 selectDesa.appendChild(option);
             });
-
             selectDesa.value = "";
             const loadingDesa = document.getElementById('loadingDesa');
             if (loadingDesa) loadingDesa.style.display = 'none';
@@ -497,7 +618,6 @@
                 const imageUrl = PROFILE_BASE_URL + fileName;
                 imgElement.src = imageUrl;
                 if (nameElement) nameElement.textContent = matchedKey;
-
                 imgElement.onerror = function() {
                     console.warn(`Gagal memuat profil untuk ${matchedKey}, file tidak ditemukan di folder profile/`);
                     imgElement.src = DEFAULT_FAVICON_URL;
@@ -583,10 +703,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             startSplashProgress();
             loadDesaListFromGitHub();
-            
-            // 🔽 TAMBAHKAN INI - RESET CANVAS DENGAN GAMBAR DEFAULT 🔽
             resetCanvas();
-            
+
             const selectDesa = document.getElementById('selectDesa');
             if (selectDesa) {
                 selectDesa.addEventListener('change', function() {
@@ -705,28 +823,54 @@
         })();
     </script>
 
-    <!-- ============ INSTALL BUTTON ============ -->
+    <!-- ============ INSTALL BUTTON - OTOMATIS HILANG JIKA SUDAH TERINSTALL ============ -->
     <script>
         (function() {
             let deferredPrompt;
             const installBtn = document.getElementById('installButton');
 
+            function isAppInstalled() {
+                return window.matchMedia('(display-mode: standalone)').matches || 
+                       window.navigator.standalone === true;
+            }
+
+            // Sembunyikan tombol jika sudah terinstall
+            if (isAppInstalled()) {
+                if (installBtn) {
+                    installBtn.classList.remove('show');
+                    installBtn.style.display = 'none';
+                }
+                console.log('✅ Aplikasi sudah terinstall, tombol Install disembunyikan');
+            }
+
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                if (!window.matchMedia('(display-mode: standalone)').matches) {
-                    installBtn.style.display = 'block';
+                if (!isAppInstalled() && installBtn) {
+                    installBtn.classList.add('show');
+                    installBtn.style.display = 'flex';
+                    installBtn.innerHTML = '<i class="fas fa-download"></i> Install App';
                 }
             });
 
             window.addEventListener('appinstalled', () => {
-                installBtn.style.display = 'none';
+                if (installBtn) {
+                    installBtn.classList.remove('show');
+                    installBtn.style.display = 'none';
+                }
                 deferredPrompt = null;
+                console.log('✅ Aplikasi berhasil diinstall!');
             });
 
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                installBtn.style.display = 'none';
-            }
+            // Cek ulang setiap kali halaman terlihat
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden && isAppInstalled()) {
+                    if (installBtn) {
+                        installBtn.classList.remove('show');
+                        installBtn.style.display = 'none';
+                    }
+                }
+            });
 
             if (installBtn) {
                 installBtn.addEventListener('click', async () => {
@@ -734,11 +878,12 @@
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;
                         if (outcome === 'accepted') {
+                            installBtn.classList.remove('show');
                             installBtn.style.display = 'none';
+                            deferredPrompt = null;
                         }
-                        deferredPrompt = null;
                     } else {
-                        alert('');
+                        alert('⚠️ Install prompt tidak tersedia.\n\nUntuk menginstall:\n• Android: Buka menu browser → "Install App"\n• PC: Klik ikon install di address bar');
                     }
                 });
             }
@@ -897,6 +1042,309 @@
 
             loadTemplatesFromGitHub();
         })();
+    </script>
+
+    <!-- ============ FITUR KOORDINAT ACAK ============ -->
+    <script>
+        // ============================================================
+        // FITUR KOORDINAT ACAK DARI JSON + GABUNG DENGAN PREVIEW DESA
+        // ============================================================
+
+        let koordinatDesaTerpilih = null;
+        let semuaKoordinatDesa = null;
+
+        async function loadKoordinatDesa(namaDesa) {
+            try {
+                const fileName = namaDesa.trim() + '.json';
+                let url = `data/coordinates/${encodeURIComponent(fileName)}?t=${Date.now()}`;
+                console.log(`📡 Mencoba mengambil koordinat dari lokal: ${url}`);
+                
+                let response = await fetch(url);
+                if (!response.ok) {
+                    const githubUrl = `https://raw.githubusercontent.com/sukasada05/dukops4/main/data/coordinates/${encodeURIComponent(fileName)}?t=${Date.now()}`;
+                    console.log(`📡 Mencoba dari GitHub: ${githubUrl}`);
+                    response = await fetch(githubUrl);
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} - File tidak ditemukan`);
+                }
+                
+                const data = await response.json();
+                console.log(`✅ Koordinat ${namaDesa} dimuat:`, data.coordinates?.length || 0, 'titik');
+                return data;
+            } catch (error) {
+                console.warn(`⚠️ Gagal memuat koordinat untuk ${namaDesa}:`, error.message);
+                return null;
+            }
+        }
+
+        function getRandomCoordinate(koordinatData) {
+            if (!koordinatData || !koordinatData.coordinates || koordinatData.coordinates.length === 0) {
+                console.warn('⚠️ Tidak ada data koordinat');
+                return null;
+            }
+            const coords = koordinatData.coordinates;
+            const randomIndex = Math.floor(Math.random() * coords.length);
+            const selected = coords[randomIndex];
+            console.log(`🎲 Koordinat acak terpilih: [${randomIndex + 1}/${coords.length}]`, selected);
+            return {
+                ...selected,
+                index: randomIndex,
+                total: coords.length,
+                desa: koordinatData.desa
+            };
+        }
+
+        function displayCoordinatePreview(coord, desaName) {
+            const previewDesa = document.getElementById('previewDesa');
+            const previewKordinat = document.getElementById('previewKordinat');
+            const loadingEl = document.getElementById('loadingKoordinat');
+            
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (previewKordinat) {
+                previewKordinat.innerHTML = '';
+                previewKordinat.style.display = 'none';
+            }
+            
+            if (previewDesa) {
+                if (!coord) {
+                    previewDesa.innerHTML = `
+                        <div class="coord-preview error">
+                            <div class="desa-name">
+                                📌 Desa: ${desaName || 'Pilih Desa'}
+                            </div>
+                            <div class="coord-value error">
+                                ❌ Koordinat tidak ditemukan
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const lat = typeof coord.lat === 'number' ? coord.lat.toFixed(6) : coord.lat;
+                    const lon = typeof coord.lon === 'number' ? coord.lon.toFixed(6) : coord.lon;
+                    const elevation = coord.elevation || '-';
+                    
+                    previewDesa.innerHTML = `
+                        <div class="coord-preview">
+                            <div class="desa-name">
+                                📌 Desa: ${coord.desa || desaName}
+                                <span class="coord-value">- ${lat},${lon},${elevation}</span>
+                            </div>
+                            <div class="coord-meta">
+                                <span>🎲 Titik #${coord.index !== undefined ? coord.index + 1 : '?'}/${coord.total || '?'}</span>
+                                <span>📡 ${coord.source || 'lokal'}</span>
+                                <button class="acak-btn" onclick="ambilKoordinatAcak()">
+                                    🔄 Acak Ulang
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        async function ambilKoordinatAcakUntukDesa(namaDesa) {
+            if (!namaDesa || namaDesa === '') {
+                const previewDesa = document.getElementById('previewDesa');
+                if (previewDesa) {
+                    previewDesa.innerHTML = `
+                        <div class="coord-preview error">
+                            <div class="desa-name">📌 Pilih desa terlebih dahulu</div>
+                        </div>
+                    `;
+                }
+                koordinatDesaTerpilih = null;
+                semuaKoordinatDesa = null;
+                return;
+            }
+            
+            const loadingEl = document.getElementById('loadingKoordinat');
+            const previewDesa = document.getElementById('previewDesa');
+            
+            if (loadingEl) {
+                loadingEl.style.display = 'block';
+                loadingEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengambil koordinat...';
+                loadingEl.style.color = '#ffcc00';
+            }
+            
+            if (previewDesa) {
+                previewDesa.innerHTML = `
+                    <div class="coord-preview" style="border-left-color:#ffcc00;">
+                        <div class="desa-name" style="color:#ffcc00;">🔍 Mengambil koordinat desa...</div>
+                    </div>
+                `;
+            }
+            
+            const data = await loadKoordinatDesa(namaDesa);
+            
+            if (!data) {
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (previewDesa) {
+                    previewDesa.innerHTML = `
+                        <div class="coord-preview error">
+                            <div class="desa-name">📌 Desa: ${namaDesa}</div>
+                            <div class="coord-value error">❌ File koordinat tidak ditemukan</div>
+                        </div>
+                    `;
+                }
+                koordinatDesaTerpilih = null;
+                semuaKoordinatDesa = null;
+                return;
+            }
+            
+            semuaKoordinatDesa = data;
+            const randomCoord = getRandomCoordinate(data);
+            displayCoordinatePreview(randomCoord, namaDesa);
+            koordinatDesaTerpilih = randomCoord;
+            
+            if (loadingEl) loadingEl.style.display = 'none';
+            console.log(`✅ Koordinat siap untuk ${namaDesa}:`, randomCoord);
+        }
+
+        window.ambilKoordinatAcak = function() {
+            const selectDesa = document.getElementById('selectDesa');
+            const desaName = selectDesa.options[selectDesa.selectedIndex]?.text || '';
+            
+            if (!desaName || desaName === '') {
+                alert('⚠️ Pilih desa terlebih dahulu!');
+                return;
+            }
+            
+            if (!semuaKoordinatDesa) {
+                ambilKoordinatAcakUntukDesa(desaName);
+                return;
+            }
+            
+            const randomCoord = getRandomCoordinate(semuaKoordinatDesa);
+            displayCoordinatePreview(randomCoord, desaName);
+            koordinatDesaTerpilih = randomCoord;
+            
+            const btn = document.querySelector('#previewDesa .acak-btn');
+            if (btn) {
+                btn.textContent = '✅ Terpilih!';
+                btn.style.background = '#1b5e20';
+                btn.style.borderColor = '#4caf50';
+                setTimeout(() => {
+                    btn.textContent = '🔄 Acak Ulang';
+                    btn.style.background = '#1a3a1a';
+                    btn.style.borderColor = '#4dff4d';
+                }, 1000);
+            }
+            console.log('🎲 Koordinat diacak ulang:', randomCoord);
+        };
+
+        // Override loadSelectedDesa
+        const originalLoadSelectedDesa = window.loadSelectedDesa;
+        window.loadSelectedDesa = async function() {
+            const selectDesa = document.getElementById('selectDesa');
+            const selectedText = selectDesa.options[selectDesa.selectedIndex]?.text || "";
+            updateDesaProfile(selectedText);
+            await ambilKoordinatAcakUntukDesa(selectedText);
+            if (typeof window.triggerPlayMusic === 'function') {
+                window.triggerPlayMusic();
+            }
+        };
+
+        console.log('✅ Fitur koordinat acak + preview gabungan siap digunakan!');
+
+        // ============ TAMBAHKAN KOORDINAT KE CANVAS ============
+        window.getKoordinatUntukStamp = function() {
+            if (!koordinatDesaTerpilih) return null;
+            const coord = koordinatDesaTerpilih;
+            return {
+                lat: coord.lat || 0,
+                lon: coord.lon || 0,
+                elevation: coord.elevation || '-'
+            };
+        };
+
+        function tambahkanKoordinatKeCanvas(canvas, ctx) {
+            const coord = window.getKoordinatUntukStamp();
+            if (!coord) return;
+            
+            ctx.save();
+            const padding = 15;
+            const fontSize = 11;
+            const lineHeight = 16;
+            
+            const lines = [
+                `📍 LAT: ${typeof coord.lat === 'number' ? coord.lat.toFixed(6) : coord.lat}`,
+                `📍 LON: ${typeof coord.lon === 'number' ? coord.lon.toFixed(6) : coord.lon}`,
+                `🏔️ Elevasi: ${coord.elevation}`
+            ];
+            
+            ctx.font = `${fontSize}px Arial, sans-serif`;
+            let maxWidth = 0;
+            lines.forEach(line => {
+                const metrics = ctx.measureText(line);
+                if (metrics.width > maxWidth) maxWidth = metrics.width;
+            });
+            
+            const x = canvas.width - maxWidth - padding - 12;
+            const y = canvas.height - (lines.length * lineHeight) - padding - 8;
+            
+            const bgWidth = maxWidth + 20;
+            const bgHeight = (lines.length * lineHeight) + 14;
+            
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(x - 8, y - 8, bgWidth + 8, bgHeight + 8, 6);
+            } else {
+                ctx.rect(x - 8, y - 8, bgWidth + 8, bgHeight + 8);
+            }
+            ctx.fill();
+            
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            
+            ctx.strokeStyle = 'rgba(77, 255, 77, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            if (ctx.roundRect) {
+                ctx.roundRect(x - 8, y - 8, bgWidth + 8, bgHeight + 8, 6);
+            } else {
+                ctx.rect(x - 8, y - 8, bgWidth + 8, bgHeight + 8);
+            }
+            ctx.stroke();
+            
+            ctx.font = `${fontSize}px Arial, sans-serif`;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            
+            lines.forEach((line, i) => {
+                ctx.fillStyle = '#4dff4d';
+                ctx.fillText(line, x, y + (i * lineHeight));
+            });
+            
+            ctx.restore();
+        }
+
+        function setupCanvasObserver() {
+            const canvas = document.getElementById('canvas');
+            if (!canvas) return;
+            let lastDataURL = canvas.toDataURL();
+            setInterval(() => {
+                const currentDataURL = canvas.toDataURL();
+                if (currentDataURL !== lastDataURL) {
+                    lastDataURL = currentDataURL;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) tambahkanKoordinatKeCanvas(canvas, ctx);
+                }
+            }, 2000);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupCanvasObserver);
+        } else {
+            setTimeout(setupCanvasObserver, 1000);
+        }
     </script>
 
     <!-- ============ APPLICATION SCRIPTS ============ -->
@@ -1253,20 +1701,15 @@
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             
-            // Set ukuran canvas
             canvas.width = 800;
             canvas.height = Math.round(canvas.width / (16 / 9));
             
-            // Buat gambar background dari header-background.png
             const img = new Image();
             img.crossOrigin = 'anonymous';
             img.src = 'header/header-background.png';
             
             img.onload = function() {
-                // Gambar header-background.png sebagai background canvas
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                
-                // Tambahkan watermark teks
                 ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
                 ctx.font = '24px Arial';
                 ctx.textAlign = 'center';
@@ -1274,7 +1717,6 @@
             };
             
             img.onerror = function() {
-                // Fallback jika gambar tidak ditemukan
                 ctx.fillStyle = '#0a1a0a';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.fillStyle = '#4CAF50';
@@ -1284,7 +1726,6 @@
             };
         }
 
-        // Panggil resetCanvas saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function() {
             resetCanvas();
         });
