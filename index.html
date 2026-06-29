@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- ========== INSTRUKSI NOINDEX UNTUK MESIN PENCARI ========== -->
     <meta name="robots" content="noindex, nofollow">
 
-    <!-- PWA Configuration -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,13 +15,440 @@
     <title>SISTEM PELAPORAN DUKOPS BABINSA dan JADWAL PIKET KORAMIL</title>
     <meta name="theme-color" content="#0a1a3a">
 
-    <!-- ========== FAVICON ========== -->
     <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
-    <!-- ============================= -->
+
+    <!-- ============================================================ -->
+    <!-- ============ AKTIVASI INLINE ============ -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // ============ SISTEM AKTIVASI DUKOPS ============
+        // ============================================================
+
+        (function() {
+            'use strict';
+
+            const STORAGE_KEY = 'dukops_activation';
+            const ADMIN_CODE_KEY = 'dukops_admin_code';
+
+            function generateRandomCode() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let parts = [];
+                for (let i = 0; i < 4; i++) {
+                    let part = '';
+                    for (let j = 0; j < 4; j++) {
+                        part += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    parts.push(part);
+                }
+                return parts.join('-');
+            }
+
+            function getAdminCode() {
+                let code = localStorage.getItem(ADMIN_CODE_KEY);
+                if (!code) {
+                    code = generateRandomCode();
+                    localStorage.setItem(ADMIN_CODE_KEY, code);
+                }
+                return code;
+            }
+
+            function isActivated() {
+                const data = localStorage.getItem(STORAGE_KEY);
+                if (!data) return false;
+                try {
+                    const parsed = JSON.parse(data);
+                    return parsed.activated === true;
+                } catch {
+                    return false;
+                }
+            }
+
+            function setActivated(code) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    activated: true,
+                    code: code,
+                    tanggal: new Date().toISOString()
+                }));
+                localStorage.setItem('dukops_activation_last', new Date().toISOString());
+            }
+
+            function resetActivation() {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+
+            function showToast(message) {
+                const existing = document.querySelector('.toast-activation');
+                if (existing) existing.remove();
+
+                const toast = document.createElement('div');
+                toast.className = 'toast-activation';
+                toast.innerHTML = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(0,0,0,0.9);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    z-index: 999999;
+                    font-family: 'Segoe UI', sans-serif;
+                    border: 1px solid rgba(255,215,0,0.2);
+                    max-width: 90%;
+                    text-align: center;
+                    animation: toastSlideUp 0.3s ease;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                `;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => toast.remove(), 500);
+                }, 3000);
+            }
+
+            // ===== CEK DAN REDIRECT =====
+            if (!isActivated()) {
+                showActivationOverlay();
+            }
+
+            function showActivationOverlay() {
+                const overlay = document.createElement('div');
+                overlay.id = 'activationOverlay';
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, #0a1a3a 0%, #1a3a6a 50%, #0a2a4a 100%);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 999999;
+                    padding: 20px;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                `;
+
+                overlay.innerHTML = `
+                    <div style="
+                        background: rgba(255,255,255,0.05);
+                        backdrop-filter: blur(20px);
+                        border-radius: 24px;
+                        padding: 40px;
+                        max-width: 450px;
+                        width: 100%;
+                        border: 1px solid rgba(255,255,255,0.1);
+                        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+                    ">
+                        <div style="text-align:center; margin-bottom:30px;">
+                            <img src="favicon.svg" style="width:80px; height:auto; filter:drop-shadow(0 2px 10px rgba(255,215,0,0.3));" onerror="this.src='favicon-96x96.png'">
+                            <h1 style="color:#FFD700; font-size:28px; font-weight:700; margin-top:10px; letter-spacing:2px;">🔐 DUKOPS</h1>
+                            <p style="color:#B0C4DE; font-size:14px; margin-top:5px;">Digitalisasi Operasi Babinsa</p>
+                            <p style="font-size:11px; color:rgba(255,255,255,0.3); margin-top:2px;">Koramil 1609-05/Sukasada</p>
+                        </div>
+
+                        <div style="margin-top:20px;">
+                            <label style="color:#CCCCCC; font-size:14px; font-weight:600; display:block; margin-bottom:8px;">
+                                <i class="fas fa-key"></i> Masukkan Kode Aktivasi
+                            </label>
+                            <div style="position:relative;">
+                                <input type="text" id="aktivasiCodeInput" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" style="
+                                    width:100%;
+                                    padding:14px 18px;
+                                    border-radius:12px;
+                                    border:2px solid rgba(255,255,255,0.15);
+                                    background:rgba(255,255,255,0.08);
+                                    color:#FFFFFF;
+                                    font-size:16px;
+                                    transition:all 0.3s ease;
+                                    outline:none;
+                                    letter-spacing:2px;
+                                    font-weight:600;
+                                " autofocus>
+                                <i class="fas fa-lock" style="position:absolute; right:16px; top:50%; transform:translateY(-50%); color:rgba(255,255,255,0.3); font-size:18px;"></i>
+                            </div>
+
+                            <div id="aktivasiError" style="
+                                background:rgba(255,68,68,0.15);
+                                border:1px solid rgba(255,68,68,0.3);
+                                border-radius:10px;
+                                padding:12px 16px;
+                                color:#ff6b6b;
+                                font-size:14px;
+                                margin-top:15px;
+                                display:none;
+                                text-align:center;
+                            ">
+                                <i class="fas fa-exclamation-circle"></i> <span id="errorMessage">Kode aktivasi salah!</span>
+                            </div>
+
+                            <div id="aktivasiSuccess" style="
+                                background:rgba(46,204,113,0.15);
+                                border:1px solid rgba(46,204,113,0.3);
+                                border-radius:10px;
+                                padding:12px 16px;
+                                color:#2ecc71;
+                                font-size:14px;
+                                margin-top:15px;
+                                display:none;
+                                text-align:center;
+                            ">
+                                <i class="fas fa-check-circle"></i> ✅ Aktivasi berhasil! Mengarahkan ke aplikasi...
+                            </div>
+
+                            <button onclick="validasiAktivasiInline()" id="btnAktivasiInline" style="
+                                width:100%;
+                                padding:16px;
+                                border:none;
+                                border-radius:12px;
+                                background:linear-gradient(135deg, #FFD700, #FFA500);
+                                color:#0a1a3a;
+                                font-size:18px;
+                                font-weight:700;
+                                cursor:pointer;
+                                transition:all 0.3s ease;
+                                margin-top:20px;
+                                text-transform:uppercase;
+                                letter-spacing:1px;
+                            ">
+                                <i class="fas fa-unlock"></i> AKTIVASI SEKARANG
+                            </button>
+                        </div>
+
+                        <button onclick="toggleAdminInline()" style="
+                            background:none;
+                            border:none;
+                            color:rgba(255,255,255,0.2);
+                            font-size:11px;
+                            cursor:pointer;
+                            margin-top:15px;
+                            transition:color 0.3s ease;
+                            display:block;
+                            width:100%;
+                            text-align:center;
+                        ">
+                            <i class="fas fa-user-cog"></i> Admin Panel
+                        </button>
+
+                        <div id="adminPanelInline" style="
+                            margin-top:20px;
+                            border-top:1px solid rgba(255,255,255,0.05);
+                            padding-top:20px;
+                            display:none;
+                        ">
+                            <h3 style="color:#FFD700; font-size:16px; margin-bottom:15px; text-align:center;">🛠️ ADMIN PANEL</h3>
+                            <div style="
+                                background:rgba(0,0,0,0.3);
+                                border-radius:12px;
+                                padding:15px;
+                                text-align:center;
+                                border:1px dashed rgba(255,215,0,0.3);
+                                margin-bottom:15px;
+                            ">
+                                <div id="adminCodeDisplayInline" style="font-size:32px; font-weight:700; color:#FFD700; letter-spacing:4px; font-family:'Courier New', monospace;">----</div>
+                                <div style="color:#8899AA; font-size:12px; margin-top:5px;">Kode Aktivasi Saat Ini</div>
+                            </div>
+                            <button onclick="generateNewCodeInline()" style="
+                                width:100%;
+                                padding:12px;
+                                border:none;
+                                border-radius:10px;
+                                font-size:14px;
+                                font-weight:600;
+                                cursor:pointer;
+                                transition:all 0.3s ease;
+                                margin-top:5px;
+                                background:rgba(46,204,113,0.2);
+                                color:#2ecc71;
+                                border:1px solid rgba(46,204,113,0.2);
+                            ">
+                                <i class="fas fa-sync-alt"></i> Generate Kode Baru
+                            </button>
+                            <button onclick="resetAllActivationInline()" style="
+                                width:100%;
+                                padding:12px;
+                                border:none;
+                                border-radius:10px;
+                                font-size:14px;
+                                font-weight:600;
+                                cursor:pointer;
+                                transition:all 0.3s ease;
+                                margin-top:5px;
+                                background:rgba(255,68,68,0.15);
+                                color:#ff6b6b;
+                                border:1px solid rgba(255,68,68,0.15);
+                            ">
+                                <i class="fas fa-trash-alt"></i> Reset Semua Aktivasi
+                            </button>
+                            <div style="text-align:center; font-size:12px; color:#667766; margin-top:10px;">
+                                <span id="adminStatusInline">Status: <span style="color:#2ecc71;">Aktif</span></span>
+                            </div>
+                        </div>
+
+                        <div style="text-align:center; color:rgba(255,255,255,0.2); font-size:11px; margin-top:20px;">
+                            Versi 6.0 | © 2024 Koramil 1609-05/Sukasada
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+
+                // ===== FUNGSI INLINE =====
+                window.validasiAktivasiInline = function() {
+                    const input = document.getElementById('aktivasiCodeInput');
+                    const code = input.value.trim().toUpperCase();
+                    const errorEl = document.getElementById('aktivasiError');
+                    const successEl = document.getElementById('aktivasiSuccess');
+                    const errorMsg = document.getElementById('errorMessage');
+                    const btn = document.getElementById('btnAktivasiInline');
+
+                    errorEl.style.display = 'none';
+                    successEl.style.display = 'none';
+
+                    if (!code) {
+                        errorMsg.textContent = 'Masukkan kode aktivasi!';
+                        errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const codePattern = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+                    if (!codePattern.test(code)) {
+                        errorMsg.textContent = 'Format kode salah! Gunakan: XXXX-XXXX-XXXX-XXXX';
+                        errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const adminCode = getAdminCode();
+                    if (code === adminCode) {
+                        setActivated(code);
+                        successEl.innerHTML = '<i class="fas fa-check-circle"></i> ✅ Aktivasi berhasil! Mengarahkan ke aplikasi...';
+                        successEl.style.display = 'block';
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+
+                        setTimeout(() => {
+                            document.getElementById('activationOverlay').remove();
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        errorMsg.textContent = '❌ Kode aktivasi salah! Periksa kembali.';
+                        errorEl.style.display = 'block';
+                        input.value = '';
+                        input.focus();
+                        input.style.animation = 'shake 0.5s ease';
+                        setTimeout(() => { input.style.animation = ''; }, 500);
+                    }
+                };
+
+                window.toggleAdminInline = function() {
+                    const panel = document.getElementById('adminPanelInline');
+                    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                    if (panel.style.display === 'block') {
+                        updateAdminDisplayInline();
+                    }
+                };
+
+                window.updateAdminDisplayInline = function() {
+                    const code = getAdminCode();
+                    const display = document.getElementById('adminCodeDisplayInline');
+                    if (display) display.textContent = code;
+
+                    const status = document.getElementById('adminStatusInline');
+                    if (status) {
+                        const isActive = isActivated();
+                        status.innerHTML = 'Status: <span style="color:' + (isActive ? '#2ecc71' : '#ff6b6b') + ';">' + (isActive ? '✅ Aktif' : '❌ Tidak Aktif') + '</span>';
+                    }
+                };
+
+                window.generateNewCodeInline = function() {
+                    if (confirm('⚠️ Generate kode baru? Kode lama tidak akan berlaku lagi!')) {
+                        const newCode = generateRandomCode();
+                        localStorage.setItem(ADMIN_CODE_KEY, newCode);
+                        resetActivation();
+                        updateAdminDisplayInline();
+                        showToast('✅ Kode baru: ' + newCode);
+                        document.getElementById('aktivasiCodeInput').value = '';
+                        document.getElementById('aktivasiCodeInput').focus();
+                    }
+                };
+
+                window.resetAllActivationInline = function() {
+                    if (confirm('⚠️ Yakin reset semua aktivasi? Semua perangkat harus aktivasi ulang!')) {
+                        const newCode = generateRandomCode();
+                        localStorage.setItem(ADMIN_CODE_KEY, newCode);
+                        resetActivation();
+                        updateAdminDisplayInline();
+                        showToast('🔄 Reset berhasil! Kode baru: ' + newCode);
+                        document.getElementById('aktivasiCodeInput').value = '';
+                        document.getElementById('aktivasiCodeInput').focus();
+                    }
+                };
+
+                // ===== AUTO FORMAT INPUT =====
+                const input = document.getElementById('aktivasiCodeInput');
+                if (input) {
+                    input.addEventListener('input', function(e) {
+                        let value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                        let formatted = '';
+                        for (let i = 0; i < value.length; i++) {
+                            if (i > 0 && i % 4 === 0) formatted += '-';
+                            formatted += value[i];
+                        }
+                        this.value = formatted;
+                    });
+
+                    input.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') {
+                            window.validasiAktivasiInline();
+                        }
+                    });
+
+                    input.focus();
+                }
+
+                // ===== INISIALISASI =====
+                if (!localStorage.getItem(ADMIN_CODE_KEY)) {
+                    const code = generateRandomCode();
+                    localStorage.setItem(ADMIN_CODE_KEY, code);
+                }
+
+                // Tambahkan CSS animasi
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes shake {
+                        0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-10px)}80%{transform:translateX(10px)}
+                    }
+                    @keyframes toastSlideUp {
+                        from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}
+                    }
+                `;
+                document.head.appendChild(style);
+
+                console.log('🔐 DUKOPS Aktivasi Inline Loaded');
+                console.log('📊 Status: ' + (isActivated() ? '✅ Aktif' : '❌ Tidak Aktif'));
+            }
+
+            // ===== EXPOSE KE GLOBAL =====
+            window.__dukops = window.__dukops || {};
+            window.__dukops.isActivated = isActivated;
+            window.__dukops.getAdminCode = getAdminCode;
+
+            console.log('🔐 DUKOPS Aktivasi System Ready');
+
+        })();
+    </script>
+    <!-- ============================================================ -->
+    <!-- ============ AKHIR AKTIVASI INLINE ============ -->
+    <!-- ============================================================ -->
 
     <!-- External Libraries -->
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes"></script>
@@ -33,154 +458,1000 @@
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- ========== CSS MODULAR ========== -->
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/download-png.css">
 
-    <!-- html2canvas -->
+    <!-- html2canvas untuk fitur screenshot -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
-        /* ============================================================
-           INSTALL BUTTON - Default Sembunyi
-           ============================================================ */
-        #installButton {
-            display: none;
+        /* ============ SPLASH SCREEN MODERN UDAYANA - SEMUA CENTER ========== */
+        .splash-container-modern {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 14px 24px;
-            margin-bottom: 16px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #1a3a6a, #2d5a8a, #1a3a6a);
-            background-size: 300% 300%;
-            animation: gradientMoveInstall 3s ease-in-out infinite;
-            color: #ffffff;
-            font-family: 'Chakra Petch', 'Oxanium', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(52, 152, 219, 0.25);
-            transition: all 0.4s ease;
+            height: 100%;
+            background: linear-gradient(135deg, #0a1a3a 0%, #1a3a6a 50%, #0a2a4a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .splash-content {
+            text-align: center;
+            padding: 20px;
+            max-width: 85%;
+            animation: fadeInUp 0.6s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .splash-logo-center {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .splash-logo-center img {
+            width: 80px;
+            height: auto;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+        .splash-title-center {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FFD700;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 0;
+            line-height: 1.2;
+            text-align: center;
+        }
+        .splash-subtitle-center {
+            font-size: 11px;
+            color: #CCCCCC;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .splash-divider-center {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD700, #FF0000, #FFD700);
+            margin: 15px auto;
+            border-radius: 3px;
+        }
+        .splash-unit-center {
+            font-size: 14px;
+            color: #FFFFFF;
+            font-weight: 500;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .splash-kodim-center {
+            font-size: 11px;
+            color: #B0C4DE;
+            margin-top: 4px;
+            text-align: center;
+        }
+        .splash-progress-center {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 25px auto 10px;
+            overflow: hidden;
+        }
+        .splash-progress-bar-center {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .splash-percentage-center {
+            font-size: 12px;
+            color: #FFD700;
+            font-weight: bold;
+            text-align: center;
         }
 
-        #installButton.show {
+        /* ============ HEADER DUKOPS ============ */
+        .dukops-header {
+            background: url('header/header-background.png') center/cover no-repeat;
+            background-color: #1a472a;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+        .dukops-header-row {
             display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
-
-        #installButton:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 6px 30px rgba(52, 152, 219, 0.4);
+        .dukops-profile-area {
+            flex-shrink: 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 6px;
+            border-radius: 18px;
+            width: 98px;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
-
-        #installButton:active {
-            transform: scale(0.96);
+        .dukops-profile-img {
+            width: 100%;
+            height: 90px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            object-fit: cover;
+            background-color: #102214;
         }
-
-        @keyframes gradientMoveInstall {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .dukops-profile-name {
+            font-size: 11px;
+            font-weight: bold;
+            color: #f4f5c8;
+            margin-top: 6px;
+            text-align: center;
+            line-height: 1.2;
         }
-
-        /* Preview Desa + Koordinat Gabungan */
-        #previewDesa {
-            margin: 8px 0 12px;
-            padding: 0;
-            background: transparent;
+        .dukops-title-area {
+            flex: 1;
+            text-align: left;
+        }
+        .dukops-header-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffcc00;
+            margin: 2px 0;
+        }
+        .dukops-header-address {
+            font-size: 9px;
+            color: #aaffaa;
+            margin-top: 3px;
+        }
+        .audio-control-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .audio-control-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
             border: none;
-            min-height: auto;
+            background: rgba(255, 255, 255, 0.12);
+            color: #f4f5c8;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .audio-control-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: scale(1.05);
+        }
+        .audio-volume-slider {
+            display: none;
+            width: 120px;
+            appearance: none;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.25);
+            outline: none;
+        }
+        .audio-volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+        }
+        .audio-volume-slider::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            border: none;
+        }
+        .counter-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffcc00;
+            background: rgba(0, 0, 0, 0.5);
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-top: 5px;
         }
 
-        #previewDesa .coord-preview {
+        /* ============ JADWAL PIKET ============ */
+        .running-text-container {
+            background: rgba(0, 30, 0, 0.7);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ffcc00;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .running-text {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 10s linear infinite;
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 14px;
+            padding-right: 50px;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            50% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+        .running-text-container:hover .running-text {
+            animation-play-state: paused;
+        }
+
+        .whatsapp-transparent-btn {
             display: flex;
             flex-direction: column;
-            gap: 2px;
-            padding: 8px 10px;
-            background: rgba(0, 40, 0, 0.5);
-            border-radius: 6px;
-            border-left: 3px solid #4dff4d;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            border: 2px solid #25D366;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
-
-        #previewDesa .coord-preview.error {
-            border-left-color: #ff6666;
+        .whatsapp-transparent-btn i {
+            font-size: 28px;
+            color: #25D366;
+            pointer-events: none;
         }
-
-        #previewDesa .coord-preview .desa-name {
+        .whatsapp-transparent-btn span {
+            color: #25D366;
+            font-size: 16px;
             font-weight: bold;
+            pointer-events: none;
+        }
+        .whatsapp-transparent-btn:hover {
+            background: rgba(37, 211, 102, 0.1);
+            transform: scale(1.02);
+            border-color: #128C7E;
+        }
+        .whatsapp-transparent-btn:hover i,
+        .whatsapp-transparent-btn:hover span {
+            color: #128C7E;
+        }
+        .whatsapp-transparent-btn:active {
+            transform: scale(0.98);
+        }
+
+        .jadwal-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 80, 0, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 80%;
+            text-align: center;
+        }
+        .jadwal-toast.show {
+            opacity: 1;
+        }
+
+        .jadwal-section {
+            background: rgba(0, 60, 0, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 200, 127, 0.3);
+        }
+        .section-title-koramil {
+            color: #4dff4d;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+        .section-title-kediaman {
+            color: #ffcc00;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+        .section-title-makodim {
+            color: #00ccff;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+        .jadwal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .jadwal-title {
+            color: #4dff4d;
+            font-size: 24px;
+        }
+        .app-logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .jadwal-logo {
+            max-width: 100%;
+            height: auto;
+            max-height: 100px;
+            border-radius: 8px;
+            border: 2px solid #4dff4d;
+        }
+        .app-loading {
+            text-align: center;
+            padding: 10px;
+            color: #4dff4d;
+            display: none;
+        }
+
+        .auto-height-textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #4dff4d;
+            background-color: rgba(0, 40, 0, 0.8);
             color: #e6ffe6;
-            font-size: 13px;
+            font-size: 15px;
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.5;
+            resize: none;
+            overflow-y: hidden;
+            transition: height 0.1s ease;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: nowrap;
+            flex-direction: row !important;
+        }
+        .nav-btn {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #2a4a2a;
+            color: #e6ffe6;
+            white-space: normal;
+        }
+        .nav-btn.active {
+            background: #4dff4d;
+            color: #003300;
+        }
+        .nav-btn-dukops.active {
+            background: #4dff4d;
+            color: #003300;
+        }
+        .nav-btn-piket.active {
+            background: #ffcc00;
+            color: #003300;
+        }
+        .nav-btn-absen.active {
+            background: #ff6600;
+            color: #003300;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .col {
+            flex: 1;
+            min-width: 0;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #4dff4d;
+            background-color: rgba(0, 40, 0, 0.8);
+            color: #e6ffe6;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        select option {
+            background-color: #003300;
+            color: #e6ffe6;
+        }
+
+        .section-content {
+            display: block;
+        }
+        .section-content>div {
+            margin-bottom: 15px;
+        }
+        @media screen and (min-width: 601px) {
+            .section-content {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            .section-content>div {
+                flex: 1;
+                min-width: 250px;
+            }
+        }
+
+        /* ============ TAB ABSEN ============ */
+        .absen-card {
+            background: rgba(0, 40, 0, 0.7);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #4dff4d;
+        }
+        .absen-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .absen-stat-card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+        .absen-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .absen-stat-label {
+            font-size: 0.7rem;
+            color: #aaa;
+        }
+        .absen-progress-container {
+            margin: 10px 0;
+        }
+        .absen-progress-bar {
+            background: #333;
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .absen-progress-fill {
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+        }
+        .absen-desa-list {
+            max-height: none;
+            overflow-y: visible;
+        }
+        .absen-desa-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #2a4a2a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .absen-desa-name {
+            flex: 2;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .absen-desa-stats {
+            min-width: 50px;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+        .absen-desa-progress {
+            flex: 1;
+            min-width: 80px;
+        }
+        .absen-desa-progress-bar {
+            background: #333;
+            border-radius: 5px;
+            height: 5px;
+        }
+        .absen-desa-progress-fill {
+            height: 5px;
+            border-radius: 5px;
+        }
+        .absen-status-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+        }
+        .absen-status-lengkap {
+            background: #1b5e20;
+            color: #a5d6a7;
+        }
+        .absen-status-belum-lengkap {
+            background: #e65100;
+            color: #ffcc80;
+        }
+        .absen-status-belum {
+            background: #b71c1c;
+            color: #ef9a9a;
+        }
+        .absen-btn {
+            background: #2a4a2a;
+            color: #e6ffe6;
+            border: 1px solid #4dff4d;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .absen-btn:hover {
+            background: #3a6a3a;
+        }
+        .absen-btn-primary {
+            background: #1a73e8;
+            border-color: #4dff4d;
+        }
+        .absen-loading {
+            text-align: center;
+            padding: 20px;
+            color: #4dff4d;
+        }
+        .absen-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #4dff4d;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .absen-info-text {
+            text-align: center;
+            font-size: 0.6rem;
+            margin-top: 10px;
+            color: #888;
+        }
+
+        /* ============ PNG SCREENSHOT ============ */
+        .png-container {
+            width: 480px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: white !important;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: #000000 !important;
+        }
+        .png-container * {
+            color: #000000 !important;
+        }
+        .png-header {
+            background: linear-gradient(135deg, #0d47a1, #1a73e8) !important;
+            color: white !important;
+            padding: 10px;
+            text-align: center;
+        }
+        .png-header * {
+            color: white !important;
+        }
+        .png-stats {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+        .png-stat-card {
+            flex: 1;
+            background: #f0f2f5 !important;
+            border-radius: 8px;
+            padding: 5px;
+            text-align: center;
+        }
+        .png-stat-card div:first-child {
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .png-stat-card div:last-child {
+            font-size: 7px;
+            color: #666 !important;
+        }
+        .png-progress-bar {
+            background: #e0e0e0 !important;
+            border-radius: 8px;
+            height: 5px;
+        }
+        .png-progress-fill {
+            background: linear-gradient(90deg, #4caf50, #8bc34a) !important;
+            height: 5px;
+            border-radius: 8px;
+        }
+        .png-desa-item {
             display: flex;
             align-items: center;
             gap: 6px;
-            flex-wrap: wrap;
+            padding: 4px 0;
+            border-bottom: 1px solid #eee;
         }
 
-        #previewDesa .coord-preview .coord-value {
-            font-family: monospace;
-            color: #4dff4d;
-            font-size: 13px;
+        /* ============ INSTALL BUTTON ============ */
+        #installButton {
+            display: none;
+            margin-bottom: 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: bold;
+            width: 100%;
         }
 
-        #previewDesa .coord-preview .coord-value.error {
-            color: #ff6666;
+        /* ============ AI TEMPLATE MODAL ============ */
+        .modal-ai {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
         }
-
-        #previewDesa .coord-preview .coord-meta {
-            font-size: 10px;
-            color: #888;
+        .modal-ai.show {
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
             align-items: center;
+            justify-content: center;
         }
-
-        #previewDesa .coord-preview .acak-btn {
-            padding: 2px 10px;
-            background: #1a3a1a;
-            border: 1px solid #4dff4d;
-            border-radius: 4px;
-            color: #e6ffe6;
+        .modal-ai-content {
+            background: linear-gradient(145deg, #1a2a1f, #0f1a12);
+            margin: 0 auto;
+            padding: 0;
+            width: 95%;
+            max-width: 700px;
+            height: 85vh;
+            max-height: 600px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(46, 204, 113, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: modalSlideIn 0.25s ease;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #0d2a1d, #0a1f15);
+            border-bottom: 1px solid #2e8b57;
+            flex-shrink: 0;
+        }
+        .modal-ai-header h3 {
+            margin: 0;
+            color: #9fd49f;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .modal-ai-header h3 i {
+            margin-right: 8px;
+            color: #2ecc71;
+            font-size: 1.1rem;
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 26px;
             cursor: pointer;
-            font-size: 10px;
-            transition: all 0.3s ease;
+            color: #9fd49f;
+            transition: all 0.2s;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ff6b6b;
         }
 
-        #previewDesa .coord-preview .acak-btn:hover {
-            background: #2a5a2a;
-            border-color: #7dff7d;
+        .modal-ai-tabs {
+            padding: 12px;
+            background: #0e1712;
+            border-bottom: 1px solid #1e3a2a;
+            flex-shrink: 0;
         }
 
-        /* Sembunyikan previewKordinat karena sudah digabung */
-        #previewKordinat {
-            display: none !important;
+        #categorySelect {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #1a2a1f;
+            color: #e6ffe6;
+            border: 1px solid #2ecc71;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        #categorySelect:hover {
+            border-color: #4dff4d;
+            background: #2a3a2a;
+        }
+        #categorySelect:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.3);
         }
 
-        #loadingKoordinat {
-            display: none !important;
+        .modal-ai-body {
+            padding: 14px;
+            overflow-y: auto;
+            flex: 1;
+            scrollbar-width: thin;
+            scrollbar-color: #2ecc71 #1a2a1f;
+        }
+        .modal-ai-body::-webkit-scrollbar {
+            width: 5px;
+        }
+        .modal-ai-body::-webkit-scrollbar-track {
+            background: #1a2a1f;
+            border-radius: 10px;
+        }
+        .modal-ai-body::-webkit-scrollbar-thumb {
+            background: #2ecc71;
+            border-radius: 10px;
+        }
+        .modal-template-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .modal-template-item {
+            background: #0f1a12;
+            border-radius: 12px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #2a4a2a;
+        }
+        .modal-template-item:hover {
+            background: #1a2a1f;
+            border-color: #2ecc71;
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .modal-template-text {
+            font-size: 0.75rem;
+            line-height: 1.45;
+            color: #c8e6d0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .modal-template-item:hover .modal-template-text {
+            -webkit-line-clamp: unset;
+            overflow: visible;
+        }
+        .loading-templates {
+            text-align: center;
+            padding: 40px;
+            color: #9fd49f;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 480px) {
-            #installButton {
-                padding: 12px 16px;
-                font-size: 12px;
+        .narasi-wrapper {
+            position: relative;
+        }
+        .ai-icon-corner {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .ai-icon-corner:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.5);
+        }
+        .ai-icon-corner i {
+            color: white;
+            font-size: 17px;
+        }
+
+        /* ================= ANNOUNCEMENT BAR ================= */
+        .dukops-announcement-bar {
+            width: 100%;
+            background: transparent;
+            color: #ffffff;
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+            border-bottom: 3px solid transparent;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+        .dukops-announcement-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: dukops-running-text 30s linear infinite;
+        }
+        @keyframes dukops-running-text {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        /* ===== PREVIEW BOX ===== */
+        .previewBox {
+            color: #0a1a2e !important;
+            font-weight: 500 !important;
+            border: 2px solid #2a5a8a !important;
+            background: #f5f9ff !important;
+        }
+        .previewBox * {
+            color: #0a1a2e !important;
+        }
+
+        /* ===== CANVAS ===== */
+        #canvas {
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid #2a5a8a;
+            background: #0a1a0a;
+            margin: 10px 0;
+            display: block;
+        }
+
+        /* ===== ANTI POTRAIT ===== */
+        #previewGambar .error-potrait {
+            color: #ff4444;
+            font-weight: 600;
+            text-align: center;
+            padding: 20px;
+            background: #ffebee;
+            border-radius: 8px;
+            border-left: 4px solid #ff4444;
+        }
+        #previewGambar .error-potrait i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+            color: #ff4444;
+        }
+        #previewGambar .error-potrait .sub {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        #previewGambar .preview-landscape {
+            position: relative;
+            width: 100%;
+        }
+        #previewGambar .preview-landscape img {
+            width: 100%;
+            border-radius: 8px;
+            max-height: 400px;
+            object-fit: cover;
+            border: 2px solid #4CAF50;
+        }
+        #previewGambar .preview-landscape .badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(46, 204, 113, 0.9);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media screen and (max-width: 480px) {
+            .modal-ai-content {
+                width: 98%;
+                height: 90vh;
+                border-radius: 16px;
             }
-            #previewDesa .coord-preview .desa-name {
-                font-size: 12px;
+            .modal-template-text {
+                font-size: 0.7rem;
+                -webkit-line-clamp: 2;
             }
-            #previewDesa .coord-preview .coord-value {
+            .modal-ai-header h3 {
+                font-size: 1rem;
+            }
+            .splash-title-center {
+                font-size: 22px;
+            }
+            .splash-subtitle-center {
+                font-size: 9px;
+            }
+            .splash-logo-center img {
+                width: 60px;
+            }
+            .dukops-header-row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .dukops-title-area {
+                text-align: center;
+            }
+            .dukops-profile-img {
+                width: 100%;
+                height: 72px;
+            }
+            .dukops-header-title {
+                font-size: 14px;
+            }
+            #categorySelect {
                 font-size: 12px;
+                padding: 8px 10px;
             }
         }
     </style>
 </head>
 
 <body>
+
     <!-- ================= SPLASH SCREEN ================= -->
     <div id="splashScreen" class="splash-container-modern">
         <div class="splash-content">
@@ -189,7 +1460,6 @@
             </div>
             <div class="splash-title-center">DUKOPS</div>
             <div class="splash-title-center">BABINSA SUKASADA</div>
-            <div class="splash-divider-center"></div>
             <div class="splash-subtitle-center">KODIM 1609/BULELENG</div>
             <div class="splash-unit-center">KORAMIL 1609-05/SUKASADA</div>
             <div class="splash-kodim-center">Sistem Pelaporan Digitalisasi Babinsa</div>
@@ -201,7 +1471,9 @@
     </div>
 
     <!-- ================= BACKGROUND MP3 PLAYER ================= -->
-    <audio id="backgroundMusic" loop preload="auto"></audio>
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="assets/audio/background.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- ================= ANNOUNCEMENT BAR ================= -->
     <div class="dukops-announcement-bar">
@@ -227,24 +1499,18 @@
                     <div class="dukops-header-address">
                         <i class="fas fa-map-marker-alt"></i> Jl. Jelantik Gingsir No. 32 Sukasada Singaraja-Bali 81161
                     </div>
-
-                    <!-- AUDIO + COUNTER SATU BARIS -->
-                    <div class="audio-counter-wrapper">
-                        <div class="audio-control-wrapper">
-                            <button id="mp3ControlBtn" class="audio-control-btn" type="button" title="Kontrol audio">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
-                            <input id="audioVolumeSlider" class="audio-volume-slider" type="range" min="0" max="100" value="30" aria-label="Volume audio">
-                        </div>
-                        <span class="counter-value" id="submissionCounter">0</span>
+                    <div class="audio-control-wrapper">
+                        <!-- TOMBOL SPEAKER DIHILANGKAN -->
+                        <input id="audioVolumeSlider" class="audio-volume-slider" type="range" min="0" max="100" value="30" aria-label="Volume audio">
                     </div>
+                    <div><span class="counter-value" id="submissionCounter">0</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- ========== RUNNING TEXT TELEGRAM ========== -->
+        <!-- ========== RUNNING TEXT INFORMASI ========== -->
         <div class="telegram-running-container">
-            <div class="telegram-running-text" id="telegramRunningMessage">📨 Menghubungkan ke Telegram...</div>
+            <div class="telegram-running-text" id="infoRunningMessage">📢 Selamat datang di DUKOPS Digitalisasi Babinsa</div>
         </div>
 
         <!-- ========== NAVIGASI ========== -->
@@ -268,10 +1534,11 @@
                     <option value="">-- Pilih Desa --</option>
                 </select>
                 <div id="loadingDesa" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
-                <div class="previewBox" id="previewDesa"></div>
+                <div class="previewBox" id="previewDesa" style="display:none;"></div>
 
-                <div id="loadingKoordinat" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
-                <div class="previewBox" id="previewKordinat"></div>
+                <label><i class="fas fa-map-pin"></i> Koordinat:</label>
+                <div id="loadingKoordinat" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat koordinat...</div>
+                <div class="previewBox" id="previewKordinat"><span style="color:#6a7a8a;">Pilih desa untuk melihat koordinat</span></div>
 
                 <label><i class="fas fa-camera"></i> Foto Kegiatan:</label>
                 <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
@@ -283,10 +1550,10 @@
 
                 <label><i class="fas fa-file-alt"></i> Narasi Kegiatan:</label>
                 <div class="narasi-wrapper">
-                    <textarea id="narasi" rows="12" placeholder="Masukkan narasi kegiatan..." oninput="checkInputCompletion()"></textarea>
+                    <textarea id="narasi" rows="18" placeholder="Masukkan narasi kegiatan..." oninput="checkInputCompletion()"></textarea>
                 </div>
 
-                <!-- AI TEMPLATE DI BAWAH -->
+                <!-- AI TEMPLATE -->
                 <div class="ai-template-container">
                     <span><i class="fas fa-robot" style="color: #2ecc71;"></i> Butuh template narasi?</span>
                     <button class="ai-template-btn" id="aiTemplateBtn">
@@ -303,14 +1570,13 @@
                     <button id="resetBtn" onclick="resetAll()"><i class="fas fa-redo"></i> RESET</button>
                 </div>
 
-                <button id="showAttendanceBtn" onclick="showAttendance()" style="margin-top:12px;">
+                <button id="showAttendanceBtn" onclick="showAttendance()" style="margin-top:12px; width:100%; padding:14px; border-radius:12px; background:#1a6a3a; color:#ffffff; border:none; font-weight:600; font-size:1.1rem; cursor:pointer;">
                     <i class="fas fa-chart-bar"></i> KLIK INI..CEK LAPORAN ANDA DISINI YANG TIAP BULAN
                 </button>
 
-                <!-- Panel Absensi -->
                 <div id="attendancePanel" style="display: none;">
                     <div class="attendance-header">
-                        <button onclick="hideAttendance()">✕ TUTUP</button>
+                        <button onclick="hideAttendance()" style="background:#ff4444; color:#ffffff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:600;">✕ TUTUP</button>
                     </div>
                     <div class="attendance-filters">
                         <select id="attendanceDesaFilter" onchange="loadAttendanceData()">
@@ -346,7 +1612,6 @@
                 <div class="running-text" id="runningTextJadwalBaru">🌾 Memuat jadwal hanpangan... 🌾</div>
             </div>
 
-            <!-- Piket Koramil -->
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
@@ -366,7 +1631,6 @@
                 </div>
             </div>
 
-            <!-- Jaga Kediaman -->
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
@@ -386,7 +1650,6 @@
                 </div>
             </div>
 
-            <!-- Piket Makodim -->
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
@@ -406,13 +1669,11 @@
                 </div>
             </div>
 
-            <!-- Tombol WhatsApp -->
             <button id="whatsappBtnBaru" class="whatsapp-transparent-btn">
                 <i class="fab fa-whatsapp"></i>
                 <span>KIRIM KE WHATSAPP</span>
             </button>
 
-            <!-- Preview Pesan -->
             <div class="jadwal-section">
                 <textarea id="j_hasilPesanBaru" class="auto-height-textarea" readonly placeholder="Preview pesan akan muncul di sini setelah memilih nama..."></textarea>
             </div>
@@ -456,104 +1717,151 @@
 
     <!-- ==================== JAVASCRIPT ==================== -->
 
-    <!-- ============ TELEGRAM BOT + RUNNING TEXT ============ -->
+    <!-- ============ MP3 BACKGROUND AUTO-PLAY ============ -->
     <script>
-        // ========== KONFIGURASI ==========
-        const BOT_TOKEN = 'YOUR_BOT_TOKEN';
-        const CHAT_ID = 'YOUR_CHAT_ID';
-        const USE_REAL_BOT = (BOT_TOKEN !== 'YOUR_BOT_TOKEN' && CHAT_ID !== 'YOUR_CHAT_ID');
-
-        const runningTextEl = document.getElementById('telegramRunningMessage');
-
-        function updateRunningText(message) {
-            if (runningTextEl) {
-                let displayMsg = message.length > 100 ? message.substring(0, 97) + '...' : message;
-                runningTextEl.textContent = `📨 ${displayMsg}`;
-                runningTextEl.style.animation = 'none';
-                void runningTextEl.offsetWidth;
-                runningTextEl.style.animation = 'telegramMarquee 20s linear infinite';
-                console.log("✅ Running text diperbarui:", displayMsg);
-            }
-        }
-
-        async function fetchTelegramMessages() {
-            if (!USE_REAL_BOT) return;
-            try {
-                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=-1&limit=1`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.ok && data.result && data.result.length > 0) {
-                    const message = data.result[data.result.length - 1].message;
-                    if (message && message.text) {
-                        updateRunningText(message.text);
-                    }
-                }
-            } catch (error) {
-                console.error("Gagal ambil pesan Telegram:", error);
-            }
-        }
-
         (function() {
-            const messages = [
-                "📨 🔄 Terima Kasih Telah Mengirim Laporan DUKOPS dengan tepat waktu dan lengkap",
-                "📢 📡 DUKOPS DIGITALISASI BABINSA • Pastikan laporan terisi dengan benar",
-                "🇮🇩 🎯 Target 9 laporan per desa per bulan!",
-                "🔄 ✅ Laporan DUKOPS membantu pembinaan teritorial",
-                "📊 📈 Pantau terus laporan bulanan di menu ABSEN"
-            ];
+            const audio = document.getElementById('backgroundMusic');
+            const volumeSlider = document.getElementById('audioVolumeSlider');
+            let isPlaying = false;
+            let hasUserInteracted = false;
 
-            let currentIndex = 0;
-            let isBotActive = USE_REAL_BOT;
-
-            function rotateMessage() {
-                if (!runningTextEl) return;
-                if (isBotActive) return;
-                currentIndex = (currentIndex + 1) % messages.length;
-                runningTextEl.textContent = messages[currentIndex];
-                runningTextEl.style.animation = 'none';
-                void runningTextEl.offsetWidth;
-                runningTextEl.style.animation = 'telegramMarquee 20s linear infinite';
-            }
-
-            if (runningTextEl) {
-                if (isBotActive) {
-                    runningTextEl.textContent = '📨 Menghubungkan ke Telegram...';
-                } else {
-                    runningTextEl.textContent = messages[0];
+            function playMusic() {
+                if (audio && !isPlaying) {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        console.log('🎵 Musik background diputar');
+                    }).catch(err => console.log('Gagal memutar musik:', err));
                 }
-                runningTextEl.style.animation = 'telegramMarquee 20s linear infinite';
             }
 
-            if (!isBotActive) {
-                setInterval(rotateMessage, 5000);
-                console.log('✅ Running text auto-rotate aktif (tanpa bot)');
-            } else {
-                setInterval(fetchTelegramMessages, 6000);
-                fetchTelegramMessages();
-                console.log('✅ Running text menggunakan Telegram Bot');
+            if (audio) {
+                if (!audio.src) {
+                    audio.src = 'assets/audio/background.mp3';
+                }
+                audio.volume = 0.3;
+                if (volumeSlider) {
+                    volumeSlider.value = Math.round(audio.volume * 100);
+                }
+                audio.loop = true;
+                audio.load();
             }
+
+            if (volumeSlider) {
+                volumeSlider.oninput = function() {
+                    if (!audio) return;
+                    const value = parseInt(this.value, 10) / 100;
+                    audio.volume = value;
+                    if (value > 0 && !isPlaying && hasUserInteracted) {
+                        playMusic();
+                    }
+                };
+            }
+
+            window.triggerPlayMusic = function() {
+                if (!audio) return;
+                if (!hasUserInteracted) {
+                    hasUserInteracted = true;
+                    playMusic();
+                } else if (!isPlaying) {
+                    playMusic();
+                }
+            };
+
+            function firstInteraction() {
+                if (!hasUserInteracted) {
+                    hasUserInteracted = true;
+                    playMusic();
+                    document.removeEventListener('click', firstInteraction);
+                    document.removeEventListener('touchstart', firstInteraction);
+                    document.removeEventListener('scroll', firstInteraction);
+                }
+            }
+            document.addEventListener('click', firstInteraction);
+            document.addEventListener('touchstart', firstInteraction);
+            document.addEventListener('scroll', firstInteraction);
+
+            setTimeout(() => {
+                if (!hasUserInteracted) {
+                    playMusic();
+                }
+            }, 3000);
         })();
     </script>
 
-    <!-- ============ DATA DESA ============ -->
+    <!-- ============ DATA DESA & KOORDINAT ============ -->
     <script>
         const DESA_LIST_URL = 'data/desa-list.json';
+        const COORDINATES_URL = 'data/coordinates.json';
         const PROFILE_BASE_URL = 'profile/';
         const DEFAULT_FAVICON_URL = 'favicon-96x96.png';
 
         let daftarDesaGlobal = [];
         let profileImagesGlobal = {};
+        let coordinatesData = {};
+
+        async function loadCoordinates() {
+            try {
+                const response = await fetch(COORDINATES_URL + '?t=' + Date.now());
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                coordinatesData = data.coordinates || {};
+                console.log("✅ Koordinat berhasil dimuat:", Object.keys(coordinatesData).length, "desa");
+                return true;
+            } catch (error) {
+                console.error("Gagal memuat koordinat:", error);
+                coordinatesData = {};
+                return false;
+            }
+        }
+
+        function getCoordinates(desaName) {
+            if (!desaName || !coordinatesData) return null;
+            for (let key in coordinatesData) {
+                if (key.toLowerCase() === desaName.toLowerCase()) {
+                    return coordinatesData[key];
+                }
+            }
+            return null;
+        }
+
+        function updateCoordinatesPreview(desaName) {
+            const previewKordinat = document.getElementById('previewKordinat');
+            const loadingKoordinat = document.getElementById('loadingKoordinat');
+
+            if (!previewKordinat) return;
+            if (loadingKoordinat) loadingKoordinat.style.display = 'none';
+
+            if (!desaName || desaName === "") {
+                previewKordinat.innerHTML = '<span style="color:#6a7a8a;">Pilih desa untuk melihat koordinat</span>';
+                return;
+            }
+
+            const coords = getCoordinates(desaName);
+            if (coords) {
+                previewKordinat.innerHTML = `
+                        <div style="display:flex;flex-direction:column;gap:4px;">
+                            <span><i class="fas fa-location-dot" style="color:#e74c3c;"></i> <strong>Latitude:</strong> ${coords.lat}</span>
+                            <span><i class="fas fa-location-dot" style="color:#3498db;"></i> <strong>Longitude:</strong> ${coords.lng}</span>
+                            ${coords.nama ? `<span><i class="fas fa-map-pin" style="color:#2ecc71;"></i> <strong>Lokasi:</strong> ${coords.nama}</span>` : ''}
+                        </div>
+                    `;
+            } else {
+                previewKordinat.innerHTML = `<span style="color:#e67e22;"><i class="fas fa-exclamation-triangle"></i> Koordinat tidak tersedia untuk desa ini</span>`;
+            }
+        }
 
         async function loadDesaListFromGitHub() {
             const selectDesa = document.getElementById('selectDesa');
             const loadingDesa = document.getElementById('loadingDesa');
 
             try {
+                await loadCoordinates();
+
                 const response = await fetch(DESA_LIST_URL + '?t=' + Date.now());
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 daftarDesaGlobal = data.desaList || [];
-                console.log("✅ Daftar desa berhasil dimuat dari lokal:", daftarDesaGlobal.length, "desa");
+                console.log("✅ Daftar desa berhasil dimuat:", daftarDesaGlobal.length, "desa");
 
                 daftarDesaGlobal.forEach(desa => {
                     let fileName = desa.toLowerCase() + '.png';
@@ -563,7 +1871,7 @@
                 populateDesaDropdown();
 
             } catch (error) {
-                console.error("Gagal memuat daftar desa lokal:", error);
+                console.error("Gagal memuat daftar desa:", error);
                 if (loadingDesa) {
                     loadingDesa.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Gagal memuat daftar desa. Cek koneksi internet!';
                     loadingDesa.style.color = '#ff6666';
@@ -583,6 +1891,7 @@
         function populateDesaDropdown() {
             const selectDesa = document.getElementById('selectDesa');
             if (!selectDesa) return;
+
             selectDesa.disabled = false;
             selectDesa.innerHTML = '<option value="">-- Pilih Desa/Kelurahan --</option>';
             daftarDesaGlobal.forEach(desa => {
@@ -591,9 +1900,11 @@
                 option.textContent = desa;
                 selectDesa.appendChild(option);
             });
+
             selectDesa.value = "";
             const loadingDesa = document.getElementById('loadingDesa');
             if (loadingDesa) loadingDesa.style.display = 'none';
+            updateCoordinatesPreview("");
         }
 
         function updateDesaProfile(desaName) {
@@ -603,6 +1914,7 @@
             if (!desaName || desaName === "") {
                 imgElement.src = DEFAULT_FAVICON_URL;
                 if (nameElement) nameElement.textContent = "Pilih Desa";
+                updateCoordinatesPreview("");
                 return;
             }
 
@@ -619,8 +1931,9 @@
                 const imageUrl = PROFILE_BASE_URL + fileName;
                 imgElement.src = imageUrl;
                 if (nameElement) nameElement.textContent = matchedKey;
+
                 imgElement.onerror = function() {
-                    console.warn(`Gagal memuat profil untuk ${matchedKey}, file tidak ditemukan di folder profile/`);
+                    console.warn(`Gagal memuat profil untuk ${matchedKey}`);
                     imgElement.src = DEFAULT_FAVICON_URL;
                     if (nameElement) nameElement.textContent = matchedKey;
                 };
@@ -628,6 +1941,7 @@
                 imgElement.src = DEFAULT_FAVICON_URL;
                 if (nameElement) nameElement.textContent = desaName || "Pilih Desa";
             }
+            updateCoordinatesPreview(desaName);
         }
 
         function injectDesaKeNarasi(templateText, namaDesa) {
@@ -716,162 +2030,28 @@
         });
     </script>
 
-    <!-- ============ MP3 PLAYER ============ -->
-    <script>
-        (function() {
-            const audio = document.getElementById('backgroundMusic');
-            const mp3Btn = document.getElementById('mp3ControlBtn');
-            const volumeSlider = document.getElementById('audioVolumeSlider');
-            let isPlaying = false;
-            let hasUserInteracted = false;
-            let sliderVisible = false;
-
-            function updateButtonIcon() {
-                if (!mp3Btn) return;
-                if (!audio || audio.volume === 0) {
-                    mp3Btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                } else {
-                    mp3Btn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                }
-            }
-
-            function showVolumeSlider(show) {
-                if (!volumeSlider) return;
-                sliderVisible = show;
-                volumeSlider.style.display = show ? 'inline-block' : 'none';
-            }
-
-            function playMusic() {
-                if (audio && !isPlaying) {
-                    audio.play().then(() => {
-                        isPlaying = true;
-                        if (mp3Btn) {
-                            mp3Btn.classList.remove('muted');
-                            updateButtonIcon();
-                        }
-                    }).catch(err => console.log('Gagal memutar musik:', err));
-                }
-            }
-
-            function pauseMusic() {
-                if (audio && isPlaying) {
-                    audio.pause();
-                    isPlaying = false;
-                    if (mp3Btn) {
-                        mp3Btn.classList.add('muted');
-                        updateButtonIcon();
-                    }
-                }
-            }
-
-            function toggleSliderAndPlay() {
-                if (!audio) return;
-                if (!hasUserInteracted) {
-                    hasUserInteracted = true;
-                    playMusic();
-                }
-                showVolumeSlider(!sliderVisible);
-            }
-
-            if (audio) {
-                if (!audio.src) {
-                    audio.src = 'assets/audio/background.mp3';
-                }
-                audio.volume = 0.3;
-                if (volumeSlider) {
-                    volumeSlider.value = Math.round(audio.volume * 100);
-                }
-                audio.loop = true;
-                audio.load();
-            }
-
-            if (mp3Btn) {
-                mp3Btn.style.display = 'flex';
-                mp3Btn.onclick = toggleSliderAndPlay;
-            }
-
-            if (volumeSlider) {
-                volumeSlider.oninput = function() {
-                    if (!audio) return;
-                    const value = parseInt(this.value, 10) / 100;
-                    audio.volume = value;
-                    updateButtonIcon();
-                    if (value > 0 && !isPlaying && hasUserInteracted) {
-                        playMusic();
-                    }
-                };
-            }
-
-            window.triggerPlayMusic = function() {
-                if (!audio) return;
-                if (!hasUserInteracted) {
-                    hasUserInteracted = true;
-                    playMusic();
-                } else if (!isPlaying) {
-                    playMusic();
-                }
-            };
-
-            function firstInteraction() {
-                if (!hasUserInteracted) {
-                    hasUserInteracted = true;
-                    document.removeEventListener('click', firstInteraction);
-                    document.removeEventListener('touchstart', firstInteraction);
-                }
-            }
-            document.addEventListener('click', firstInteraction);
-            document.addEventListener('touchstart', firstInteraction);
-        })();
-    </script>
-
-    <!-- ============ INSTALL BUTTON - OTOMATIS HILANG JIKA SUDAH TERINSTALL ============ -->
+    <!-- ============ INSTALL BUTTON ============ -->
     <script>
         (function() {
             let deferredPrompt;
             const installBtn = document.getElementById('installButton');
 
-            function isAppInstalled() {
-                return window.matchMedia('(display-mode: standalone)').matches || 
-                       window.navigator.standalone === true;
-            }
-
-            // Sembunyikan tombol jika sudah terinstall
-            if (isAppInstalled()) {
-                if (installBtn) {
-                    installBtn.classList.remove('show');
-                    installBtn.style.display = 'none';
-                }
-                console.log('✅ Aplikasi sudah terinstall, tombol Install disembunyikan');
-            }
-
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
-                if (!isAppInstalled() && installBtn) {
-                    installBtn.classList.add('show');
-                    installBtn.style.display = 'flex';
-                    installBtn.innerHTML = '<i class="fas fa-download"></i> Install App';
+                if (!window.matchMedia('(display-mode: standalone)').matches) {
+                    installBtn.style.display = 'block';
                 }
             });
 
             window.addEventListener('appinstalled', () => {
-                if (installBtn) {
-                    installBtn.classList.remove('show');
-                    installBtn.style.display = 'none';
-                }
+                installBtn.style.display = 'none';
                 deferredPrompt = null;
-                console.log('✅ Aplikasi berhasil diinstall!');
             });
 
-            // Cek ulang setiap kali halaman terlihat
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden && isAppInstalled()) {
-                    if (installBtn) {
-                        installBtn.classList.remove('show');
-                        installBtn.style.display = 'none';
-                    }
-                }
-            });
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                installBtn.style.display = 'none';
+            }
 
             if (installBtn) {
                 installBtn.addEventListener('click', async () => {
@@ -879,12 +2059,11 @@
                         deferredPrompt.prompt();
                         const { outcome } = await deferredPrompt.userChoice;
                         if (outcome === 'accepted') {
-                            installBtn.classList.remove('show');
                             installBtn.style.display = 'none';
-                            deferredPrompt = null;
                         }
+                        deferredPrompt = null;
                     } else {
-                        alert('⚠️ Install prompt tidak tersedia.\n\nUntuk menginstall:\n• Android: Buka menu browser → "Install App"\n• PC: Klik ikon install di address bar');
+                        alert('');
                     }
                 });
             }
@@ -967,14 +2146,15 @@
 
                 let html = '<div class="modal-template-list">';
                 templates.forEach((template, idx) => {
-                    const escapedTemplate = template.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+                    const escapedTemplate = template.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g,
+                    '\\n');
                     const displayTemplate = template.length > 120 ? template.substring(0, 120) + '...' : template;
                     html += `
-                        <div class="modal-template-item" onclick="window.selectTemplate('${escapedTemplate}')">
-                            <div style="font-size:0.6rem;color:#2ecc71;margin-bottom:4px;">#${idx + 1}</div>
-                            <div class="modal-template-text">${displayTemplate}</div>
-                        </div>
-                    `;
+                            <div class="modal-template-item" onclick="window.selectTemplate('${escapedTemplate}')">
+                                <div style="font-size:0.6rem;color:#2ecc71;margin-bottom:4px;">#${idx + 1}</div>
+                                <div class="modal-template-text">${displayTemplate}</div>
+                            </div>
+                        `;
                 });
                 html += '</div>';
                 modalBody.innerHTML = html;
@@ -1011,7 +2191,8 @@
 
             openModalBtn.onclick = async () => {
                 if (!templateData) {
-                    modalBody.innerHTML = '<div class="loading-templates" style="color:#889988; text-align:center; padding:40px;"><i class="fas fa-spinner fa-pulse"></i> Memuat template...</div>';
+                    modalBody.innerHTML =
+                        '<div class="loading-templates" style="color:#889988; text-align:center; padding:40px;"><i class="fas fa-spinner fa-pulse"></i> Memuat template...</div>';
                     modal.style.display = 'flex';
                     modal.classList.add('show');
                     const success = await loadTemplatesFromGitHub();
@@ -1019,7 +2200,8 @@
                         renderModalTabs();
                         renderModalTemplateList();
                     } else {
-                        modalBody.innerHTML = '<div class="loading-templates" style="color:#f44336; text-align:center; padding:40px;">❌ Gagal memuat template. Cek koneksi internet!</div>';
+                        modalBody.innerHTML =
+                            '<div class="loading-templates" style="color:#f44336; text-align:center; padding:40px;">❌ Gagal memuat template. Cek koneksi internet!</div>';
                     }
                 } else {
                     renderModalTabs();
@@ -1045,309 +2227,6 @@
         })();
     </script>
 
-    <!-- ============ FITUR KOORDINAT ACAK ============ -->
-    <script>
-        // ============================================================
-        // FITUR KOORDINAT ACAK DARI JSON + GABUNG DENGAN PREVIEW DESA
-        // ============================================================
-
-        let koordinatDesaTerpilih = null;
-        let semuaKoordinatDesa = null;
-
-        async function loadKoordinatDesa(namaDesa) {
-            try {
-                const fileName = namaDesa.trim() + '.json';
-                let url = `data/coordinates/${encodeURIComponent(fileName)}?t=${Date.now()}`;
-                console.log(`📡 Mencoba mengambil koordinat dari lokal: ${url}`);
-                
-                let response = await fetch(url);
-                if (!response.ok) {
-                    const githubUrl = `https://raw.githubusercontent.com/sukasada05/dukops4/main/data/coordinates/${encodeURIComponent(fileName)}?t=${Date.now()}`;
-                    console.log(`📡 Mencoba dari GitHub: ${githubUrl}`);
-                    response = await fetch(githubUrl);
-                }
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status} - File tidak ditemukan`);
-                }
-                
-                const data = await response.json();
-                console.log(`✅ Koordinat ${namaDesa} dimuat:`, data.coordinates?.length || 0, 'titik');
-                return data;
-            } catch (error) {
-                console.warn(`⚠️ Gagal memuat koordinat untuk ${namaDesa}:`, error.message);
-                return null;
-            }
-        }
-
-        function getRandomCoordinate(koordinatData) {
-            if (!koordinatData || !koordinatData.coordinates || koordinatData.coordinates.length === 0) {
-                console.warn('⚠️ Tidak ada data koordinat');
-                return null;
-            }
-            const coords = koordinatData.coordinates;
-            const randomIndex = Math.floor(Math.random() * coords.length);
-            const selected = coords[randomIndex];
-            console.log(`🎲 Koordinat acak terpilih: [${randomIndex + 1}/${coords.length}]`, selected);
-            return {
-                ...selected,
-                index: randomIndex,
-                total: coords.length,
-                desa: koordinatData.desa
-            };
-        }
-
-        function displayCoordinatePreview(coord, desaName) {
-            const previewDesa = document.getElementById('previewDesa');
-            const previewKordinat = document.getElementById('previewKordinat');
-            const loadingEl = document.getElementById('loadingKoordinat');
-            
-            if (loadingEl) loadingEl.style.display = 'none';
-            if (previewKordinat) {
-                previewKordinat.innerHTML = '';
-                previewKordinat.style.display = 'none';
-            }
-            
-            if (previewDesa) {
-                if (!coord) {
-                    previewDesa.innerHTML = `
-                        <div class="coord-preview error">
-                            <div class="desa-name">
-                                📌 Desa: ${desaName || 'Pilih Desa'}
-                            </div>
-                            <div class="coord-value error">
-                                ❌ Koordinat tidak ditemukan
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    const lat = typeof coord.lat === 'number' ? coord.lat.toFixed(6) : coord.lat;
-                    const lon = typeof coord.lon === 'number' ? coord.lon.toFixed(6) : coord.lon;
-                    const elevation = coord.elevation || '-';
-                    
-                    previewDesa.innerHTML = `
-                        <div class="coord-preview">
-                            <div class="desa-name">
-                                📌 Desa: ${coord.desa || desaName}
-                                <span class="coord-value">- ${lat},${lon},${elevation}</span>
-                            </div>
-                            <div class="coord-meta">
-                                <span>🎲 Titik #${coord.index !== undefined ? coord.index + 1 : '?'}/${coord.total || '?'}</span>
-                                <span>📡 ${coord.source || 'lokal'}</span>
-                                <button class="acak-btn" onclick="ambilKoordinatAcak()">
-                                    🔄 Acak Ulang
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-        }
-
-        async function ambilKoordinatAcakUntukDesa(namaDesa) {
-            if (!namaDesa || namaDesa === '') {
-                const previewDesa = document.getElementById('previewDesa');
-                if (previewDesa) {
-                    previewDesa.innerHTML = `
-                        <div class="coord-preview error">
-                            <div class="desa-name">📌 Pilih desa terlebih dahulu</div>
-                        </div>
-                    `;
-                }
-                koordinatDesaTerpilih = null;
-                semuaKoordinatDesa = null;
-                return;
-            }
-            
-            const loadingEl = document.getElementById('loadingKoordinat');
-            const previewDesa = document.getElementById('previewDesa');
-            
-            if (loadingEl) {
-                loadingEl.style.display = 'block';
-                loadingEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengambil koordinat...';
-                loadingEl.style.color = '#ffcc00';
-            }
-            
-            if (previewDesa) {
-                previewDesa.innerHTML = `
-                    <div class="coord-preview" style="border-left-color:#ffcc00;">
-                        <div class="desa-name" style="color:#ffcc00;">🔍 Mengambil koordinat desa...</div>
-                    </div>
-                `;
-            }
-            
-            const data = await loadKoordinatDesa(namaDesa);
-            
-            if (!data) {
-                if (loadingEl) loadingEl.style.display = 'none';
-                if (previewDesa) {
-                    previewDesa.innerHTML = `
-                        <div class="coord-preview error">
-                            <div class="desa-name">📌 Desa: ${namaDesa}</div>
-                            <div class="coord-value error">❌ File koordinat tidak ditemukan</div>
-                        </div>
-                    `;
-                }
-                koordinatDesaTerpilih = null;
-                semuaKoordinatDesa = null;
-                return;
-            }
-            
-            semuaKoordinatDesa = data;
-            const randomCoord = getRandomCoordinate(data);
-            displayCoordinatePreview(randomCoord, namaDesa);
-            koordinatDesaTerpilih = randomCoord;
-            
-            if (loadingEl) loadingEl.style.display = 'none';
-            console.log(`✅ Koordinat siap untuk ${namaDesa}:`, randomCoord);
-        }
-
-        window.ambilKoordinatAcak = function() {
-            const selectDesa = document.getElementById('selectDesa');
-            const desaName = selectDesa.options[selectDesa.selectedIndex]?.text || '';
-            
-            if (!desaName || desaName === '') {
-                alert('⚠️ Pilih desa terlebih dahulu!');
-                return;
-            }
-            
-            if (!semuaKoordinatDesa) {
-                ambilKoordinatAcakUntukDesa(desaName);
-                return;
-            }
-            
-            const randomCoord = getRandomCoordinate(semuaKoordinatDesa);
-            displayCoordinatePreview(randomCoord, desaName);
-            koordinatDesaTerpilih = randomCoord;
-            
-            const btn = document.querySelector('#previewDesa .acak-btn');
-            if (btn) {
-                btn.textContent = '✅ Terpilih!';
-                btn.style.background = '#1b5e20';
-                btn.style.borderColor = '#4caf50';
-                setTimeout(() => {
-                    btn.textContent = '🔄 Acak Ulang';
-                    btn.style.background = '#1a3a1a';
-                    btn.style.borderColor = '#4dff4d';
-                }, 1000);
-            }
-            console.log('🎲 Koordinat diacak ulang:', randomCoord);
-        };
-
-        // Override loadSelectedDesa
-        const originalLoadSelectedDesa = window.loadSelectedDesa;
-        window.loadSelectedDesa = async function() {
-            const selectDesa = document.getElementById('selectDesa');
-            const selectedText = selectDesa.options[selectDesa.selectedIndex]?.text || "";
-            updateDesaProfile(selectedText);
-            await ambilKoordinatAcakUntukDesa(selectedText);
-            if (typeof window.triggerPlayMusic === 'function') {
-                window.triggerPlayMusic();
-            }
-        };
-
-        console.log('✅ Fitur koordinat acak + preview gabungan siap digunakan!');
-
-        // ============ TAMBAHKAN KOORDINAT KE CANVAS ============
-        window.getKoordinatUntukStamp = function() {
-            if (!koordinatDesaTerpilih) return null;
-            const coord = koordinatDesaTerpilih;
-            return {
-                lat: coord.lat || 0,
-                lon: coord.lon || 0,
-                elevation: coord.elevation || '-'
-            };
-        };
-
-        function tambahkanKoordinatKeCanvas(canvas, ctx) {
-            const coord = window.getKoordinatUntukStamp();
-            if (!coord) return;
-            
-            ctx.save();
-            const padding = 15;
-            const fontSize = 11;
-            const lineHeight = 16;
-            
-            const lines = [
-                `📍 LAT: ${typeof coord.lat === 'number' ? coord.lat.toFixed(6) : coord.lat}`,
-                `📍 LON: ${typeof coord.lon === 'number' ? coord.lon.toFixed(6) : coord.lon}`,
-                `🏔️ Elevasi: ${coord.elevation}`
-            ];
-            
-            ctx.font = `${fontSize}px Arial, sans-serif`;
-            let maxWidth = 0;
-            lines.forEach(line => {
-                const metrics = ctx.measureText(line);
-                if (metrics.width > maxWidth) maxWidth = metrics.width;
-            });
-            
-            const x = canvas.width - maxWidth - padding - 12;
-            const y = canvas.height - (lines.length * lineHeight) - padding - 8;
-            
-            const bgWidth = maxWidth + 20;
-            const bgHeight = (lines.length * lineHeight) + 14;
-            
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
-            ctx.shadowBlur = 8;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-            ctx.beginPath();
-            if (ctx.roundRect) {
-                ctx.roundRect(x - 8, y - 8, bgWidth + 8, bgHeight + 8, 6);
-            } else {
-                ctx.rect(x - 8, y - 8, bgWidth + 8, bgHeight + 8);
-            }
-            ctx.fill();
-            
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-            
-            ctx.strokeStyle = 'rgba(77, 255, 77, 0.4)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            if (ctx.roundRect) {
-                ctx.roundRect(x - 8, y - 8, bgWidth + 8, bgHeight + 8, 6);
-            } else {
-                ctx.rect(x - 8, y - 8, bgWidth + 8, bgHeight + 8);
-            }
-            ctx.stroke();
-            
-            ctx.font = `${fontSize}px Arial, sans-serif`;
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            
-            lines.forEach((line, i) => {
-                ctx.fillStyle = '#4dff4d';
-                ctx.fillText(line, x, y + (i * lineHeight));
-            });
-            
-            ctx.restore();
-        }
-
-        function setupCanvasObserver() {
-            const canvas = document.getElementById('canvas');
-            if (!canvas) return;
-            let lastDataURL = canvas.toDataURL();
-            setInterval(() => {
-                const currentDataURL = canvas.toDataURL();
-                if (currentDataURL !== lastDataURL) {
-                    lastDataURL = currentDataURL;
-                    const ctx = canvas.getContext('2d');
-                    if (ctx) tambahkanKoordinatKeCanvas(canvas, ctx);
-                }
-            }, 2000);
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupCanvasObserver);
-        } else {
-            setTimeout(setupCanvasObserver, 1000);
-        }
-    </script>
-
     <!-- ============ APPLICATION SCRIPTS ============ -->
     <script src="app.js"></script>
 
@@ -1363,8 +2242,7 @@
             ];
 
             function updateRunningText() { const el = document.getElementById('runningTextJadwalBaru'); if (el) el
-                    .textContent = JadwalData.currentHanpangan ? '🌾 JADWAL HANPANGAN HARI INI: ' + JadwalData
-                    .currentHanpangan + ' 🌾' : '🌾 Memuat jadwal hanpangan... 🌾'; }
+                    .textContent = '🌾 JADWAL HANPANGAN HARI INI: ' + JadwalData.currentHanpangan + ' 🌾'; }
 
             function fetchFromGitHub(url) { return new Promise(resolve => { fetch(url + '?t=' + new Date().getTime()).then(
                         res => res.ok ? res.text() : null).then(data => resolve(data)).catch(() => resolve(null)); }); }
@@ -1696,35 +2574,163 @@
         });
     </script>
 
-    <!-- ============ RESET CANVAS ============ -->
+    <!-- ============ RESET CANVAS & PREVIEW GAMBAR ============ -->
     <script>
         function resetCanvas() {
             const canvas = document.getElementById('canvas');
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            
+
             canvas.width = 800;
             canvas.height = Math.round(canvas.width / (16 / 9));
-            
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.src = 'header/header-background.png';
-            
-            img.onload = function() {
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
-                ctx.font = '24px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('📸 DUKOPS BABINSA', canvas.width / 2, canvas.height - 30);
+
+            // Background default hijau (TANPA WATERMARK)
+            ctx.fillStyle = '#0a1a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Teks placeholder
+            ctx.fillStyle = '#4CAF50';
+            ctx.font = '20px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('📸 Preview gambar akan muncul di sini', canvas.width / 2, canvas.height / 2);
+        }
+
+        // ============ PREVIEW GAMBAR DI CANVAS DENGAN ANTI POTRAIT ============
+        function previewImage() {
+            const input = document.getElementById('gambar');
+            const preview = document.getElementById('previewGambar');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            if (!input || !input.files || !input.files[0]) {
+                preview.innerHTML = '<span style="color:#6a7a8a;">Belum ada gambar dipilih</span>';
+                resetCanvas();
+                return;
+            }
+
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const lebar = img.width;
+                    const tinggi = img.height;
+                    const isLandscape = lebar > tinggi;
+
+                    console.log(`📐 Ukuran gambar: ${lebar}×${tinggi}`);
+                    console.log(`🔄 Orientasi: ${isLandscape ? 'LANDSCAPE ✅' : 'POTRAIT/SQUARE ❌'}`);
+
+                    // ===== ANTI POTRAIT =====
+                    if (!isLandscape) {
+                        preview.innerHTML = `
+                                <div class="error-potrait">
+                                    <i class="fas fa-times-circle"></i>
+                                    ❌ GAMBAR POTRAIT DITOLAK!<br>
+                                    <span class="sub">Ukuran: ${lebar}×${tinggi} (Harus lebar > tinggi)</span>
+                                    <br><br>
+                                    <span style="font-size:0.7rem; color:#888;">📷 Gunakan gambar LANDSCAPE (horizontal)</span>
+                                </div>
+                            `;
+                        resetCanvas();
+                        input.value = '';
+                        if (typeof checkInputCompletion === 'function') {
+                            checkInputCompletion();
+                        }
+                        alert('❌ GAMBAR POTRAIT DITOLAK!\nUkuran: ' + lebar + '×' + tinggi +
+                            '\nGunakan gambar LANDSCAPE (lebar > tinggi)');
+                        return;
+                    }
+
+                    // ===== GAMBAR LANDSCAPE - DITERIMA =====
+                    preview.innerHTML = `
+                            <div class="preview-landscape">
+                                <img src="${e.target.result}" alt="Preview gambar landscape">
+                                <div class="badge">✅ LANDSCAPE (${lebar}×${tinggi})</div>
+                            </div>
+                        `;
+
+                    // Tampilkan di canvas
+                    canvas.width = 800;
+                    canvas.height = Math.round(canvas.width / (16 / 9));
+
+                    const bgImg = new Image();
+                    bgImg.crossOrigin = 'anonymous';
+                    bgImg.src = 'header/header-background.png';
+
+                    bgImg.onload = function() {
+                        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+                        const maxWidth = canvas.width * 0.85;
+                        const maxHeight = canvas.height * 0.75;
+                        let imgWidth = maxWidth;
+                        let imgHeight = imgWidth * (tinggi / lebar);
+
+                        if (imgHeight > maxHeight) {
+                            imgHeight = maxHeight;
+                            imgWidth = imgHeight * (lebar / tinggi);
+                        }
+
+                        const x = (canvas.width - imgWidth) / 2;
+                        const y = (canvas.height - imgHeight) / 2 + 20;
+
+                        ctx.drawImage(img, x, y, imgWidth, imgHeight);
+                        ctx.strokeStyle = 'rgba(255,215,0,0.6)';
+                        ctx.lineWidth = 3;
+                        ctx.strokeRect(x, y, imgWidth, imgHeight);
+
+                        // Watermark
+                        ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
+                        ctx.font = '24px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('📸 DUKOPS BABINSA', canvas.width / 2, canvas.height - 30);
+                    };
+
+                    bgImg.onerror = function() {
+                        ctx.fillStyle = '#0a1a0a';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                        const maxWidth = canvas.width * 0.85;
+                        const maxHeight = canvas.height * 0.75;
+                        let imgWidth = maxWidth;
+                        let imgHeight = imgWidth * (tinggi / lebar);
+
+                        if (imgHeight > maxHeight) {
+                            imgHeight = maxHeight;
+                            imgWidth = imgHeight * (lebar / tinggi);
+                        }
+
+                        const x = (canvas.width - imgWidth) / 2;
+                        const y = (canvas.height - imgHeight) / 2 + 20;
+
+                        ctx.drawImage(img, x, y, imgWidth, imgHeight);
+                        ctx.strokeStyle = 'rgba(255,215,0,0.6)';
+                        ctx.lineWidth = 3;
+                        ctx.strokeRect(x, y, imgWidth, imgHeight);
+
+                        ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
+                        ctx.font = '24px Arial';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('📸 DUKOPS BABINSA', canvas.width / 2, canvas.height - 30);
+                    };
+
+                    // Simpan data
+                    window._gambarData = {
+                        file: file,
+                        dataUrl: e.target.result,
+                        width: lebar,
+                        height: tinggi,
+                        isLandscape: true
+                    };
+
+                    if (typeof checkInputCompletion === 'function') {
+                        checkInputCompletion();
+                    }
+                };
+                img.src = e.target.result;
             };
-            
-            img.onerror = function() {
-                ctx.fillStyle = '#0a1a0a';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#4CAF50';
-                ctx.font = '20px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('📸 Preview gambar akan muncul di sini', canvas.width / 2, canvas.height / 2);
-            };
+
+            reader.readAsDataURL(file);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
