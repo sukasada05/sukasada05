@@ -1,0 +1,281 @@
+/* download-png.css - CSS untuk halaman download absen PNG */
+
+/* Container utama untuk area screenshot */
+.png-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Header PNG */
+.png-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px 10px 16px;
+    background: linear-gradient(135deg, #1a2332, #2c3e50);
+    border-radius: 10px 10px 0 0;
+    color: white;
+}
+
+.png-header div:first-child {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.png-header div:last-child {
+    font-size: 8px;
+    opacity: 0.7;
+}
+
+/* Stats grid untuk PNG */
+.png-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin: 8px 0 10px 0;
+}
+
+.png-stat-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+}
+
+.png-stat-card div:first-child {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.png-stat-card div:last-child {
+    font-size: 7px;
+    color: #6b7a8f;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Progress bar PNG */
+.png-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 2px 0;
+}
+
+.png-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #66BB6A);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* Item desa untuk PNG */
+.png-desa-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px;
+    border-bottom: 1px solid #f0f2f5;
+    font-size: 10px;
+}
+
+.png-desa-item:last-child {
+    border-bottom: none;
+}
+
+.png-desa-item .desa-name {
+    flex: 2;
+    font-weight: 500;
+    color: #000;
+    font-size: 10px;
+}
+
+.png-desa-item .desa-count {
+    width: 35px;
+    text-align: center;
+    font-size: 9px;
+    color: #000;
+}
+
+.png-desa-item .desa-progress {
+    width: 50px;
+}
+
+.png-desa-item .desa-progress-bar {
+    background: #e0e0e0;
+    border-radius: 6px;
+    height: 4px;
+    overflow: hidden;
+}
+
+.png-desa-item .desa-progress-fill {
+    height: 4px;
+    border-radius: 6px;
+}
+
+.png-desa-item .desa-status {
+    width: 45px;
+    text-align: center;
+    font-size: 8px;
+    padding: 2px 4px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* Status badge untuk PNG */
+.png-status-lengkap {
+    background: #e8f5e9;
+    color: #4caf50;
+}
+
+.png-status-bl {
+    background: #fff3e0;
+    color: #ff9800;
+}
+
+.png-status-belum {
+    background: #ffebee;
+    color: #f44336;
+}
+
+/* Footer PNG */
+.png-footer {
+    text-align: center;
+    padding: 8px 0 4px 0;
+    font-size: 7px;
+    color: #999;
+    border-top: 1px solid #f0f2f5;
+    margin-top: 8px;
+}
+
+/* Style untuk tombol download di halaman absen */
+.absen-btn-download-png {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+    margin: 10px 0;
+}
+
+.absen-btn-download-png:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+}
+
+.absen-btn-download-png:active {
+    transform: translateY(0);
+}
+
+.absen-btn-download-png i {
+    font-size: 18px;
+}
+
+/* Responsif untuk PNG */
+@media (max-width: 480px) {
+    .png-container {
+        padding: 10px;
+        max-width: 100%;
+    }
+    
+    .png-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+    }
+    
+    .png-stat-card {
+        padding: 5px 2px;
+    }
+    
+    .png-stat-card div:first-child {
+        font-size: 10px;
+    }
+    
+    .png-stat-card div:last-child {
+        font-size: 6px;
+    }
+    
+    .png-desa-item {
+        padding: 4px 4px;
+        font-size: 8px;
+        gap: 4px;
+    }
+    
+    .png-desa-item .desa-name {
+        font-size: 8px;
+    }
+    
+    .png-desa-item .desa-count {
+        font-size: 7px;
+        width: 28px;
+    }
+    
+    .png-desa-item .desa-progress {
+        width: 35px;
+    }
+    
+    .png-desa-item .desa-status {
+        font-size: 6px;
+        width: 35px;
+        padding: 1px 3px;
+    }
+    
+    .png-header div:first-child {
+        font-size: 12px;
+    }
+    
+    .png-header div:last-child {
+        font-size: 6px;
+    }
+}
+
+/* Print style untuk PNG */
+@media print {
+    .png-container {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        max-width: 100% !important;
+    }
+    
+    .png-header {
+        background: #1a2332 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    .png-stat-card {
+        background: #f8f9fa !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    .png-progress-fill {
+        background: #4CAF50 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    .png-status-lengkap,
+    .png-status-bl,
+    .png-status-belum {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
