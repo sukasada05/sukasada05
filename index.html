@@ -64,7 +64,7 @@
             color: #0a1a2e !important;
         }
 
-        #previewDesa, #previewKordinat, #previewTanggal {
+        #previewDesa, #previewKordinat, #previewGambar, #previewTanggal {
             color: #0a1a2e !important;
             font-weight: 500 !important;
         }
@@ -98,114 +98,6 @@
 
         #previewKordinat {
             min-height: 30px !important;
-        }
-
-        /* ===== HEADER ===== */
-        .dukops-header {
-            background: transparent !important;
-            border: none !important;
-            padding: 0 !important;
-            margin-bottom: 15px !important;
-            border-radius: 0 !important;
-        }
-
-        .dukops-header-row {
-            display: flex !important;
-            align-items: center !important;
-            gap: 15px !important;
-            flex-wrap: wrap !important;
-        }
-
-        /* ===== PROFILE AREA TETAP ADA ===== */
-        .dukops-profile-area {
-            flex-shrink: 0 !important;
-            text-align: center !important;
-            background: rgba(10, 26, 58, 0.85) !important;
-            padding: 6px !important;
-            border-radius: 18px !important;
-            width: 98px !important;
-            display: inline-flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            border: 2px solid #2a5a8a !important;
-        }
-
-        .dukops-profile-img {
-            width: 100% !important;
-            height: 90px !important;
-            border-radius: 16px !important;
-            border: 1px solid rgba(255, 255, 255, 0.18) !important;
-            object-fit: cover !important;
-            background-color: #102214 !important;
-        }
-
-        .dukops-profile-name {
-            font-size: 11px !important;
-            font-weight: bold !important;
-            color: #f4f5c8 !important;
-            margin-top: 6px !important;
-            text-align: center !important;
-            line-height: 1.2 !important;
-        }
-
-        /* ===== TITLE AREA ===== */
-        .dukops-title-area {
-            flex: 1 !important;
-            text-align: center !important;
-            padding: 20px 16px !important;
-            background: url('header/header-background.png') center/cover no-repeat !important;
-            border-radius: 14px !important;
-            border: 2px solid #2a5a8a !important;
-            position: relative !important;
-            min-height: 120px !important;
-        }
-
-        .dukops-title-area::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 26, 58, 0.4);
-            border-radius: 12px;
-            pointer-events: none;
-        }
-
-        .dukops-title-area * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .dukops-header-title {
-            font-size: 1.8rem !important;
-            font-weight: 700 !important;
-            color: #FFD700 !important;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.8) !important;
-        }
-
-        .dukops-header-address {
-            font-size: 0.95rem !important;
-            color: #ffffff !important;
-            text-shadow: 1px 1px 6px rgba(0,0,0,0.8) !important;
-        }
-
-        .audio-control-wrapper {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 10px !important;
-            margin-top: 8px !important;
-        }
-
-        .counter-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffcc00;
-            background: rgba(0,0,0,0.6);
-            display: inline-block;
-            padding: 2px 14px;
-            border-radius: 20px;
         }
 
         /* ===== TINGGI NARASI ===== */
@@ -263,6 +155,14 @@
             display: none !important;
         }
 
+        /* ===== AUDIO WRAPPER ===== */
+        .audio-control-wrapper {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            margin-top: 8px !important;
+        }
+
         /* ===== INSTALL BUTTON ===== */
         #installButton {
             display: none;
@@ -313,8 +213,8 @@
         }
 
         .ai-template-btn {
-            background: #2ecc71 !important;
-            color: #0a1a0a !important;
+            background: rgba(255, 255, 255, 0.76);
+            color: #0e0101 !important;
             border: none !important;
             padding: 10px 18px !important;
             border-radius: 10px !important;
@@ -323,56 +223,8 @@
         }
 
         .ai-template-btn:hover {
-            background: #27ae60 !important;
+            background: rgba(135, 16, 16, 0.589);
         }
-
-        /* ===== CANVAS ===== */
-        #canvas {
-            width: 100%;
-            border-radius: 12px;
-            border: 2px solid #2a5a8a;
-            background: #0a1a0a;
-            margin: 10px 0;
-            display: block;
-        }
-
-        /* ===== INFO GAMBAR ===== */
-        #gambarInfo {
-            color: #2a5a8a;
-            font-size: 0.85rem;
-            margin: 4px 0 8px 0;
-            display: block;
-        }
-
-        /* ===== NAVIGASI ===== */
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .nav-btn {
-            flex: 1;
-            padding: 12px 10px !important;
-            border: none !important;
-            border-radius: 10px !important;
-            font-size: 1rem !important;
-            font-weight: 700 !important;
-            cursor: pointer !important;
-            transition: all 0.3s ease !important;
-            background: #2a4a2a !important;
-            color: #e6ffe6 !important;
-            text-align: center;
-        }
-
-        .nav-btn.active {
-            background: #4dff4d !important;
-            color: #003300 !important;
-        }
-
-        .nav-btn-dukops.active { background: #4dff4d !important; color: #003300 !important; }
-        .nav-btn-piket.active { background: #ffcc00 !important; color: #003300 !important; }
-        .nav-btn-absen.active { background: #ff6600 !important; color: #003300 !important; }
     </style>
 </head>
 
@@ -415,13 +267,10 @@
         <!-- ========== HEADER DUKOPS ========== -->
         <div class="dukops-header">
             <div class="dukops-header-row">
-                <!-- ===== PROFILE DESA TETAP ADA ===== -->
                 <div class="dukops-profile-area" id="desaProfileContainerHeader">
                     <img id="desaProfileImgHeader" class="dukops-profile-img" src="favicon-96x96.png" alt="Foto Profil">
                     <div id="desaProfileNameHeader" class="dukops-profile-name">Pilih Desa</div>
                 </div>
-
-                <!-- ===== TITLE AREA ===== -->
                 <div class="dukops-title-area">
                     <div class="dukops-header-title">DUKOPS BABINSA</div>
                     <div class="dukops-header-title">KORAMIL 1609-05/SUKASADA</div>
@@ -429,6 +278,7 @@
                         <i class="fas fa-map-marker-alt"></i> Jl. Jelantik Gingsir No. 32 Sukasada Singaraja-Bali 81161
                     </div>
                     <div class="audio-control-wrapper">
+                        <!-- TOMBOL SPEAKER DIHILANGKAN -->
                         <input id="audioVolumeSlider" class="audio-volume-slider" type="range" min="0" max="100" value="30" aria-label="Volume audio">
                     </div>
                     <div><span class="counter-value" id="submissionCounter">0</span></div>
@@ -470,7 +320,7 @@
 
                 <label><i class="fas fa-camera"></i> Foto Kegiatan:</label>
                 <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
-                <div id="gambarInfo"><i class="fas fa-info-circle"></i> 📷 Hanya gambar LANDSCAPE (lebar > tinggi) yang diterima</div>
+                <div class="previewBox" id="previewGambar"></div>
 
                 <label><i class="fas fa-calendar-alt"></i> Tanggal & Waktu:</label>
                 <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
@@ -483,7 +333,6 @@
 
                 <!-- AI TEMPLATE -->
                 <div class="ai-template-container">
-                    <span><i class="fas fa-robot" style="color: #2ecc71;"></i> Butuh template narasi?</span>
                     <button class="ai-template-btn" id="aiTemplateBtn">
                         <i class="fas fa-robot"></i> Gunakan Template AI
                     </button>
@@ -833,7 +682,6 @@
             const loadingDesa = document.getElementById('loadingDesa');
             if (loadingDesa) loadingDesa.style.display = 'none';
             updateCoordinatesPreview("");
-            resetCanvas();
         }
 
         function updateDesaProfile(desaName) {
@@ -844,7 +692,6 @@
                 imgElement.src = DEFAULT_FAVICON_URL;
                 if (nameElement) nameElement.textContent = "Pilih Desa";
                 updateCoordinatesPreview("");
-                resetCanvas();
                 return;
             }
 
@@ -872,7 +719,6 @@
                 if (nameElement) nameElement.textContent = desaName || "Pilih Desa";
             }
             updateCoordinatesPreview(desaName);
-            resetCanvas();
         }
 
         function injectDesaKeNarasi(templateText, namaDesa) {
@@ -893,8 +739,6 @@
             const selectDesa = document.getElementById('selectDesa');
             const selectedText = selectDesa.options[selectDesa.selectedIndex]?.text || "";
             updateDesaProfile(selectedText);
-            resetCanvas();
-            
             if (typeof window.triggerPlayMusic === 'function') {
                 window.triggerPlayMusic();
             }
@@ -1504,7 +1348,7 @@
         });
     </script>
 
-    <!-- ============ RESET CANVAS & PREVIEW GAMBAR ============ -->
+    <!-- ============ RESET CANVAS ============ -->
     <script>
         function resetCanvas() {
             const canvas = document.getElementById('canvas');
@@ -1514,123 +1358,26 @@
             canvas.width = 800;
             canvas.height = Math.round(canvas.width / (16 / 9));
             
-            // Background default hijau (TANPA WATERMARK)
-            ctx.fillStyle = '#0a1a0a';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = 'header/header-background.png';
             
-            // Teks placeholder
-            ctx.fillStyle = '#4CAF50';
-            ctx.font = '20px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('📸 Preview gambar akan muncul di sini', canvas.width / 2, canvas.height / 2);
-        }
-
-        // ============ PREVIEW GAMBAR DI CANVAS ============
-        function previewImage() {
-            const input = document.getElementById('gambar');
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            if (!input || !input.files || !input.files[0]) {
-                resetCanvas();
-                return;
-            }
-            
-            const file = input.files[0];
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const lebar = img.width;
-                    const tinggi = img.height;
-                    const isLandscape = lebar > tinggi;
-                    
-                    console.log(`📐 Ukuran gambar: ${lebar}×${tinggi}`);
-                    console.log(`🔄 Orientasi: ${isLandscape ? 'LANDSCAPE ✅' : 'POTRAIT/SQUARE ❌'}`);
-                    
-                    if (!isLandscape) {
-                        alert(`❌ GAMBAR POTRAIT DITOLAK!\nUkuran: ${lebar}×${tinggi}\nGunakan gambar LANDSCAPE (lebar > tinggi)`);
-                        resetCanvas();
-                        input.value = '';
-                        if (typeof checkInputCompletion === 'function') {
-                            checkInputCompletion();
-                        }
-                        return;
-                    }
-                    
-                    // ===== GAMBAR LANDSCAPE =====
-                    canvas.width = 800;
-                    canvas.height = Math.round(canvas.width / (16 / 9));
-                    
-                    // Gambar foto FULL
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    // Efek overlay gelap di bagian bawah untuk watermark
-                    const gradient = ctx.createLinearGradient(0, canvas.height - 60, 0, canvas.height);
-                    gradient.addColorStop(0, 'rgba(0,0,0,0)');
-                    gradient.addColorStop(1, 'rgba(0,0,0,0.5)');
-                    ctx.fillStyle = gradient;
-                    ctx.fillRect(0, canvas.height - 60, canvas.width, 60);
-                    
-                    // ===== WATERMARK DI ATAS GAMBAR =====
-                    ctx.fillStyle = 'rgba(255, 215, 0, 0.25)';
-                    ctx.font = 'bold 22px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('📸 DUKOPS BABINSA', canvas.width / 2, canvas.height - 20);
-                    
-                    // Border/Frame
-                    ctx.strokeStyle = 'rgba(255,215,0,0.3)';
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Corner accent (ujung lancip/kotak)
-                    const cornerSize = 20;
-                    ctx.strokeStyle = 'rgba(255,215,0,0.4)';
-                    ctx.lineWidth = 3;
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(0, cornerSize);
-                    ctx.lineTo(0, 0);
-                    ctx.lineTo(cornerSize, 0);
-                    ctx.stroke();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.width - cornerSize, 0);
-                    ctx.lineTo(canvas.width, 0);
-                    ctx.lineTo(canvas.width, cornerSize);
-                    ctx.stroke();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(0, canvas.height - cornerSize);
-                    ctx.lineTo(0, canvas.height);
-                    ctx.lineTo(cornerSize, canvas.height);
-                    ctx.stroke();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.width - cornerSize, canvas.height);
-                    ctx.lineTo(canvas.width, canvas.height);
-                    ctx.lineTo(canvas.width, canvas.height - cornerSize);
-                    ctx.stroke();
-                    
-                    console.log('✅ Gambar landscape berhasil ditampilkan di canvas');
-                    
-                    window._gambarData = {
-                        file: file,
-                        dataUrl: e.target.result,
-                        width: lebar,
-                        height: tinggi,
-                        isLandscape: true
-                    };
-                    
-                    if (typeof checkInputCompletion === 'function') {
-                        checkInputCompletion();
-                    }
-                };
-                img.src = e.target.result;
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255, 215, 0, 0.15)';
+                ctx.font = '24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('📸 DUKOPS BABINSA', canvas.width / 2, canvas.height - 30);
             };
             
-            reader.readAsDataURL(file);
+            img.onerror = function() {
+                ctx.fillStyle = '#0a1a0a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#4CAF50';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('📸 Preview gambar akan muncul di sini', canvas.width / 2, canvas.height / 2);
+            };
         }
 
         document.addEventListener('DOMContentLoaded', function() {
