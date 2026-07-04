@@ -13,11 +13,11 @@
     --secondary: #1a3a6a;
     --accent: #FFD700;
     --success: #4CAF50;
-    --bg-dark: #0a120a;
+    --bg-dark: #000300f1;
     --bg-card: #162016;
     --text-light: #e6ffe6;
     --text-muted: #889988;
-    --border-glow: rgba(76, 175, 80, 0.3);
+    --border-glow: rgba(238, 8, 219, 0.3);
 }
 
 body {
@@ -29,19 +29,6 @@ body {
     background-image: 
         radial-gradient(ellipse at 10% 20%, rgba(26, 58, 106, 0.15) 0%, transparent 50%),
         radial-gradient(ellipse at 90% 80%, rgba(26, 58, 106, 0.10) 0%, transparent 50%);
-}
-
-.container {
-    display: none;
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 20px;
-    background: rgba(22, 32, 22, 0.92);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    border: 1px solid rgba(76, 175, 80, 0.15);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    animation: fadeIn 0.6s ease-out;
 }
 
 @keyframes fadeIn {

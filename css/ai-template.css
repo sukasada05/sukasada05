@@ -1,0 +1,267 @@
+/* ================================================================
+   AI-TEMPLATE.CSS - TEMPLATE AI (STYLE GAME 3D)
+   ================================================================ */
+
+.ai-template-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+
+/* ================================================================
+   TOMBOL AI - 3D GAME STYLE
+   ================================================================ */
+.ai-template-btn {
+    background: linear-gradient(145deg, #ff6b35, #f7931e) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 14px 24px !important;
+    border-radius: 14px !important;
+    font-family: 'Segoe UI', 'Arial', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    box-shadow: 
+        0 6px 0 #b85a1a,
+        0 8px 20px rgba(255, 107, 53, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+    position: relative !important;
+    transform: translateY(0) !important;
+    width: auto !important;
+    min-width: 200px;
+}
+
+/* Efek 3D - Kilauan di atas */
+.ai-template-btn::before {
+    content: '';
+    position: absolute !important;
+    top: 4px !important;
+    left: 10% !important;
+    right: 10% !important;
+    height: 35% !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%) !important;
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0% !important;
+    pointer-events: none !important;
+}
+
+/* Efek 3D - Bayangan bawah */
+.ai-template-btn::after {
+    content: '';
+    position: absolute !important;
+    bottom: -4px !important;
+    left: 4px !important;
+    right: 4px !important;
+    height: 6px !important;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent) !important;
+    border-radius: 0 0 10px 10px !important;
+    pointer-events: none !important;
+}
+
+/* HOVER - Tombol terangkat */
+.ai-template-btn:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 
+        0 10px 0 #b85a1a,
+        0 12px 30px rgba(255, 107, 53, 0.45),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.3) !important;
+    background: linear-gradient(145deg, #ff7a45, #f79a2e) !important;
+}
+
+/* ACTIVE - Tombol tertekan */
+.ai-template-btn:active {
+    transform: translateY(4px) scale(0.98) !important;
+    box-shadow: 
+        0 2px 0 #b85a1a,
+        0 4px 15px rgba(255, 107, 53, 0.25),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    transition: all 0.05s ease !important;
+}
+
+/* ICON - Robot */
+.ai-template-btn i {
+    font-size: 20px !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.15) !important;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) !important;
+}
+
+/* ================================================================
+   VARIASI WARNA - BISA DIPILIH SALAH SATU
+   ================================================================ */
+
+/* -------- WARNA 1: ORANGE (DEFAULT) ---------- */
+/* Sudah di atas */
+
+/* -------- WARNA 2: BIRU NEON ---------- */
+/* .ai-template-btn {
+    background: linear-gradient(145deg, #00b4d8, #0077b6) !important;
+    box-shadow: 
+        0 6px 0 #005a8c,
+        0 8px 20px rgba(0, 180, 216, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+}
+.ai-template-btn:hover {
+    background: linear-gradient(145deg, #00c8e8, #0088c8) !important;
+    box-shadow: 
+        0 10px 0 #005a8c,
+        0 12px 30px rgba(0, 180, 216, 0.45) !important;
+} */
+
+/* -------- WARNA 3: HIJAU ---------- */
+/* .ai-template-btn {
+    background: linear-gradient(145deg, #2ecc71, #27ae60) !important;
+    box-shadow: 
+        0 6px 0 #1a7a42,
+        0 8px 20px rgba(46, 204, 113, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+}
+.ai-template-btn:hover {
+    background: linear-gradient(145deg, #3ddc84, #2ecc71) !important;
+    box-shadow: 
+        0 10px 0 #1a7a42,
+        0 12px 30px rgba(46, 204, 113, 0.45) !important;
+} */
+
+/* -------- WARNA 4: UNGU ---------- */
+/* .ai-template-btn {
+    background: linear-gradient(145deg, #9b59b6, #8e44ad) !important;
+    box-shadow: 
+        0 6px 0 #6c3483,
+        0 8px 20px rgba(155, 89, 182, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+}
+.ai-template-btn:hover {
+    background: linear-gradient(145deg, #a96bc4, #9b59b6) !important;
+    box-shadow: 
+        0 10px 0 #6c3483,
+        0 12px 30px rgba(155, 89, 182, 0.45) !important;
+} */
+
+/* -------- WARNA 5: MERAH ---------- */
+/* .ai-template-btn {
+    background: linear-gradient(145deg, #e74c3c, #c0392b) !important;
+    box-shadow: 
+        0 6px 0 #922b21,
+        0 8px 20px rgba(231, 76, 60, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+}
+.ai-template-btn:hover {
+    background: linear-gradient(145deg, #f05a4a, #e74c3c) !important;
+    box-shadow: 
+        0 10px 0 #922b21,
+        0 12px 30px rgba(231, 76, 60, 0.45) !important;
+} */
+
+/* -------- WARNA 6: EMAS ---------- */
+/* .ai-template-btn {
+    background: linear-gradient(145deg, #f39c12, #e67e22) !important;
+    color: #1a1a1a !important;
+    box-shadow: 
+        0 6px 0 #b85a1a,
+        0 8px 20px rgba(243, 156, 18, 0.35),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 4px 8px rgba(255, 255, 255, 0.25) !important;
+}
+.ai-template-btn:hover {
+    background: linear-gradient(145deg, #f5a623, #f39c12) !important;
+    box-shadow: 
+        0 10px 0 #b85a1a,
+        0 12px 30px rgba(243, 156, 18, 0.45) !important;
+}
+.ai-template-btn i {
+    color: #1a1a1a !important;
+} */
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 480px) {
+    .ai-template-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .ai-template-btn {
+        justify-content: center !important;
+        padding: 12px 18px !important;
+        font-size: 14px !important;
+        min-width: unset;
+        width: 100% !important;
+    }
+    
+    .ai-template-btn i {
+        font-size: 17px !important;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .ai-template-btn {
+        padding: 12px 20px !important;
+        font-size: 15px !important;
+        min-width: 160px;
+    }
+}
+
+/* ================================================================
+   DARK MODE SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .ai-template-btn {
+        box-shadow: 
+            0 6px 0 #8a4515,
+            0 8px 25px rgba(255, 107, 53, 0.25),
+            inset 0 -4px 8px rgba(0, 0, 0, 0.2),
+            inset 0 4px 8px rgba(255, 255, 255, 0.15) !important;
+    }
+    
+    .ai-template-btn:hover {
+        box-shadow: 
+            0 10px 0 #8a4515,
+            0 12px 35px rgba(255, 107, 53, 0.35) !important;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .ai-template-btn {
+        box-shadow: 
+            0 6px 0 #b85a1a,
+            0 8px 25px rgba(255, 107, 53, 0.2),
+            inset 0 -4px 8px rgba(0, 0, 0, 0.1),
+            inset 0 4px 8px rgba(255, 255, 255, 0.35) !important;
+    }
+}
+
+/* ================================================================
+   ANIMASI KETIKA DITAMBAHKAN
+   ================================================================ */
+@keyframes ai-btn-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 6px 0 #b85a1a, 0 8px 20px rgba(255, 107, 53, 0.35);
+    }
+    50% { 
+        transform: scale(1.02);
+        box-shadow: 0 8px 0 #b85a1a, 0 12px 30px rgba(255, 107, 53, 0.45);
+    }
+}
+
+.ai-template-btn.pulse {
+    animation: ai-btn-pulse 1.5s ease-in-out infinite;
+}
+
+/* ===== End of ai-template.css ===== */

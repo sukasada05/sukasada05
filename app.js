@@ -581,82 +581,37 @@ function pickRandomKoordinat() {
     }, 300);
 }
 
-// ================= PERBAIKAN: PREVIEW GAMBAR TANPA DUPLIKAT =================
 function previewImage() {
-    const fileInput = document.getElementById("gambar");
+    const file = document.getElementById("gambar").files[0];
     const preview = document.getElementById("previewGambar");
 
-    // Reset preview
-    if (preview) {
-        preview.innerHTML = '';
-        preview.style.color = '#888';
-    }
-
-    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-        if (preview) {
-            preview.innerHTML = '📷 Tidak ada file yang dipilih';
-        }
+    if (file) {
+        preview.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            img = new Image();
+            img.src = e.target.result;
+            img.onload = function () {
+                if (kordinatList.length > 0) {
+                    pickRandomKoordinat();
+                }
+                updatePreview();
+            };
+            img.onerror = function () {
+                showNotification("Gagal memuat gambar", "error");
+                document.getElementById("gambar").value = "";
+                preview.textContent = "";
+            };
+        };
+        reader.onerror = function () {
+            showNotification("Gagal membaca file", "error");
+        };
+        reader.readAsDataURL(file);
+    } else {
         img = new Image();
         updatePreview();
-        checkInputCompletion();
-        return;
     }
-
-    const file = fileInput.files[0];
-
-    if (!file) {
-        if (preview) {
-            preview.innerHTML = '📷 Tidak ada file yang dipilih';
-        }
-        img = new Image();
-        updatePreview();
-        checkInputCompletion();
-        return;
-    }
-
-    // Tampilkan nama file SATU KALI dengan format yang rapi
-    if (preview) {
-        const fileSize = (file.size / 1024).toFixed(1);
-        preview.innerHTML = `
-            <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(0,40,0,0.5);border-radius:6px;border-left:3px solid #4dff4d;">
-                <span style="font-size:16px;">📷</span>
-                <span style="font-weight:bold;color:#e6ffe6;">${file.name}</span>
-                <span style="font-size:11px;color:#888;">(${fileSize} KB)</span>
-            </div>
-        `;
-        preview.style.color = '#e6ffe6';
-    }
-
-    // Baca file gambar
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        img = new Image();
-        img.src = e.target.result;
-        img.onload = function () {
-            if (kordinatList.length > 0) {
-                pickRandomKoordinat();
-            }
-            updatePreview();
-            checkInputCompletion();
-        };
-        img.onerror = function () {
-            showNotification("Gagal memuat gambar", "error");
-            fileInput.value = "";
-            if (preview) {
-                preview.innerHTML = '❌ Gagal memuat gambar';
-                preview.style.color = '#ff6666';
-            }
-        };
-    };
-    reader.onerror = function () {
-        showNotification("Gagal membaca file", "error");
-        fileInput.value = "";
-        if (preview) {
-            preview.innerHTML = '❌ Gagal membaca file';
-            preview.style.color = '#ff6666';
-        }
-    };
-    reader.readAsDataURL(file);
+    checkInputCompletion();
 }
 
 function updateDatePreview() {

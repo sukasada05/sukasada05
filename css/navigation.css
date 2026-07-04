@@ -1,404 +1,430 @@
-/* ============================================================
-   NAVIGATION - TOMBOL TAB DENGAN EFEK PREMIUM
-   CSS LENGKAP DENGAN SEMUA EFEK SEPERTI TOMBOL LOGIN
-   ============================================================ */
+/* ================================================================
+   NAVIGATION.CSS - NAVIGASI KAPSUL 3D REALISTIS PREMIUM
+   ================================================================ */
 
 .nav-buttons {
     display: flex;
-    gap: 10px;
+    flex-direction: row;
+    gap: 12px;
     margin-bottom: 24px;
-    padding: 6px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 900px;
+    
+    /* PASTIKAN SELALU TERLIHAT */
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: flex !important;
 }
 
-/* ============================================================
-   TOMBOL NAVIGASI - BASE (SEPERTI LOGIN-BTN)
-   ============================================================ */
+/* ================================================================
+   TOMBOL NAVIGASI - KAPSUL 3D DENGAN SEMUA EFEK PREMIUM
+   ================================================================ */
 .nav-btn {
-    /* === POSITION & LAYOUT === */
-    position: relative;
     flex: 1;
-    padding: 14px 20px;
-    z-index: 1;
-    overflow: hidden;
-
-    /* === TYPOGRAPHY === */
-    font-family: 'Chakra Petch', 'Oxanium', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: #ffffff;
-
-    /* === BORDER & BACKGROUND === */
+    padding: 16px 28px;
     border: none;
-    border-radius: 10px;
-    
-    /* === SHADOW === */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    
-    /* === CURSOR & TRANSITION === */
+    border-radius: 60px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    
-    /* === DISPLAY === */
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
+    letter-spacing: 0.5px;
+    
+    /* Transisi smooth dengan efek spring premium */
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Default: transparan dengan teks */
+    background: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    
+    /* Posisi relatif untuk pseudo-elements */
+    position: relative;
+    
+    /* Teks shadow untuk keterbacaan */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    
+    /* Mencegah overflow pseudo-elements */
+    overflow: hidden;
+    
+    /* Memastikan semua tombol sama panjang */
+    min-width: 0;
+    white-space: nowrap;
+    flex: 1 1 0;
+    
+    /* PASTIKAN SELALU TERLIHAT */
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: flex !important;
 }
 
-.nav-btn i {
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-
-/* ============================================================
-   WARNA DASAR PER TAB - TANPA HOVER SUDAH BERWARNA
-   ============================================================ */
-
-/* DUKOPS - Hijau */
-.nav-btn-dukops {
-    background: linear-gradient(135deg, #1a5a1a, #2d7a2d, #1a5a1a);
-    background-size: 300% 300%;
-    animation: gradientMove 4s ease-in-out infinite;
-    color: #d4ffd4;
-    border: 1px solid rgba(76, 175, 80, 0.3);
-}
-
-/* PIKET - Orange */
-.nav-btn-piket {
-    background: linear-gradient(135deg, #6a3a1a, #8a5a2d, #6a3a1a);
-    background-size: 300% 300%;
-    animation: gradientMove 4s ease-in-out infinite;
-    color: #ffddbb;
-    border: 1px solid rgba(255, 165, 0, 0.3);
-}
-
-/* ABSEN - Biru */
-.nav-btn-absen {
-    background: linear-gradient(135deg, #1a2a5a, #2d4a7a, #1a2a5a);
-    background-size: 300% 300%;
-    animation: gradientMove 4s ease-in-out infinite;
-    color: #bbddff;
-    border: 1px solid rgba(52, 152, 219, 0.3);
-}
-
-@keyframes gradientMove {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-/* ============================================================
-   HOVER - PERBAIKAN WARNA SAAT HOVER
-   ============================================================ */
-.nav-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
-    color: #ffffff;
-}
-
-.nav-btn-dukops:hover {
-    background: linear-gradient(135deg, #2a6a2a, #3d8a3d, #2a6a2a);
-    background-size: 300% 300%;
-    animation: gradientMove 3s ease-in-out infinite;
-    border-color: rgba(76, 175, 80, 0.6);
-}
-
-.nav-btn-piket:hover {
-    background: linear-gradient(135deg, #8a4a2a, #aa6a3d, #8a4a2a);
-    background-size: 300% 300%;
-    animation: gradientMove 3s ease-in-out infinite;
-    border-color: rgba(255, 165, 0, 0.6);
-}
-
-.nav-btn-absen:hover {
-    background: linear-gradient(135deg, #2a3a6a, #3d5a8a, #2a3a6a);
-    background-size: 300% 300%;
-    animation: gradientMove 3s ease-in-out infinite;
-    border-color: rgba(52, 152, 219, 0.6);
-}
-
-.nav-btn:hover i {
-    transform: translateY(-2px) scale(1.1);
-}
-
-/* ============================================================
-   ACTIVE STATE - TOMBOL AKTIF (DIPILIH)
-   ============================================================ */
-.nav-btn.active {
-    transform: translateY(0) scale(1);
-    color: #ffffff;
-    animation: navPulse 0.5s ease;
-    border-color: transparent;
-}
-
-/* Warna active lebih terang */
-.nav-btn-dukops.active {
-    background: linear-gradient(135deg, #00ff88, #00cc77, #00ff88);
-    background-size: 300% 300%;
-    animation: gradientMove 2s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-    border-color: #00ff88;
-}
-
-.nav-btn-piket.active {
-    background: linear-gradient(135deg, #ff8800, #ffaa00, #ff8800);
-    background-size: 300% 300%;
-    animation: gradientMove 2s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
-    border-color: #ff8800;
-}
-
-.nav-btn-absen.active {
-    background: linear-gradient(135deg, #0088ff, #00aaff, #0088ff);
-    background-size: 300% 300%;
-    animation: gradientMove 2s ease-in-out infinite;
-    box-shadow: 0 0 30px rgba(0, 136, 255, 0.3);
-    border-color: #0088ff;
-}
-
-@keyframes navPulse {
-    0% { transform: scale(0.95); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
-}
-
-/* ============================================================
-   BORDER GLOW - EFEK BORDER BERPUTAR (SAAT HOVER)
-   ============================================================ */
+/* ================================================================
+   EFEK KILAP/KILAU PREMIUM DI ATAS TOMBOL
+   ================================================================ */
 .nav-btn::before {
     content: '';
     position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    border-radius: 13px;
-    z-index: -1;
+    top: 8%;
+    left: 15%;
+    right: 15%;
+    height: 30%;
+    border-radius: 60px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        transparent 80%
+    );
+    pointer-events: none;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: all 0.4s ease;
+    z-index: 1;
 }
 
-.nav-btn-dukops::before {
-    background: linear-gradient(45deg, #00ff88, #4caf50, #00ff88, #4caf50, #00ff88);
-    background-size: 400% 400%;
-    animation: borderGlowSpin 3s linear infinite;
+/* ================================================================
+   EFEK BAYANGAN DALAM PREMIUM DI BAWAH TOMBOL
+   ================================================================ */
+.nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 5%;
+    left: 20%;
+    right: 20%;
+    height: 15%;
+    border-radius: 60px;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.25) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 1;
 }
 
-.nav-btn-piket::before {
-    background: linear-gradient(45deg, #ff8800, #ffcc00, #ff8800, #ffcc00, #ff8800);
-    background-size: 400% 400%;
-    animation: borderGlowSpin 3s linear infinite;
-}
-
-.nav-btn-absen::before {
-    background: linear-gradient(45deg, #0088ff, #00ccff, #0088ff, #00ccff, #0088ff);
-    background-size: 400% 400%;
-    animation: borderGlowSpin 3s linear infinite;
-}
-
-@keyframes borderGlowSpin {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* ================================================================
+   HOVER PREMIUM - EFEK MENGAMBANG DENGAN KILAP
+   ================================================================ */
+.nav-btn:hover {
+    transform: translateY(-4px) scale(1.03);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    
+    /* Bayangan 3D premium saat hover */
+    box-shadow: 
+        0 16px 40px -10px rgba(0, 0, 0, 0.5),
+        0 5px 0 rgba(255, 165, 0, 0.25),
+        0 8px 0 rgba(255, 165, 0, 0.1),
+        inset 0 -5px 10px rgba(0, 0, 0, 0.1),
+        inset 0 5px 16px rgba(255, 255, 255, 0.2);
 }
 
 .nav-btn:hover::before {
     opacity: 1;
-}
-
-/* Active - matikan border glow */
-.nav-btn.active::before {
-    opacity: 0 !important;
-}
-
-/* ============================================================
-   SHINE EFFECT - GARIS CAHAYA MELINTAS
-   ============================================================ */
-.nav-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-    transform: skewX(-25deg);
-    transition: all 0.6s ease;
-    z-index: 0;
-    pointer-events: none;
+    top: 5%;
+    left: 10%;
+    right: 10%;
+    height: 38%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 80%
+    );
 }
 
 .nav-btn:hover::after {
-    left: 100%;
+    opacity: 1;
+}
+
+/* ================================================================
+   ICON PREMIUM DENGAN EFEK
+   ================================================================ */
+.nav-btn i {
+    font-size: 22px;
+    font-weight: bold;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    flex-shrink: 0;
+}
+
+.nav-btn:hover i {
+    transform: translateY(-4px) scale(1.15) rotate(-3deg);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* ================================================================
+   ACTIVE STATE PREMIUM - KAPSUL 3D REALISTIS
+   ================================================================ */
+.nav-btn.active {
+    color: #ffffff;
+    transform: translateY(0) scale(1);
+    
+    /* Bayangan 3D premium multi-layer */
+    box-shadow: 
+        /* Bayangan ambient jatuh kebawah */
+        0 24px 48px -12px rgba(0, 0, 0, 0.6),
+        /* Ketebalan tombol layer 1 */
+        0 7px 0 rgba(0, 0, 0, 0.25),
+        /* Ketebalan tombol layer 2 */
+        0 10px 0 rgba(0, 0, 0, 0.12),
+        /* Bayangan dalam atas (cahaya) */
+        inset 0 8px 16px rgba(255, 255, 255, 0.35),
+        /* Bayangan dalam bawah (volume) */
+        inset 0 -8px 16px rgba(0, 0, 0, 0.3);
+    
+    /* Animasi bounce premium */
+    animation: capsuleActivePremium 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Kilap premium pada tombol aktif */
+.nav-btn.active::before {
+    opacity: 1;
+    top: 6%;
+    left: 10%;
+    right: 10%;
+    height: 35%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 80%
+    );
 }
 
 .nav-btn.active::after {
-    display: none !important;
+    opacity: 0.7;
 }
 
-/* ============================================================
-   PULSE RING - CINCIN BERDENYUT (SAAT HOVER)
-   ============================================================ */
-.nav-btn .pulse-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    animation: none;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease;
+/* ================================================================
+   VARIASI WARNA PREMIUM PER TOMBOL (ACTIVE)
+   ================================================================ */
+
+/* Tombol Dukops - Gradien Oranye ke Emas Premium */
+.nav-btn-dukops.active {
+    background: linear-gradient(145deg, #f7971e, #e07c00);
+    box-shadow: 
+        0 24px 48px -12px rgba(247, 151, 30, 0.5),
+        0 7px 0 #a85f00,
+        0 10px 0 #8a4d00,
+        inset 0 8px 16px rgba(255, 255, 255, 0.35),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.nav-btn:hover .pulse-ring {
-    opacity: 1;
-    animation: pulseRing 2s ease-in-out infinite;
+/* Tombol Piket - Gradien Hijau ke Emerald Premium */
+.nav-btn-piket.active {
+    background: linear-gradient(145deg, #690a05e2, #158a3a);
+    box-shadow: 
+        0 24px 48px -12px rgba(29, 185, 84, 0.5),
+        0 7px 0 #0f6b2d,
+        0 10px 0 #0c5523,
+        inset 0 8px 16px rgba(255, 255, 255, 0.35),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.nav-btn-dukops .pulse-ring {
-    background: rgba(0, 255, 136, 0.15);
+/* Tombol Absen - Gradien Biru ke Electric Premium */
+.nav-btn-absen.active {
+    background: linear-gradient(145deg, #4facfe, #0066cc);
+    box-shadow: 
+        0 24px 48px -12px rgba(79, 172, 254, 0.5),
+        0 7px 0 #004d99,
+        0 10px 0 #003d7a,
+        inset 0 8px 16px rgba(255, 255, 255, 0.35),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.nav-btn-piket .pulse-ring {
-    background: rgba(255, 136, 0, 0.15);
+/* ================================================================
+   EFEK PRESSED PREMIUM (SAAT DIKLIK)
+   ================================================================ */
+.nav-btn:active {
+    transform: translateY(5px) scale(0.96);
+    
+    box-shadow: 
+        0 10px 24px -8px rgba(0, 0, 0, 0.5),
+        0 4px 0 rgba(0, 0, 0, 0.2),
+        0 6px 0 rgba(0, 0, 0, 0.1),
+        inset 0 -5px 10px rgba(0, 0, 0, 0.35),
+        inset 0 5px 10px rgba(255, 255, 255, 0.15);
+    
+    transition-duration: 0.08s;
 }
 
-.nav-btn-absen .pulse-ring {
-    background: rgba(0, 136, 255, 0.15);
+.nav-btn:active i {
+    transform: scale(0.85) rotate(0deg);
 }
 
-@keyframes pulseRing {
+.nav-btn:active::before {
+    opacity: 0.5;
+    top: 10%;
+    height: 25%;
+}
+
+/* ================================================================
+   ANIMASI ACTIVE PREMIUM
+   ================================================================ */
+@keyframes capsuleActivePremium {
     0% {
-        width: 0;
-        height: 0;
-        opacity: 0.8;
+        transform: scale(0.90) translateY(5px);
+    }
+    35% {
+        transform: scale(1.06) translateY(-3px);
+    }
+    65% {
+        transform: scale(0.97) translateY(2px);
     }
     100% {
-        width: 300%;
-        height: 300%;
-        opacity: 0;
+        transform: scale(1) translateY(0);
     }
 }
 
-.nav-btn.active .pulse-ring {
-    opacity: 0 !important;
-    animation: none !important;
+/* ================================================================
+   ANIMASI BREATHE (OPSIONAL - UNTUK TOMBOL AKTIF)
+   ================================================================ */
+.nav-btn.breathe {
+    animation: breathe 3s ease-in-out infinite;
 }
 
-/* ============================================================
-   PARTICLE BURST - PARTIKEL MELEDAK (SAAT HOVER)
-   ============================================================ */
-.nav-btn .btn-particles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-}
-
-.nav-btn .btn-particles span {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    opacity: 0;
-    transition: all 0.6s ease;
-}
-
-.nav-btn-dukops .btn-particles span {
-    background: #00ff88;
-    box-shadow: 0 0 10px #00ff88;
-}
-
-.nav-btn-piket .btn-particles span {
-    background: #ff8800;
-    box-shadow: 0 0 10px #ff8800;
-}
-
-.nav-btn-absen .btn-particles span {
-    background: #0088ff;
-    box-shadow: 0 0 10px #0088ff;
-}
-
-.nav-btn:hover .btn-particles span {
-    opacity: 1;
-    animation: particleBurst 0.8s ease-out forwards;
-}
-
-@keyframes particleBurst {
-    0% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
+@keyframes breathe {
+    0%, 100% {
+        box-shadow: 
+            0 24px 48px -12px rgba(0, 0, 0, 0.6),
+            0 7px 0 rgba(0, 0, 0, 0.25),
+            0 10px 0 rgba(0, 0, 0, 0.12),
+            inset 0 8px 16px rgba(255, 255, 255, 0.35),
+            inset 0 -8px 16px rgba(0, 0, 0, 0.3);
     }
-    100% {
-        transform: translate(var(--tx), var(--ty)) scale(0);
-        opacity: 0;
+    50% {
+        box-shadow: 
+            0 28px 56px -14px rgba(0, 0, 0, 0.7),
+            0 7px 0 rgba(0, 0, 0, 0.3),
+            0 10px 0 rgba(0, 0, 0, 0.15),
+            inset 0 8px 20px rgba(255, 255, 255, 0.45),
+            inset 0 -8px 16px rgba(0, 0, 0, 0.35);
+        transform: scale(1.02);
     }
 }
 
-.nav-btn.active .btn-particles {
-    display: none !important;
-}
-
-/* ============================================================
-   RIPPLE EFFECT - EFEK RIAK SAAT DIKLIK
-   ============================================================ */
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(0);
-    animation: rippleAnim 0.7s ease-out;
-    pointer-events: none;
-    z-index: 3;
-}
-
-@keyframes rippleAnim {
-    to {
-        transform: scale(4);
-        opacity: 0;
+/* ================================================================
+   RESPONSIVE - TETAP HORIZONTAL DENGAN UKURAN SAMA
+   ================================================================ */
+@media (max-width: 768px) {
+    .nav-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        border-radius: 40px;
+        gap: 8px;
+        padding: 8px;
+        max-width: 100%;
+    }
+    
+    .nav-btn {
+        padding: 14px 18px;
+        font-size: 15px;
+        border-radius: 40px;
+        flex: 1 1 0;
+        min-width: 80px;
+        gap: 8px;
+    }
+    
+    .nav-btn i {
+        font-size: 20px;
+    }
+    
+    .nav-btn.active {
+        border-radius: 40px;
+        box-shadow: 
+            0 20px 40px -10px rgba(0, 0, 0, 0.5),
+            0 6px 0 rgba(0, 0, 0, 0.2),
+            0 8px 0 rgba(0, 0, 0, 0.1),
+            inset 0 6px 12px rgba(255, 255, 255, 0.3),
+            inset 0 -6px 12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .nav-btn::before,
+    .nav-btn::after {
+        border-radius: 40px;
+    }
+    
+    .nav-btn-dukops.active,
+    .nav-btn-piket.active,
+    .nav-btn-absen.active {
+        box-shadow: 
+            0 20px 40px -10px rgba(0, 0, 0, 0.5),
+            0 6px 0 rgba(0, 0, 0, 0.2),
+            0 8px 0 rgba(0, 0, 0, 0.1),
+            inset 0 6px 12px rgba(255, 255, 255, 0.3),
+            inset 0 -6px 12px rgba(0, 0, 0, 0.25);
     }
 }
 
-/* ============================================================
-   RESPONSIF - UNTUK LAYAR KECIL
-   ============================================================ */
+/* ================================================================
+   RESPONSIVE MOBILE (DIPERBAIKI)
+   ================================================================ */
 @media (max-width: 480px) {
     .nav-buttons {
-        gap: 4px;
-        padding: 4px;
-        border-radius: 10px;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 28px;
     }
     
     .nav-btn {
-        padding: 10px 8px;
-        font-size: 11px;
-        border-radius: 8px;
-        gap: 4px;
+        padding: 10px 12px;
+        font-size: 12px;  /* ✅ DIPERBAIKI: dari 62px menjadi 12px */
+        gap: 5px;
+        border-radius: 28px;
+        min-width: 55px;
+        flex: 1 1 0;
     }
     
     .nav-btn i {
-        font-size: 13px;
+        font-size: 14px;  /* ✅ DIPERKECIL agar proporsional */
+    }
+    
+    .nav-btn.active {
+        border-radius: 28px;
+        box-shadow: 
+            0 16px 32px -8px rgba(0, 0, 0, 0.4),
+            0 4px 0 rgba(0, 0, 0, 0.2),
+            0 6px 0 rgba(0, 0, 0, 0.1),
+            inset 0 4px 8px rgba(255, 255, 255, 0.25),
+            inset 0 -4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .nav-btn::before,
+    .nav-btn::after {
+        border-radius: 28px;
+    }
+    
+    .nav-btn-dukops.active,
+    .nav-btn-piket.active,
+    .nav-btn-absen.active {
+        box-shadow: 
+            0 16px 32px -8px rgba(0, 0, 0, 0.4),
+            0 4px 0 rgba(0, 0, 0, 0.2),
+            0 6px 0 rgba(0, 0, 0, 0.1),
+            inset 0 4px 8px rgba(255, 255, 255, 0.25),
+            inset 0 -4px 8px rgba(0, 0, 0, 0.2);
     }
 }
 
-@media (max-width: 380px) {
-    .nav-btn {
-        padding: 8px 6px;
-        font-size: 10px;
-    }
-    
-    .nav-btn i {
-        font-size: 11px;
-    }
+/* ================================================================
+   PASTIKAN TIDAK ADA AUTO-HIDE
+   ================================================================ */
+.nav-buttons.hidden,
+.nav-buttons[style*="display: none"],
+.nav-btn.hidden,
+.nav-btn[style*="display: none"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }

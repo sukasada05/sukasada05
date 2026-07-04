@@ -6,13 +6,13 @@ label {
     display: block;
     margin-top: 16px;
     font-weight: 600;
-    color: #b2d8b2;
-    font-size: 13px;
+    color: #effb04;
+    font-size: 20px;
     letter-spacing: 0.5px;
 }
 
 label i {
-    color: #FFD700;
+    color: #ffffff;
     margin-right: 6px;
 }
 

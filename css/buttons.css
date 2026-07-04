@@ -1,526 +1,65 @@
-/* ============================================================
-   ACTION BUTTONS - Tombol Aksi Utama
-   ============================================================ */
+/* ================================================================
+   BUTTONS.CSS - TOMBOL
+   ================================================================ */
 
-.action-buttons {
-    display: flex;
-    gap: 10px;
-    margin: 15px 0;
-    flex-wrap: wrap;
-}
-
-.action-buttons button {
-    flex: 1;
-    min-width: 120px;
-}
-
-/* ============================================================
-   SUBMIT BUTTON - DOWNLOAD KIRIM DRIVE
-   ============================================================ */
-
-#submitBtn {
-    /* === POSITION & LAYOUT === */
-    position: relative;
-    width: 100%;
-    padding: 14px 24px;
-    margin: 8px 0;
-    z-index: 1;
-    overflow: hidden;
-
-    /* === TYPOGRAPHY === */
-    font-family: 'Chakra Petch', 'Oxanium', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #ffffff;
-
-    /* === BORDER & BACKGROUND === */
+button {
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #1a4a1a, #2d6a2d);
+    color: white;
     border: none;
     border-radius: 10px;
-    background: linear-gradient(135deg, #1a6a1a, #2d8a2d, #1a6a1a);
-    background-size: 300% 300%;
-    animation: gradientMove 4s ease-in-out infinite;
-    
-    /* === SHADOW === */
-    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.25);
-    
-    /* === CURSOR & TRANSITION === */
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Gradient Move */
-@keyframes gradientMove {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-/* Border Glow */
-#submitBtn::before {
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    background: linear-gradient(45deg, #00ff88, #4caf50, #00ff88, #4caf50, #00ff88);
-    background-size: 400% 400%;
-    border-radius: 13px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    animation: borderGlowSpin 3s linear infinite;
-}
-
-@keyframes borderGlowSpin {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-#submitBtn:hover::before {
-    opacity: 1;
-}
-
-/* Shine Effect */
-#submitBtn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
     width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: skewX(-25deg);
-    transition: all 0.6s ease;
-    z-index: 0;
-    pointer-events: none;
-}
-
-#submitBtn:hover::after {
-    left: 100%;
-}
-
-/* Hover */
-#submitBtn:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 6px 30px rgba(76, 175, 80, 0.4);
-}
-
-/* Active */
-#submitBtn:active {
-    transform: scale(0.96);
-}
-
-/* Disabled */
-#submitBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-}
-
-#submitBtn:disabled:hover {
-    transform: none !important;
-    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.25) !important;
-}
-
-#submitBtn:disabled::before {
-    opacity: 0 !important;
-}
-
-#submitBtn:disabled::after {
-    display: none !important;
-}
-
-/* Text container */
-#submitBtn .btn-text {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* Icon bounce */
-#submitBtn:hover .btn-text i {
-    animation: iconBounce 0.6s ease infinite;
-}
-
-@keyframes iconBounce {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
-}
-
-/* ============================================================
-   RESET BUTTON
-   ============================================================ */
-
-#resetBtn {
-    /* === POSITION & LAYOUT === */
-    position: relative;
-    width: 100%;
-    padding: 14px 24px;
-    margin: 8px 0;
-    z-index: 1;
-    overflow: hidden;
-
-    /* === TYPOGRAPHY === */
-    font-family: 'Chakra Petch', 'Oxanium', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #ff6666;
-
-    /* === BORDER & BACKGROUND === */
-    border: 2px solid #ff4444;
-    border-radius: 10px;
-    background: rgba(255, 0, 0, 0.05);
-    
-    /* === SHADOW === */
-    box-shadow: 0 2px 10px rgba(255, 0, 0, 0.1);
-    
-    /* === CURSOR & TRANSITION === */
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Reset Button Hover */
-#resetBtn:hover {
-    background: rgba(255, 0, 0, 0.15);
-    border-color: #ff6666;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
-    color: #ff8888;
-}
-
-#resetBtn:active {
-    transform: scale(0.96);
-}
-
-/* Reset Button Icon */
-#resetBtn i {
-    margin-right: 8px;
-    transition: transform 0.5s ease;
-}
-
-#resetBtn:hover i {
-    transform: rotate(180deg);
-}
-
-/* ============================================================
-   SHOW ATTENDANCE BUTTON - KLIK INI..CEK LAPORAN
-   ============================================================ */
-
-#showAttendanceBtn {
-    /* === POSITION & LAYOUT === */
-    position: relative;
-    width: 100%;
-    padding: 14px 24px;
-    margin: 12px 0 8px;
-    z-index: 1;
-    overflow: hidden;
-
-    /* === TYPOGRAPHY === */
-    font-family: 'Chakra Petch', 'Oxanium', sans-serif;
-    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 1px;
-    color: #ffdd44;
-
-    /* === BORDER & BACKGROUND === */
-    border: 2px solid #ffcc00;
-    border-radius: 10px;
-    background: rgba(255, 204, 0, 0.05);
-    
-    /* === SHADOW === */
-    box-shadow: 0 2px 10px rgba(255, 204, 0, 0.1);
-    
-    /* === CURSOR & TRANSITION === */
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Show Attendance Button Hover */
-#showAttendanceBtn:hover {
-    background: rgba(255, 204, 0, 0.15);
-    border-color: #ffdd44;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(255, 204, 0, 0.2);
-    color: #ffdd88;
-}
-
-#showAttendanceBtn:active {
-    transform: scale(0.96);
-}
-
-/* Show Attendance Icon */
-#showAttendanceBtn i {
-    margin-right: 8px;
-    transition: transform 0.5s ease;
-}
-
-#showAttendanceBtn:hover i {
-    animation: chartBounce 0.8s ease infinite;
-}
-
-@keyframes chartBounce {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2) rotate(5deg); }
-}
-
-/* ============================================================
-   RESPONSIF
-   ============================================================ */
-
-@media (max-width: 480px) {
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    #submitBtn,
-    #resetBtn,
-    #showAttendanceBtn {
-        padding: 12px 16px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 380px) {
-    #submitBtn,
-    #resetBtn,
-    #showAttendanceBtn {
-        padding: 10px 12px;
-        font-size: 11px;
-    }
-}
-/* ============================================================
-   INSTALL BUTTON - PASANG APLIKASI
-   ============================================================ */
-
-#installButton {
-    /* === POSITION & LAYOUT === */
-    position: relative;
-    width: 100%;
-    padding: 14px 24px;
-    margin-bottom: 16px;
-    z-index: 1;
-    overflow: hidden;
-
-    /* === TYPOGRAPHY === */
-    font-family: 'Chakra Petch', 'Oxanium', sans-serif;
     font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #ffffff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(76, 175, 80, 0.1);
+}
 
-    /* === BORDER & BACKGROUND === */
+button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.15);
+    background: linear-gradient(135deg, #2d6a2d, #3d8a3d);
+}
+
+button:disabled {
+    background: #333;
+    cursor: not-allowed;
+    opacity: 0.4;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+button i {
+    margin-right: 8px;
+}
+
+/* ===== INSTALL BUTTON ===== */
+#installButton {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, #4CAF50, #2d6a2d);
+    color: white;
     border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #1a3a6a, #2d5a8a, #1a3a6a);
-    background-size: 300% 300%;
-    animation: gradientMoveInstall 4s ease-in-out infinite;
-    
-    /* === SHADOW === */
-    box-shadow: 0 4px 20px rgba(52, 152, 219, 0.25);
-    
-    /* === CURSOR & TRANSITION === */
+    border-radius: 50px;
+    padding: 12px 20px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    
-    /* === DISPLAY === */
-    display: flex;
+    z-index: 1000;
+    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.2);
+    display: none;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    gap: 8px;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
-/* Gradient Move */
-@keyframes gradientMoveInstall {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-/* ============================================================
-   INSTALL BUTTON - ICON
-   ============================================================ */
-
-#installButton i {
-    font-size: 18px;
-    transition: all 0.4s ease;
-}
-
-/* ============================================================
-   INSTALL BUTTON - BORDER GLOW
-   ============================================================ */
-
-#installButton::before {
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    background: linear-gradient(45deg, #0088ff, #00ccff, #0088ff, #00ccff, #0088ff);
-    background-size: 400% 400%;
-    border-radius: 13px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    animation: borderGlowInstall 3s linear infinite;
-}
-
-@keyframes borderGlowInstall {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-#installButton:hover::before {
-    opacity: 1;
-}
-
-/* ============================================================
-   INSTALL BUTTON - SHINE EFFECT
-   ============================================================ */
-
-#installButton::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: skewX(-25deg);
-    transition: all 0.6s ease;
-    z-index: 0;
-    pointer-events: none;
-}
-
-#installButton:hover::after {
-    left: 100%;
-}
-
-/* ============================================================
-   INSTALL BUTTON - HOVER
-   ============================================================ */
 
 #installButton:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 6px 30px rgba(52, 152, 219, 0.4);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(76, 175, 80, 0.3);
 }
-
-#installButton:hover i {
-    animation: installBounce 0.8s ease infinite;
-}
-
-@keyframes installBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
-/* ============================================================
-   INSTALL BUTTON - ACTIVE (SAAT DIKLIK)
-   ============================================================ */
-
-#installButton:active {
-    transform: scale(0.96);
-}
-
-/* ============================================================
-   INSTALL BUTTON - TEXT CONTAINER
-   ============================================================ */
-
-#installButton .btn-text {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-/* ============================================================
-   INSTALL BUTTON - PULSE RING
-   ============================================================ */
-
-#installButton .pulse-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    background: rgba(52, 152, 219, 0.15);
-}
-
-#installButton:hover .pulse-ring {
-    opacity: 1;
-    animation: pulseRingInstall 2s ease-in-out infinite;
-}
-
-@keyframes pulseRingInstall {
-    0% {
-        width: 0;
-        height: 0;
-        opacity: 0.8;
-    }
-    100% {
-        width: 300%;
-        height: 300%;
-        opacity: 0;
-    }
-}
-
-/* ============================================================
-   INSTALL BUTTON - RIPPLE EFFECT (via JavaScript)
-   ============================================================ */
-
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(0);
-    animation: rippleAnim 0.7s ease-out;
-    pointer-events: none;
-    z-index: 3;
-}
-
-@keyframes rippleAnim {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-/* ============================================================
-   INSTALL BUTTON - RESPONSIF
-   ============================================================ */
-
-@media (max-width: 480px) {
-    #installButton {
-        padding: 12px 16px;
-        font-size: 12px;
-        border-radius: 8px;
-    }
-    
-    #installButton i {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 380px) {
-    #installButton {
-        padding: 10px 12px;
-        font-size: 11px;
-    }
-    
-    #installButton i {
-        font-size: 14px;
-    }
-}
+/* ===== End of buttons.css ===== */
