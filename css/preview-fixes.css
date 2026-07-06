@@ -9,19 +9,40 @@
 
 /* ===== PERBAIKAN PREVIEW KOORDINAT ===== */
 #previewKordinat {
+    display: none !important;
+    visibility: hidden !important;
     color: #0a1a2e !important;
     font-weight: 500 !important;
-    min-height: 30px !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    height: auto !important;
+}
+
+#loadingKoordinat {
+    display: none !important;
 }
 
 #previewGambar {
+    display: none !important;
+    visibility: hidden !important;
     color: #0a1a2e !important;
     font-weight: 500 !important;
+    border: none !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
 }
 
 #previewTanggal {
+    display: none !important;
+    visibility: hidden !important;
     color: #0a1a2e !important;
     font-weight: 500 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    height: auto !important;
 }
 
 /* ===== LOADING KOORDINAT ===== */
@@ -48,11 +69,15 @@
 
 /* ===== NARASI TEXTAREA ===== */
 #narasi {
-    min-height: 350px !important;
+    min-height: 150px !important;
     height: auto !important;
-    max-height: 500px !important;
+    max-height: 260px !important;
     resize: vertical !important;
-    padding: 18px !important;
+    overflow-y: auto !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    white-space: pre-wrap !important;
+    padding: 18px 18px 84px 18px !important;
     font-size: 1.15rem !important;
     line-height: 1.9 !important;
     color: #0a1a2e !important;
@@ -60,6 +85,13 @@
     font-weight: 500 !important;
     border: 2px solid #2a5a8a !important;
     border-radius: 12px !important;
+}
+
+.auto-height-textarea {
+    min-height: 150px !important;
+    height: auto !important;
+    max-height: 260px !important;
+    overflow-y: auto !important;
 }
 
 /* ===== SELECT, INPUT, TEXTAREA ===== */

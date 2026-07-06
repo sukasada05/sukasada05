@@ -28,7 +28,7 @@ textarea {
     color: #e6ffe6;
     font-size: 14px;
     transition: all 0.3s ease;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: var(--sys-font);
 }
 
 select:focus,
@@ -51,40 +51,72 @@ textarea {
     line-height: 1.6;
 }
 
+.datetime-wrapper {
+    position: relative;
+}
+
+.datetime-wrapper input[type="datetime-local"] {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    color: transparent;
+    caret-color: #ffffff;
+}
+
+.datetime-wrapper .datetime-display {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #e6ffe6;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .narasi-wrapper {
     position: relative;
     margin-top: 6px;
 }
 
 .narasi-wrapper textarea {
-    margin-top: 0;
-    padding-right: 50px;
-    min-height: 150px;
-}
+        margin-top: 0;
+        box-sizing: border-box;
+        padding-right: 18px;
+        min-height: 150px;
+        height: auto;
+        overflow: hidden;
+        resize: vertical;
+        width: 100%;
+        font-family: var(--sys-font);
+    }
 
 .ai-template-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 10px;
-    padding: 10px 14px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-}
+        position: absolute;
+        right: 12px;
+        top: -24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 20;
+        padding: 0;
+        background: transparent;
+        border: none;
+        pointer-events: auto;
+    }
 
-.ai-template-container span {
-    font-size: 12px;
-    color: #889988;
-    letter-spacing: 0.3px;
-}
-
+.ai-template-container .ai-template-btn {
+        pointer-events: auto;
+    }
 .ai-template-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, #1a4a2a, #2d6a3d);
+    background: #1a4a2a;
     border: none;
     padding: 8px 18px;
     border-radius: 30px;
@@ -92,10 +124,10 @@ textarea {
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: none;
     margin-top: 0;
     width: auto;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: var(--sys-font);
     border: 1px solid rgba(46, 204, 113, 0.15);
 }
 
@@ -105,13 +137,13 @@ textarea {
 }
 
 .ai-template-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.15);
-    background: linear-gradient(135deg, #2d6a3d, #3d8a4d);
+    transform: none;
+    box-shadow: none;
+    background: #1a4a2a;
 }
 
 .ai-template-btn:active {
-    transform: scale(0.96);
+    transform: none;
 }
 
 .row {
@@ -164,7 +196,7 @@ canvas {
     background: rgba(0, 0, 0, 0.3);
     color: #e6ffe6;
     font-size: 14px;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: var(--sys-font);
     resize: none;
     overflow-y: hidden;
     transition: height 0.1s ease;

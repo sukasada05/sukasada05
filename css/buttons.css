@@ -14,7 +14,7 @@ button {
     font-weight: 600;
     font-size: 14px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: var(--sys-font);
     letter-spacing: 0.5px;
     border: 1px solid rgba(76, 175, 80, 0.1);
 }

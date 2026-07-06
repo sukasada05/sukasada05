@@ -27,6 +27,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- Twemoji: normalize emoji rendering across old OS/browsers by replacing with images for display -->
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+
     <!-- ===== CSS MODULAR ===== -->
     <link rel="stylesheet" href="css/main.css">
 
@@ -268,10 +271,11 @@
         .dukops-profile-area {
             flex: 0 0 auto !important;
             display: flex !important;
+            flex-direction: column !important;
             align-items: center !important;
-            gap: clamp(8px, 1.2vw, 16px) !important;
+            gap: clamp(6px, 1.2vw, 12px) !important;
             background: rgba(255, 255, 255, 0.03) !important;
-            padding: 4px 8px 4px 4px !important;
+            padding: 6px 8px !important;
             border-radius: 10px !important;
             border: 1px solid rgba(255, 215, 0, 0.06) !important;
             transition: all 0.3s ease !important;
@@ -300,7 +304,13 @@
         }
 
         .dukops-profile-name {
-            display: none !important;
+            display: block;
+            font-size: clamp(12px, 1.4vw, 14px) !important;
+            color: #ffffff !important;
+            text-align: center !important;
+            margin-top: 2px !important;
+            font-weight: 600 !important;
+            white-space: nowrap !important;
         }
 
         .dukops-title-area {
@@ -400,10 +410,10 @@
             margin-left: auto !important;
         }
 
-        .counter-value {
+            .counter-value {
             font-size: clamp(28px, 5vw, 52px) !important;
             font-weight: 900 !important;
-            font-family: 'Arial Black', sans-serif !important;
+            font-family: var(--sys-font) !important;
             background: linear-gradient(135deg, #FFD700 0%, #FF8F00 100%) !important;
             -webkit-background-clip: text !important;
             -webkit-text-fill-color: transparent !important;
@@ -658,48 +668,46 @@
         <!-- ========== NAVIGASI ========== -->
         <div class="nav-buttons">
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">
-                <i class="fas fa-file-upload"></i> DUKOPS
+                DUKOPS
             </button>
             <button class="nav-btn nav-btn-piket" id="btnJadwal" onclick="showJadwalPiketBaru()">
-                <i class="fas fa-calendar-alt"></i> PIKET
+                PIKET
             </button>
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">
-                <i class="fas fa-chart-line"></i> ABSEN
+                ABSEN
             </button>
         </div>
 
         <!-- ==================== DUKOPS CONTENT ==================== -->
         <div id="dukopsContent">
             <div style="width: 100%; margin: 0 auto;">
-                <label><i class="fas fa-city"></i> Pilih Desa:</label>
+                <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa:</label>
                 <select id="selectDesa" onchange="loadSelectedDesa()">
                     <option value="">--Pilih desa/Kelurahan--</option>
                 </select>
                 <div id="loadingDesa" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
                 <div class="previewBox" id="previewDesa" style="display:none;"></div>
 
-                <label><i class="fas fa-map-pin"></i> Koordinat:</label>
+                <label id="labelKoordinat" style="display:none;"><i class="fas fa-map-pin"></i> Koordinat:</label>
                 <div id="loadingKoordinat" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat koordinat...</div>
                 <div class="previewBox" id="previewKordinat"><span style="color:#6a7a8a;">Pilih desa/Kelurahan untuk melihat koordinat</span></div>
 
-                <label><i class="fas fa-camera"></i> Foto Kegiatan:</label>
+                <label id="labelFotoKegiatan"><i class="fas fa-camera"></i> Foto Kegiatan:</label>
                 <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
                 <div class="previewBox" id="previewGambar"></div>
 
-                <label><i class="fas fa-calendar-alt"></i> Tanggal & Waktu:</label>
+                <label id="labelTanggalWaktu"><i class="fas fa-calendar-alt"></i> Tanggal & Waktu: <span id="tanggalWaktuLabelText">Pilih tanggal & waktu</span></label>
                 <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
-                <div class="previewBox" id="previewTanggal"></div>
 
                 <label><i class="fas fa-file-alt"></i> Narasi Kegiatan:</label>
                 <div class="narasi-wrapper">
-                    <textarea id="narasi" rows="6" placeholder="Masukkan narasi kegiatan...✍️" oninput="checkInputCompletion()"></textarea>
-                </div>
-
-                <!-- AI TEMPLATE -->
-                <div class="ai-template-container">
-                    <button class="ai-template-btn" id="aiTemplateBtn">
-                        <i class="fas fa-robot"></i> Gunakan Template AI
-                    </button>
+                    <textarea id="narasi" class="auto-height-textarea" rows="6" placeholder="Masukkan narasi kegiatan...✍️" oninput="checkInputCompletion(); autoResizeNarasi()"></textarea>
+                    <!-- AI TEMPLATE -->
+                    <div class="ai-template-container">
+                        <button class="ai-template-btn" id="aiTemplateBtn">
+                            <i class="fas fa-robot"></i> Gunakan Template AI
+                        </button>
+                    </div>
                 </div>
 
                 <canvas id="canvas"></canvas>
@@ -1113,9 +1121,13 @@
         function updateDesaProfile(desaName) {
             const imgElement = document.getElementById('desaProfileImgHeader');
             const nameElement = document.getElementById('desaProfileNameHeader');
-            if (!desaName || desaName === "") {
+            // Hide label when no desa selected or placeholder
+            if (!desaName || desaName === "" || desaName === "Pilih desa/Kelurahan") {
                 imgElement.src = DEFAULT_FAVICON_URL;
-                if (nameElement) nameElement.textContent = "Pilih desa/Kelurahan";
+                if (nameElement) {
+                    nameElement.textContent = "Pilih desa/Kelurahan";
+                    nameElement.style.display = 'none';
+                }
                 updateCoordinatesPreview("");
                 return;
             }
@@ -1126,19 +1138,29 @@
                     break;
                 }
             }
-            if (matchedKey) {
+                if (matchedKey) {
                 const fileName = profileImagesGlobal[matchedKey];
                 const imageUrl = PROFILE_BASE_URL + fileName;
                 imgElement.src = imageUrl;
-                if (nameElement) nameElement.textContent = matchedKey;
+                if (nameElement) {
+                    nameElement.textContent = matchedKey;
+                    nameElement.style.display = 'block';
+                }
                 imgElement.onerror = function() {
                     console.warn(`Gagal memuat profil untuk ${matchedKey}`);
                     imgElement.src = DEFAULT_FAVICON_URL;
-                    if (nameElement) nameElement.textContent = matchedKey;
+                    if (nameElement) {
+                        nameElement.textContent = matchedKey;
+                        nameElement.style.display = 'block';
+                    }
                 };
             } else {
                 imgElement.src = DEFAULT_FAVICON_URL;
-                if (nameElement) nameElement.textContent = desaName || "Pilih Desa/Kelurahan";
+                if (nameElement) {
+                    nameElement.textContent = desaName || "Pilih Desa/Kelurahan";
+                    // show label if a custom name (not placeholder)
+                    nameElement.style.display = desaName && desaName !== "Pilih Desa/Kelurahan" ? 'block' : 'none';
+                }
             }
             updateCoordinatesPreview(desaName);
         }
@@ -1166,6 +1188,29 @@
                 window.triggerPlayMusic();
             }
         };
+
+        // Initialize profile label visibility on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const current = getNamaDesaTerpilih();
+                updateDesaProfile(current);
+            } catch (e) {
+                // ignore
+            }
+            try {
+                if (window.twemoji && typeof twemoji.parse === 'function') {
+                    // Parse the document body to normalize emoji rendering
+                    // Ensure parsed images get the 'emoji' class and are not draggable
+                    twemoji.parse(document.body, {
+                        folder: 'svg',
+                        ext: '.svg',
+                        attributes: function () { return { class: 'emoji', draggable: 'false' }; }
+                    });
+                }
+            } catch (e) {
+                // ignore
+            }
+        });
     </script>
 
     <!-- ============ SPLASH SCREEN ============ -->
@@ -1860,7 +1905,30 @@
             // ============================================================
             async function sendToWhatsApp() {
                 const preview = document.getElementById('j_hasilPesanBaru');
-                const pesan = preview ? preview.value.trim() : "";
+                // If preview is a textarea use its value, otherwise reconstruct plain text (handles twemoji <img> replacements)
+                function extractPlainText(el) {
+                    if (!el) return '';
+                    if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+                        return el.value.trim();
+                    }
+                    // For HTML elements possibly containing twemoji <img alt="😀">
+                    let out = '';
+                    el.childNodes.forEach(node => {
+                        if (node.nodeType === Node.TEXT_NODE) {
+                            out += node.textContent;
+                        } else if (node.nodeType === Node.ELEMENT_NODE) {
+                            const ne = node;
+                            if (ne.tagName === 'IMG' && ne.alt) {
+                                out += ne.alt;
+                            } else {
+                                out += ne.textContent || '';
+                            }
+                        }
+                    });
+                    return out.trim();
+                }
+
+                const pesan = extractPlainText(preview || document.getElementById('j_hasilPesan'));
                 
                 if (!pesan) {
                     // Tampilkan di console, bukan popup
@@ -1872,6 +1940,7 @@
                     await autoSaveToSupabase();
                 }
                 
+                // Send Unicode emoji characters to WhatsApp (WhatsApp expects UTF-8). Use encodeURIComponent.
                 window.open("https://wa.me/?text=" + encodeURIComponent(pesan), "_blank");
                 return false;
             }
@@ -2227,7 +2296,7 @@
                     }
                     
                     screenshotAreaAbsen.innerHTML = `
-                        <div style="max-width:600px;margin:0 auto;padding:20px;background:#ffffff;border-radius:12px;font-family:'Segoe UI',Arial,sans-serif;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+                        <div style="max-width:600px;margin:0 auto;padding:20px;background:#ffffff;border-radius:12px;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
                             <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(135deg,#1a2332,#2c3e50);border-radius:10px 10px 0 0;color:white;">
                                 <div style="font-size:16px;font-weight:700;">📊 ABSENSI DUKOPS</div>
                                 <div style="font-size:8px;opacity:0.7;">Koramil Monitoring</div>

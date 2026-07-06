@@ -500,7 +500,14 @@ async function loadSelectedDesa() {
     updateDesaHeaderImage(selectedDesa);
 
     const desaInfo = normalizeDesaName(selectedDesa);
-    document.getElementById('previewDesa').textContent = "Desa: " + desaInfo.cleanName;
+    const previewDesa = document.getElementById('previewDesa');
+    previewDesa.textContent = desaInfo.cleanName;
+    previewDesa.style.display = 'block';
+
+    const fotoLabel = document.getElementById('labelFotoKegiatan');
+    if (fotoLabel) {
+        fotoLabel.innerHTML = `<i class="fas fa-camera"></i> Foto Kegiatan: ${desaInfo.cleanName}`;
+    }
 
     if (typeof window.triggerPlayMusic === 'function') {
         window.triggerPlayMusic();
@@ -571,6 +578,11 @@ function pickRandomKoordinat() {
 
         coordElement.innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + currentKoordinat;
 
+        const labelPilihDesa = document.getElementById('labelPilihDesa');
+        if (labelPilihDesa) {
+            labelPilihDesa.innerHTML = `<i class="fas fa-city"></i> Pilih Desa: ${currentKoordinat}`;
+        }
+
         setTimeout(() => {
             coordElement.style.opacity = "1";
         }, 50);
@@ -586,15 +598,33 @@ function previewImage() {
     const preview = document.getElementById("previewGambar");
 
     if (file) {
-        preview.textContent = file.name;
+        // don't set preview name until image is validated (reject portrait)
         const reader = new FileReader();
         reader.onload = function (e) {
             img = new Image();
             img.src = e.target.result;
             img.onload = function () {
+                // Reject portrait images (height > width) silently
+                try {
+                    if (img.height > img.width) {
+                        // clear file input and preview without showing popups/labels
+                        const inputEl = document.getElementById("gambar");
+                        if (inputEl) inputEl.value = "";
+                        if (preview) preview.textContent = "";
+                        img = new Image();
+                        // do not proceed with preview or koordinat selection
+                        checkInputCompletion();
+                        return;
+                    }
+                } catch (e) {
+                    // if validation fails for any reason, fallback to original flow
+                }
+
                 if (kordinatList.length > 0) {
                     pickRandomKoordinat();
                 }
+                // set preview filename now that image is accepted
+                preview.textContent = file.name;
                 updatePreview();
             };
             img.onerror = function () {
@@ -616,7 +646,7 @@ function previewImage() {
 
 function updateDatePreview() {
     const tglInput = document.getElementById("tanggalWaktu").value;
-    const preview = document.getElementById("previewTanggal");
+    const tanggalLabelText = document.getElementById('tanggalWaktuLabelText');
 
     if (tglInput) {
         let date;
@@ -643,14 +673,15 @@ function updateDatePreview() {
             second: '2-digit'
         };
 
-        if (date.toLocaleDateString) {
-            preview.textContent = date.toLocaleString('id-ID', options);
-        } else {
-            preview.textContent = formatDateForOldBrowsers(date);
+        const displayText = date.toLocaleString('id-ID', options).replace(/:/g, '.');
+        if (tanggalLabelText) {
+            tanggalLabelText.textContent = displayText;
         }
     } else {
         tanggalWaktu = "";
-        preview.textContent = "";
+        if (tanggalLabelText) {
+            tanggalLabelText.textContent = 'Pilih tanggal & waktu';
+        }
     }
     updatePreview();
     checkInputCompletion();
@@ -952,11 +983,22 @@ function resetForm() {
     document.getElementById('selectDesa').value = "";
     document.getElementById('previewDesa').textContent = "";
     document.getElementById('previewKordinat').textContent = "";
+    const labelPilihDesa = document.getElementById('labelPilihDesa');
+    if (labelPilihDesa) {
+        labelPilihDesa.innerHTML = '<i class="fas fa-city"></i> Pilih Desa:';
+    }
+    const labelFotoKegiatan = document.getElementById('labelFotoKegiatan');
+    if (labelFotoKegiatan) {
+        labelFotoKegiatan.innerHTML = '<i class="fas fa-camera"></i> Foto Kegiatan:';
+    }
     document.getElementById('narasi').value = "";
     document.getElementById('gambar').value = "";
     document.getElementById('tanggalWaktu').value = "";
+    const tanggalLabelText = document.getElementById('tanggalWaktuLabelText');
+    if (tanggalLabelText) {
+        tanggalLabelText.textContent = 'Pilih tanggal & waktu';
+    }
     document.getElementById('previewGambar').textContent = "";
-    document.getElementById('previewTanggal').textContent = "";
     updateDesaHeaderImage("");
     checkInputCompletion();
     updatePreview();
@@ -1034,6 +1076,24 @@ function checkInputCompletion() {
         submitBtn.disabled = !isComplete;
     }
 }
+
+function autoResizeNarasi(target) {
+    const textarea = target instanceof HTMLTextAreaElement ? target : document.getElementById('narasi');
+    if (!textarea) return;
+    textarea.style.height = '0px';
+    textarea.style.overflowY = 'hidden';
+    const desiredHeight = Math.max(textarea.scrollHeight, textarea.offsetHeight);
+    textarea.style.height = `${desiredHeight}px`;
+    textarea.style.minHeight = '150px';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const textarea = document.getElementById('narasi');
+    if (textarea) {
+        textarea.addEventListener('input', () => autoResizeNarasi(textarea));
+        autoResizeNarasi(textarea);
+    }
+});
 
 function shouldDisplayNotification(message) {
     return /sudah ada laporan/i.test(String(message || ''));

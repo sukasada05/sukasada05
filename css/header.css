@@ -41,12 +41,28 @@
 .dukops-header-row {
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     gap: clamp(10px, 2vw, 25px) !important;
     flex-wrap: nowrap !important;
     position: relative !important;
     z-index: 1 !important;
     height: 100% !important;
+}
+
+.dukops-profile-area {
+    flex: 0 0 auto !important;
+    width: 90px !important;
+    height: 80px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.dukops-profile-img {
+    width: 90px !important;
+    height: 80px !important;
+    object-fit: cover !important;
+    border-radius: 12px !important;
 }
 
 .dukops-title-area {
@@ -149,7 +165,7 @@
 .counter-value {
     font-size: clamp(28px, 5vw, 52px) !important;
     font-weight: 900 !important;
-    font-family: 'Arial Black', sans-serif !important;
+    font-family: var(--sys-font) !important;
     background: linear-gradient(135deg, #FFD700 0%, #FF8F00 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;

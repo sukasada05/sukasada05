@@ -20,11 +20,14 @@
     }
     
     .dukops-profile-area {
-        width: 80px;
+        width: 90px !important;
+        height: 80px !important;
     }
     
     .dukops-profile-img {
-        height: 70px;
+        width: 90px !important;
+        height: 80px !important;
+        object-fit: cover !important;
     }
     
     .dukops-header-title {
@@ -36,13 +39,14 @@
     }
     
     .nav-buttons {
-        gap: 6px;
+        gap: 8px;
         padding: 4px;
     }
     
     .nav-btn {
-        font-size: 11px;
+        font-size: clamp(14px, 3vw, 18px);
         padding: 10px 12px;
+        min-height: 50px;
     }
     
     .nav-btn i {
@@ -79,12 +83,15 @@
     }
     
     .dukops-profile-area {
-        width: 70px;
+        width: 90px !important;
+        height: 80px !important;
         padding: 4px;
     }
     
     .dukops-profile-img {
-        height: 60px;
+        width: 90px !important;
+        height: 80px !important;
+        object-fit: cover !important;
     }
     
     .dukops-profile-name {
@@ -118,12 +125,13 @@
     
     .nav-buttons {
         flex-wrap: wrap;
-        gap: 4px;
+        gap: 6px;
     }
     
     .nav-btn {
-        font-size: 10px;
+        font-size: clamp(12px, 4vw, 16px);
         padding: 8px 10px;
+        min-height: 44px;
         flex: 1 1 30%;
     }
     
@@ -283,11 +291,13 @@
 
 @media (max-width: 360px) {
     .dukops-profile-area {
-        width: 60px;
+        width: 90px !important;
     }
     
     .dukops-profile-img {
-        height: 50px;
+        width: 90px !important;
+        height: 80px !important;
+        object-fit: cover !important;
     }
     
     .dukops-header-title {
