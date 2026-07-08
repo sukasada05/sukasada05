@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <meta name="robots" content="noindex, nofollow">
-
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -143,12 +140,7 @@
             }
         }
 
-        /* ============================================================
-           STATUS BAR - SUDAH DIHAPUS, PAKAI INDICATOR
-           ============================================================ */
-        /* Status bar sudah dihapus, tidak ada lagi teks "Terhubung ke Supabase" */
-
-        /* ============================================================
+       /* ============================================================
            STYLE LAINNYA
            ============================================================ */
         .tanggal-info {
@@ -599,6 +591,57 @@
         .telegram-running-container:hover .telegram-running-text {
             animation-play-state: paused !important;
         }
+
+        /* ============================================================
+           TAB HANPANGAN (IFRAME) - TAMBAHAN BARU
+           ============================================================ */
+        #hanpanganContent {
+            display: none;
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 15px;
+            background: #0a1a0a;
+        }
+
+        #hanpanganContent iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 768px) {
+            #hanpanganContent {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #hanpanganContent {
+                height: 400px;
+            }
+        }
+
+        .nav-btn-hanpangan {
+            background: rgba(255, 215, 0, 0.08) !important;
+            border: 1px solid rgba(255, 215, 0, 0.15) !important;
+            color: #FFD700 !important;
+        }
+
+        .nav-btn-hanpangan:hover {
+            background: rgba(255, 215, 0, 0.15) !important;
+            border-color: rgba(255, 215, 0, 0.3) !important;
+        }
+
+        .nav-btn-hanpangan.active {
+            background: rgba(255, 215, 0, 0.2) !important;
+            border-color: #FFD700 !important;
+            color: #FFD700 !important;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1) !important;
+        }
     </style>
 
 </head>
@@ -676,12 +719,15 @@
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">
                 ABSEN
             </button>
+            <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">
+                HANPANGAN
+            </button>
         </div>
 
         <!-- ==================== DUKOPS CONTENT ==================== -->
         <div id="dukopsContent">
             <div style="width: 100%; margin: 0 auto;">
-                <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa:</label>
+                <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa/Kelurahan:</label>
                 <select id="selectDesa" onchange="loadSelectedDesa()">
                     <option value="">--Pilih desa/Kelurahan--</option>
                 </select>
@@ -705,7 +751,7 @@
                     <!-- AI TEMPLATE -->
                     <div class="ai-template-container">
                         <button class="ai-template-btn" id="aiTemplateBtn">
-                            <i class="fas fa-robot"></i> Gunakan Template AI
+                            <i class="fas fa-robot"></i> Template AI
                         </button>
                     </div>
                 </div>
@@ -714,7 +760,7 @@
 
                 <div class="action-buttons">
                     <button id="submitBtn" onclick="processSubmission()" disabled>
-                        <i class="fas fa-download">KIRIM</i> dan DOWNLOAD
+                        <i class="fas fa-download"></i> KIRIM dan DOWNLOAD
                     </button>
                     <button id="resetBtn" onclick="resetAll()"><i class="fas fa-redo"></i> RESET</button>
                     <button id="showAttendanceBtn" onclick="showAttendance()" class="btn-attendance">
@@ -728,7 +774,7 @@
                     </div>
                     <div class="attendance-filters">
                         <select id="attendanceDesaFilter" onchange="loadAttendanceData()">
-                            <option value="">Semua Desa</option>
+                            <option value="">--Pilih Desa/Kelurahan--</option>
                         </select>
                         <input type="month" id="attendanceMonthFilter" onchange="loadAttendanceData()">
                     </div>
@@ -749,7 +795,7 @@
         <!-- ==================== JADWAL PIKET ==================== -->
         <div id="jadwalPiketContainerBaru" style="display: none;">
             <div class="jadwal-header">
-                <h1 class="jadwal-title">📋 JADWAL PIKET</h1>
+                <h1 class="jadwal-title">JADWAL PIKET</h1>
                 <div class="app-logo-container">
                     <img src="LOGO KOREM163 Wirasatya.png" alt="Logo Korem 163 Wirasatya" class="jadwal-logo">
                 </div>
@@ -832,7 +878,7 @@
                 <div class="preview-status" id="previewInfo">⏳ Memuat data dari Supabase...</div>
             </div>
 
-            <div class="data-info" id="dataInfo">📌 Data otomatis tersimpan ke Supabase</div>
+            <div class="data-info" id="dataInfo">📌 Data otomatis tersimpan</div>
 
             <div class="app-loading" id="j_loadingIndicatorBaru"><i class="fas fa-spinner fa-spin"></i> Memuat data...</div>
         </div>
@@ -853,7 +899,12 @@
             </div>
 
             <div id="absenResultContainer"></div>
-            <div class="absen-info-text">✨ Tap desa untuk detail | Data tersimpan offline</div>
+            <div class="absen-info-text">✨ Mangsatria@2026</div>
+        </div>
+
+        <!-- ==================== TAB HANPANGAN (TAMBAHAN BARU) ==================== -->
+        <div id="hanpanganContent">
+            <iframe src="https://sukasada05.github.io/Hanpangan/" title="HANPANGAN"></iframe>
         </div>
 
         <div class="jadwal-toast" id="j_toastNotificationBaru"></div>
@@ -2078,9 +2129,11 @@
                 document.getElementById('dukopsContent').style.display = 'none';
                 document.getElementById('jadwalPiketContainerBaru').style.display = 'block'; 
                 document.getElementById('absenContent').style.display = 'none'; 
+                document.getElementById('hanpanganContent').style.display = 'none';
                 document.getElementById('btnDukops').classList.remove('active'); 
                 document.getElementById('btnJadwal').classList.add('active'); 
                 document.getElementById('btnAbsen').classList.remove('active');
+                document.getElementById('btnHanpangan').classList.remove('active');
                 
                 if (!window._jadwalInitialized) {
                     window._jadwalInitialized = true;
@@ -2092,19 +2145,47 @@
                 document.getElementById('dukopsContent').style.display = 'block';
                 document.getElementById('jadwalPiketContainerBaru').style.display = 'none'; 
                 document.getElementById('absenContent').style.display = 'none'; 
+                document.getElementById('hanpanganContent').style.display = 'none';
                 document.getElementById('btnDukops').classList.add('active'); 
                 document.getElementById('btnJadwal').classList.remove('active'); 
-                document.getElementById('btnAbsen').classList.remove('active'); 
+                document.getElementById('btnAbsen').classList.remove('active');
+                document.getElementById('btnHanpangan').classList.remove('active');
             };
 
             window.showAbsenTab = function() { 
                 document.getElementById('dukopsContent').style.display = 'none';
                 document.getElementById('jadwalPiketContainerBaru').style.display = 'none'; 
                 document.getElementById('absenContent').style.display = 'block'; 
+                document.getElementById('hanpanganContent').style.display = 'none';
                 document.getElementById('btnDukops').classList.remove('active'); 
                 document.getElementById('btnJadwal').classList.remove('active'); 
-                document.getElementById('btnAbsen').classList.add('active'); 
+                document.getElementById('btnAbsen').classList.add('active');
+                document.getElementById('btnHanpangan').classList.remove('active');
                 if (typeof loadAbsenTahun === 'function') loadAbsenTahun(); 
+            };
+
+            // ============================================================
+            //  SHOW HANPANGAN - TAMBAHAN BARU
+            // ============================================================
+            window.showHanpangan = function() {
+                // SEMBUNYIKAN SEMUA KONTEN LAIN
+                document.getElementById('dukopsContent').style.display = 'none';
+                document.getElementById('jadwalPiketContainerBaru').style.display = 'none';
+                document.getElementById('absenContent').style.display = 'none';
+                
+                // TAMPILKAN HANPANGAN
+                document.getElementById('hanpanganContent').style.display = 'block';
+                
+                // UPDATE CLASS ACTIVE
+                document.getElementById('btnDukops').classList.remove('active');
+                document.getElementById('btnJadwal').classList.remove('active');
+                document.getElementById('btnAbsen').classList.remove('active');
+                document.getElementById('btnHanpangan').classList.add('active');
+                
+                // PLAY MUSIC
+                if (typeof window.triggerPlayMusic === 'function') {
+                    window.triggerPlayMusic();
+                }
             };
 
             if (document.readyState === 'loading') {
@@ -2440,5 +2521,4 @@
     </script>
 
 </body>
-
 </html>

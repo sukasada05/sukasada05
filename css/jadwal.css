@@ -105,7 +105,7 @@
 }
 
 /* ================================================================
-   HILANGKAN CONTAINER TANGGAL INFO - JADI TEKS SAJA
+   TANGGAL INFO - JADI TEKS SAJA
    ================================================================ */
 .tanggal-info {
     background: transparent !important;
@@ -122,7 +122,7 @@
 }
 
 /* ================================================================
-   HILANGKAN CONTAINER RUNNING TEXT - JADI TEKS SAJA
+   RUNNING TEXT - JADI TEKS SAJA
    ================================================================ */
 .running-text-container {
     background: transparent !important;
@@ -131,6 +131,7 @@
     padding: clamp(4px, 1.2vw, 8px) 0 !important;
     margin-bottom: clamp(4px, 1vw, 8px) !important;
     border-radius: 0 !important;
+    overflow: hidden !important;
 }
 
 .running-text {
@@ -143,6 +144,7 @@
     white-space: nowrap;
     padding: 0 !important;
     text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4) !important;
+    display: inline-block !important;
 }
 
 /* ================================================================
@@ -281,6 +283,7 @@ h3.section-title-makodim {
 .jadwal-section select:focus {
     border-color: #1565C0 !important;
     box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.1), 0 4px 0 #b0bec5 !important;
+    outline: none !important;
 }
 
 .jadwal-section select:hover {
@@ -728,18 +731,34 @@ h3.section-title-makodim {
    ANIMASI RUNNING TEXT
    ================================================================ */
 @keyframes running-text-piket {
-    0% { transform: translateX(100%); opacity: 0; }
-    5% { opacity: 1; }
-    95% { opacity: 1; }
-    100% { transform: translateX(-100%); opacity: 0; }
+    0% { 
+        transform: translateX(100%); 
+        opacity: 0; 
+    }
+    5% { 
+        opacity: 1; 
+    }
+    95% { 
+        opacity: 1; 
+    }
+    100% { 
+        transform: translateX(-100%); 
+        opacity: 0; 
+    }
 }
 
 /* ================================================================
    ANIMASI FADE IN
    ================================================================ */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
 .jadwal-section {
@@ -797,11 +816,16 @@ h3.section-title-makodim {
     
     .jadwal-section {
         background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
     }
     
     .jadwal-section select {
         background: rgba(255, 255, 255, 0.9) !important;
         color: #1a2a3a !important;
+    }
+    
+    .jadwal-section .col label {
+        color: #c8d6e5 !important;
     }
     
     .tanggal-info {
@@ -831,21 +855,65 @@ h3.section-title-makodim {
     h3.section-title-makodim {
         color: #4db6ac !important;
     }
+    
+    .data-info {
+        color: #8899aa !important;
+    }
+    
+    .preview-status {
+        color: #8899aa !important;
+    }
 }
-
-/* ================================================================
-   BORDER HITAM UNTUK TANGGAL INFO (Jika ingin border, aktifkan)
-   ================================================================ */
-/* .tanggal-info {
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
-    border-radius: 6px !important;
-    padding: 6px 12px !important;
-} */
 
 /* ================================================================
    HEADER JADWAL - PREMIUM (PASTIKAN TEXT CENTER)
    ================================================================ */
 .jadwal-header {
+    text-align: center !important;
+}
+
+/* ================================================================
+   HILANGKAN BORDER/BOX-SHADOW BERLEBIH PADA ELEMEN TERTENTU
+   ================================================================ */
+.running-text-container,
+.tanggal-info {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ================================================================
+   PERBAIKI ANIMASI RUNNING TEXT
+   ================================================================ */
+.running-text-container {
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    position: relative !important;
+}
+
+.running-text {
+    display: inline-block !important;
+    white-space: nowrap !important;
+    animation: running-text-piket 25s linear infinite !important;
+}
+
+/* ================================================================
+   JADWAL HEADER - FIX FLEX UNTUK LOGO KIRI
+   ================================================================ */
+.jadwal-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    flex-wrap: wrap !important;
+}
+
+.jadwal-header .app-logo-container {
+    flex: 0 0 auto !important;
+    order: 0 !important;
+}
+
+.jadwal-header > div:last-child {
+    flex: 1 1 auto !important;
     text-align: center !important;
 }
 
