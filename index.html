@@ -12,10 +12,10 @@
     <title>SISTEM PELAPORAN DUKOPS BABINSA dan JADWAL PIKET KORAMIL</title>
     <meta name="theme-color" content="#0a1a3a">
 
-    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="shortcut icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
+    <link rel="icon" type="image/png" href="icons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
 
     <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes"></script>
@@ -214,7 +214,10 @@
            HEADER DUKOPS - GREEN ARMY TUA (FIXED)
            ============================================================ */
         .dukops-header {
-            background: linear-gradient(145deg, #0a1a0a, #0d2b0d, #0a1a0a) !important;
+            background-image: url('header/header-background.png'), linear-gradient(145deg, rgba(10, 26, 10, 0.95), rgba(13, 43, 13, 0.95), rgba(10, 26, 10, 0.95));
+            background-size: cover, cover !important;
+            background-position: center center, center center !important;
+            background-repeat: no-repeat, no-repeat !important;
             border-radius: 16px !important;
             border: 1px solid rgba(255, 215, 0, 0.08) !important;
             padding: clamp(12px, 2vw, 22px) clamp(14px, 2.5vw, 30px) !important;
@@ -266,26 +269,31 @@
             flex-direction: column !important;
             align-items: center !important;
             gap: clamp(6px, 1.2vw, 12px) !important;
-            background: rgba(255, 255, 255, 0.03) !important;
-            padding: 6px 8px !important;
-            border-radius: 10px !important;
-            border: 1px solid rgba(255, 215, 0, 0.06) !important;
-            transition: all 0.3s ease !important;
+            width: 110px !important;
+            min-height: 80px !important;
+            height: auto !important;
+            background: transparent !important;
+            padding: 0 !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            transition: none !important;
+            overflow: visible !important;
         }
 
         .dukops-profile-area:hover {
-            border-color: rgba(255, 215, 0, 0.2) !important;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.03) !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
         }
 
         .dukops-profile-img {
-            width: clamp(45px, 6vw, 70px) !important;
-            height: clamp(45px, 6vw, 70px) !important;
-            border-radius: 8px !important;
-            border: 2px solid rgba(255, 215, 0, 0.12) !important;
-            object-fit: cover !important;
-            background: linear-gradient(135deg, #0d1f0d, #1a3a1a) !important;
-            transition: all 0.3s ease !important;
+            width: 90px !important;
+            height: 80px !important;
+            border-radius: 0 !important;
+            border: none !important;
+            object-fit: contain !important;
+            background: transparent !important;
+            transition: none !important;
             flex-shrink: 0 !important;
         }
 
@@ -300,9 +308,12 @@
             font-size: clamp(12px, 1.4vw, 14px) !important;
             color: #ffffff !important;
             text-align: center !important;
-            margin-top: 2px !important;
+            margin-top: 4px !important;
             font-weight: 600 !important;
-            white-space: nowrap !important;
+            white-space: normal !important;
+            word-break: break-word !important;
+            max-width: 100% !important;
+            line-height: 1.2 !important;
         }
 
         .dukops-title-area {
@@ -319,27 +330,41 @@
         .dukops-header-title {
             font-size: clamp(20px, 4vw, 42px) !important;
             font-weight: 900 !important;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%) !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            background-clip: text !important;
+            color: #f8e28e !important;
+            text-transform: uppercase !important;
+            letter-spacing: 2px !important;
+            line-height: 1.1 !important;
             margin: 0 !important;
-            letter-spacing: 3px !important;
-            line-height: 1.2 !important;
-            text-shadow: none !important;
-            filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.15)) !important;
+            text-shadow:
+                0 1px 0 rgba(0,0,0,0.85),
+                0 2px 0 rgba(0,0,0,0.85),
+                0 3px 0 rgba(0,0,0,0.75),
+                0 5px 10px rgba(0,0,0,0.65),
+                0 0 1px rgba(255,255,255,0.15);
+            -webkit-text-stroke: 0.8px rgba(0,0,0,0.8) !important;
+            -webkit-text-fill-color: currentColor !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
         }
 
         .dukops-header-title:last-of-type {
             font-size: clamp(16px, 2.8vw, 30px) !important;
-            font-weight: 700 !important;
-            background: linear-gradient(135deg, #FFC107 0%, #FF8F00 50%, #FFC107 100%) !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            background-clip: text !important;
-            letter-spacing: 2px !important;
-            margin-top: 2px !important;
-            filter: drop-shadow(0 2px 6px rgba(255, 193, 7, 0.1)) !important;
+            font-weight: 800 !important;
+            color: #f8e2a0 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.5px !important;
+            margin-top: 4px !important;
+            text-shadow:
+                0 1px 0 rgba(0,0,0,0.85),
+                0 2px 0 rgba(0,0,0,0.75),
+                0 4px 8px rgba(0,0,0,0.6),
+                0 0 1px rgba(255,255,255,0.12);
+            -webkit-text-stroke: 0.7px rgba(0,0,0,0.8) !important;
+            -webkit-text-fill-color: currentColor !important;
+            background: none !important;
+            -webkit-background-clip: unset !important;
+            background-clip: unset !important;
         }
 
         .dukops-header-address {
@@ -514,8 +539,8 @@
                 flex-wrap: nowrap !important;
             }
             .dukops-profile-img {
-                width: 50px !important;
-                height: 50px !important;
+                width: 90px !important;
+                height: 80px !important;
             }
             .dukops-header-title {
                 font-size: 22px !important;
@@ -538,8 +563,8 @@
                 flex-wrap: nowrap !important;
             }
             .dukops-profile-img {
-                width: 65px !important;
-                height: 65px !important;
+                width: 90px !important;
+                height: 80px !important;
             }
             .dukops-header-title {
                 font-size: 36px !important;
@@ -658,7 +683,7 @@
     <div id="splashScreen" class="splash-container-modern">
         <div class="splash-content">
             <div class="splash-logo-center">
-                <img src="favicon.svg" alt="Lambang Kodam Udayana">
+                <img src="icons/favicon.svg" alt="Lambang Kodam Udayana">
             </div>
             <div class="splash-title-center">DUKOPS</div>
             <div class="splash-title-center">BABINSA SUKASADA</div>
@@ -670,6 +695,9 @@
                 <div class="splash-progress-bar-center" id="splashProgressBar"></div>
             </div>
             <div class="splash-percentage-center" id="progressPercentage">20%</div>
+            <div class="splash-army" style="text-align:center; margin-top:12px;">
+                <img id="splashArmyGif" src="army.gif" alt="army" style="max-width:240px; width:100%; height:auto; display:block; margin:0 auto;">
+            </div>
         </div>
     </div>
 
@@ -686,12 +714,11 @@
         <div class="dukops-header">
             <div class="dukops-header-row">
                 <div class="dukops-profile-area" id="desaProfileContainerHeader">
-                    <img id="desaProfileImgHeader" class="dukops-profile-img" src="favicon-96x96.png" alt="Foto Profil">
-                    <div id="desaProfileNameHeader" class="dukops-profile-name">Pilih desa/Kelurahan</div>
+                    <img id="desaProfileImgHeader" class="dukops-profile-img" src="icons/favicon-96x96.png" alt="Foto Profil">
+                    <div id="desaProfileNameHeader" class="dukops-profile-name" style="display:none;"></div>
                 </div>
                 <div class="dukops-title-area">
-                    <div class="dukops-header-title">DUKOPS BABINSA</div>
-                    <div class="dukops-header-title">KORAMIL 1609-05/SUKASADA</div>
+                    <div class="dukops-header-title"> KORAMIL 1609-05/SUKASADA</div>
                     <div class="dukops-header-address">
                         <i class="fas fa-map-marker-alt"></i> Jl. Jelantik Gingsir No. 32 Sukasada Singaraja-Bali 81161
                     </div>
@@ -701,11 +728,6 @@
                     <div><span class="counter-value" id="submissionCounter" data-count="0">0</span></div>
                 </div>
             </div>
-        </div>
-
-        <!-- ========== RUNNING TEXT INFORMASI ========== -->
-        <div class="telegram-running-container">
-            <div class="telegram-running-text" id="infoRunningMessage">📢 Selamat datang di DUKOPS Digitalisasi Babinsa</div>
         </div>
 
         <!-- ========== NAVIGASI ========== -->
@@ -763,20 +785,22 @@
                         <i class="fas fa-download"></i> KIRIM dan DOWNLOAD
                     </button>
                     <button id="resetBtn" onclick="resetAll()"><i class="fas fa-redo"></i> RESET</button>
-                    <button id="showAttendanceBtn" onclick="showAttendance()" class="btn-attendance">
+                    <button id="showAttendanceBtn" onclick="showAttendance()" class="btn-attendance btn-compact" title="Laporan Absensi" aria-label="Laporan Absensi" disabled>
                         <i class="fas fa-chart-bar"></i> LAPORAN
                     </button>
                 </div>
 
                 <div id="attendancePanel" style="display: none;">
                     <div class="attendance-header">
-                        <button onclick="hideAttendance()" style="background:#ff4444; color:#ffffff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:600;">✕ TUTUP</button>
+                        <button onclick="hideAttendance()" class="btn-close-3d btn-compact" title="Tutup" aria-label="Tutup">TUTUP</button>
                     </div>
                     <div class="attendance-filters">
-                        <select id="attendanceDesaFilter" onchange="loadAttendanceData()">
-                            <option value="">--Pilih Desa/Kelurahan--</option>
-                        </select>
-                        <input type="month" id="attendanceMonthFilter" onchange="loadAttendanceData()">
+                        <span class="attendance-selected-desa" id="attendanceSelectedDesa">
+                            Desa dipilih: <span id="attendanceSelectedDesaName">Silahkan Pilih Desa</span>
+                        </span>
+                        <div class="month-picker-area" id="attendanceMonthPicker" tabindex="0" role="button" aria-label="Pilih Periode">
+                            <input type="month" id="attendanceMonthFilter" onchange="loadAttendanceData()">
+                        </div>
                     </div>
                     <div id="attendanceLoading" style="display: none; text-align: center; padding: 20px;">
                         <i class="fas fa-spinner fa-spin"></i> 🪖 Tunggu..laporan akan di tampilkan
@@ -785,7 +809,7 @@
                         <div class="summary-row"><span>Total Laporan:</span><span id="totalReports">0</span></div>
                         <div class="summary-row"><span>Total Desa:</span><span id="totalDesa">0</span></div>
                         <div class="summary-row"><span>Pencapaian Target:</span><span id="targetStatus">0%</span></div>
-                        <div class="progress-container"><div id="progressBar" class="progress-bar" style="width:0%"></div></div>
+                        
                     </div>
                     <div id="attendanceList" style="max-height: 400px; overflow-y: auto;"></div>
                 </div>
@@ -816,8 +840,8 @@
                     <div>
                         <h3 class="section-title-koramil">Piket Koramil Hari Ini :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama1a_baru"><option value="">-- Pilih Nama --</option></select></div>
-                            <div class="col"><select id="j_nama1b_baru"><option value="">-- Pilih Nama --</option></select></div>
+                            <div class="col"><select id="j_nama1a_baru"><option value="">「 ✦ 𝐍𝐚𝐦a ✦ 」</option></select></div>
+                            <div class="col"><select id="j_nama1b_baru"><option value="">=✪=Nama=✪=</option></select></div>
                         </div>
                     </div>
                     <div>
@@ -1002,7 +1026,7 @@
         const DESA_LIST_URL = 'data/desa-list.json';
         const COORDINATES_BASE_URL = 'data/coordinates/';
         const PROFILE_BASE_URL = 'profile/';
-        const DEFAULT_FAVICON_URL = 'favicon-96x96.png';
+        const DEFAULT_FAVICON_URL = 'icons/favicon-96x96.png';
 
         let daftarDesaGlobal = [];
         let profileImagesGlobal = {};
@@ -1156,7 +1180,7 @@
             const selectDesa = document.getElementById('selectDesa');
             if (!selectDesa) return;
             selectDesa.disabled = false;
-            selectDesa.innerHTML = '<option value="">-- Pilih Desa/Kelurahan --</option>';
+            selectDesa.innerHTML = '<option value="" disabled selected>-- Pilih Desa/Kelurahan --</option>';
             daftarDesaGlobal.forEach(desa => {
                 const option = document.createElement('option');
                 option.value = desa;
@@ -1170,17 +1194,26 @@
         }
 
         function updateDesaProfile(desaName) {
+            const containerElement = document.getElementById('desaProfileContainerHeader');
             const imgElement = document.getElementById('desaProfileImgHeader');
             const nameElement = document.getElementById('desaProfileNameHeader');
-            // Hide label when no desa selected or placeholder
-            if (!desaName || desaName === "" || desaName === "Pilih desa/Kelurahan") {
-                imgElement.src = DEFAULT_FAVICON_URL;
+            const noSelection = !desaName || desaName === "" || /pilih\s*desa/i.test(desaName) || /^--\s*pilih/i.test(desaName);
+            if (noSelection) {
+                if (containerElement) containerElement.style.display = 'flex';
+                if (imgElement) {
+                    imgElement.src = DEFAULT_FAVICON_URL;
+                    imgElement.style.display = 'block';
+                }
                 if (nameElement) {
-                    nameElement.textContent = "Pilih desa/Kelurahan";
+                    nameElement.textContent = "";
                     nameElement.style.display = 'none';
                 }
                 updateCoordinatesPreview("");
                 return;
+            }
+            if (containerElement) containerElement.style.display = 'flex';
+            if (imgElement) {
+                imgElement.style.display = 'block';
             }
             let matchedKey = null;
             for (let key in profileImagesGlobal) {
@@ -1189,28 +1222,29 @@
                     break;
                 }
             }
-                if (matchedKey) {
+            if (matchedKey) {
                 const fileName = profileImagesGlobal[matchedKey];
                 const imageUrl = PROFILE_BASE_URL + fileName;
-                imgElement.src = imageUrl;
+                if (imgElement) imgElement.src = imageUrl;
                 if (nameElement) {
                     nameElement.textContent = matchedKey;
                     nameElement.style.display = 'block';
                 }
-                imgElement.onerror = function() {
-                    console.warn(`Gagal memuat profil untuk ${matchedKey}`);
-                    imgElement.src = DEFAULT_FAVICON_URL;
-                    if (nameElement) {
-                        nameElement.textContent = matchedKey;
-                        nameElement.style.display = 'block';
-                    }
-                };
+                if (imgElement) {
+                    imgElement.onerror = function() {
+                        console.warn(`Gagal memuat profil untuk ${matchedKey}`);
+                        imgElement.src = DEFAULT_FAVICON_URL;
+                        if (nameElement) {
+                            nameElement.textContent = matchedKey;
+                            nameElement.style.display = 'block';
+                        }
+                    };
+                }
             } else {
-                imgElement.src = DEFAULT_FAVICON_URL;
+                if (imgElement) imgElement.src = DEFAULT_FAVICON_URL;
                 if (nameElement) {
-                    nameElement.textContent = desaName || "Pilih Desa/Kelurahan";
-                    // show label if a custom name (not placeholder)
-                    nameElement.style.display = desaName && desaName !== "Pilih Desa/Kelurahan" ? 'block' : 'none';
+                    nameElement.textContent = desaName || "";
+                    nameElement.style.display = desaName ? 'block' : 'none';
                 }
             }
             updateCoordinatesPreview(desaName);
@@ -1539,7 +1573,7 @@
                     indicator.title = '🔴 Supabase Terputus';
                 } else {
                     indicator.classList.add('indicator-checking');
-                    indicator.title = '🟡 Menghubungkan...';
+                    indicator.title = '📡 Menghubungkan...';
                 }
                 
                 const tooltip = indicator.querySelector('.indicator-tooltip');
@@ -1710,8 +1744,7 @@
                     { names: [getVal('j_nama4c_baru'), getVal('j_nama4d_baru')], title: formatTanggal(tomorrow), suffix: " (Makodim)" }
                 ]; 
                 
-                let result = "*=======================*\n*KORAMIL 1609-05/SUKASADA*\n    *JADWAL DINAS DALAM*\n*=======================*\n\n";
-                let sectionCount = 0; 
+let result = "_____________________________\n*KORAMIL 1609-05/SUKASADA*\n    *JADWAL DINAS DALAM*\n_____________________________\n\n";                let sectionCount = 0; 
                 
                 for (const s of sections) { 
                     const valid = s.names.filter(n => n && n.trim()); 
@@ -2090,7 +2123,78 @@
             }
 
             // ============================================================
-            //  INIT JADWAL
+            //  🔥 ROTASI OTOMATIS (besok -> hari ini)
+            // ============================================================
+            const ROTATION_KEY = 'jadwal_rotation_date';
+
+            async function autoRotateSchedule() {
+                if (!supabaseClient || !isSupabaseConnected) {
+                    console.log('⏳ Supabase belum siap, skip rotasi');
+                    return;
+                }
+
+                const today = new Date();
+                const todayStr = formatDateDB(today);
+
+                // Cek apakah rotasi sudah dilakukan hari ini
+                let lastRotation = localStorage.getItem(ROTATION_KEY);
+                if (lastRotation && lastRotation === todayStr) {
+                    console.log('⏩ Rotasi sudah dilakukan hari ini, skip.');
+                    return;
+                }
+
+                console.log('🔄 Memulai rotasi otomatis (besok -> hari ini)...');
+
+                try {
+                    // 1. Cari data di tanggal HARI INI yang berjenis "besok"
+                    const { data: todayBesokData, error: fetchError } = await supabaseClient
+                        .from('jadwal_piket')
+                        .select('*')
+                        .eq('tanggal_jadwal', todayStr)
+                        .ilike('jenis', '%besok');
+
+                    if (fetchError) throw fetchError;
+
+                    if (todayBesokData && todayBesokData.length > 0) {
+                        // 2. Ubah jenis dari "besok" menjadi "hari_ini"
+                        for (const item of todayBesokData) {
+                            const newJenis = item.jenis.replace('besok', 'hari_ini');
+                            const { error: updateError } = await supabaseClient
+                                .from('jadwal_piket')
+                                .update({ jenis: newJenis })
+                                .eq('id', item.id);
+
+                            if (updateError) throw updateError;
+                        }
+                        console.log(`✅ ${todayBesokData.length} data berhasil dirotasi ke hari ini.`);
+                    } else {
+                        console.log('ℹ️ Tidak ada data "besok" untuk hari ini.');
+                    }
+
+                    // 3. Hapus data untuk tanggal BESOK (biar dropdown besok kosong)
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(today.getDate() + 1);
+                    const tomorrowStr = formatDateDB(tomorrow);
+
+                    const { error: deleteError } = await supabaseClient
+                        .from('jadwal_piket')
+                        .delete()
+                        .eq('tanggal_jadwal', tomorrowStr);
+
+                    if (deleteError) throw deleteError;
+                    console.log(`🗑️ Data untuk tanggal besok (${tomorrowStr}) direset.`);
+
+                    // 4. Simpan tanggal rotasi agar tidak diulang hari ini
+                    localStorage.setItem(ROTATION_KEY, todayStr);
+
+                    // 5. Refresh tampilan akan dilakukan di initJadwalBaru
+                } catch (error) {
+                    console.error('❌ Gagal rotasi:', error);
+                }
+            }
+
+            // ============================================================
+            //  INIT JADWAL (DENGAN ROTASI)
             // ============================================================
             async function initJadwalBaru() { 
                 console.log('🔍 Inisialisasi Aplikasi...');
@@ -2118,6 +2222,12 @@
                 autoResizeTextarea();
                 
                 await initSupabase();
+                
+                // 🔥🔥🔥 PANGGIL ROTASI OTOMATIS 🔥🔥🔥
+                await autoRotateSchedule();
+                
+                // Muat ulang data setelah rotasi
+                await loadDataFromSupabase();
                 
                 console.log('✅ Aplikasi siap!');
             }
@@ -2506,19 +2616,30 @@
     </script>
 
     <!-- ============ Tawk.to Chat ============ -->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {},
-            Tawk_LoadStart = new Date();
-        (function() {
-            var s1 = document.createElement("script"),
-                s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/6a31083849b4571d39e86fa2/1jr7og7jc';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
-    </script>
+<script type="text/javascript">
+    var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date();
+    (function() {
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src = 'https://embed.tawk.to/6a31083849b4571d39e86fa2/1jr7og7jc';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin', '*');
+        s0.parentNode.insertBefore(s1, s0);
+    })();
+</script>  <!-- ✅ Tambahkan ini! -->
+
+<script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                    console.log('❌ Service Worker registration failed:', error);
+                });
+        });
+    }
+</script>
 
 </body>
 </html>

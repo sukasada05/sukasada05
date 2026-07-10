@@ -160,6 +160,8 @@
             0 0 40px rgba(0, 168, 255, 0.3),
             inset 0 0 20px rgba(0, 168, 255, 0.1);
         transform: scale(1);
+
+/* (moved) Reduce spacing between Pilih Desa label and select - rules moved to end of file */
     }
 
     100% {
@@ -212,6 +214,32 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Reduce spacing between Pilih Desa label and select */
+/* Tighter spacing for Pilih Desa label + select
+   Use stronger overrides (negative margin + translate) to visually close the gap. */
+#labelPilihDesa {
+    display: block; /* keep label on its own line */
+    margin-bottom: 0 !important;
+    line-height: 1.05;
+}
+
+/* Very specific selectors to override the 3D select defaults */
+#labelPilihDesa + select#selectDesa,
+#dukopsContent > div label#labelPilihDesa + select#selectDesa,
+#dukopsContent label#labelPilihDesa + select#selectDesa {
+    margin-top: -6px !important; /* pull select upwards */
+    padding-top: 8px !important; /* reduce internal height */
+    padding-bottom: 8px !important;
+    height: auto !important;
+    min-height: 36px !important;
+    transform: translateY(-6px) !important;
+}
+
+/* Fallback: if layout still shows gap, allow negative top margin directly on select */
+#selectDesa {
+    margin-top: -6px !important;
 }
 
 @keyframes scaleIn {
@@ -405,7 +433,7 @@ textarea {
 button {
     margin-top: 20px;
     padding: 12px 15px;
-    background: #2b4d2b;
+    background: #cc5500; /* dark orange */
     color: white;
     border: none;
     border-radius: 5px;

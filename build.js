@@ -7,7 +7,8 @@ const dist = path.join(root, 'dist');
 
 const pathsToCopy = [
   'index.html', 'app.js', 'styles.css', 'site.json', 'site.webmanifest', 'README.md',
-  'css', 'js', 'assets', 'data', 'Profile', 'support'
+  'LOGO KOREM163 Wirasatya.png',
+  'css', 'js', 'assets', 'data', 'icons', 'header', 'Profile', 'support'
 ];
 
 function rimraf(dir) {

@@ -498,6 +498,12 @@ async function loadSelectedDesa() {
     selectedDesa = selectedOption.getAttribute('data-raw-name') || selectedOption.text;
 
     updateDesaHeaderImage(selectedDesa);
+    updateAttendanceButtonState();
+    updateAttendanceSelectedDesaLabel();
+
+    if (document.getElementById('attendancePanel')?.style.display === 'block') {
+        loadAttendanceData();
+    }
 
     const desaInfo = normalizeDesaName(selectedDesa);
     const previewDesa = document.getElementById('previewDesa');
@@ -612,6 +618,7 @@ function previewImage() {
                         if (inputEl) inputEl.value = "";
                         if (preview) preview.textContent = "";
                         img = new Image();
+                        showNotification("Foto portrait tidak diperbolehkan. Gunakan foto landscape.", "warning");
                         // do not proceed with preview or koordinat selection
                         checkInputCompletion();
                         return;
@@ -1075,6 +1082,22 @@ function checkInputCompletion() {
     if (submitBtn) {
         submitBtn.disabled = !isComplete;
     }
+
+    updateAttendanceButtonState();
+}
+
+function updateAttendanceButtonState() {
+    const button = document.getElementById('showAttendanceBtn');
+    if (!button) return;
+
+    button.disabled = !selectedDesa;
+}
+
+function updateAttendanceSelectedDesaLabel() {
+    const label = document.getElementById('attendanceSelectedDesaName');
+    if (!label) return;
+
+    label.textContent = selectedDesa ? normalizeDesaName(selectedDesa).cleanName : 'Silahkan Pilih Desa';
 }
 
 function autoResizeNarasi(target) {
@@ -1094,6 +1117,49 @@ document.addEventListener('DOMContentLoaded', function () {
         autoResizeNarasi(textarea);
     }
 });
+
+// Make the whole month-picker area open the native month picker (static 3D area)
+(function() {
+    function attachMonthPickerArea() {
+        const pickerArea = document.getElementById('attendanceMonthPicker');
+        const monthInput = document.getElementById('attendanceMonthFilter');
+        if (!pickerArea || !monthInput) return;
+
+        pickerArea.addEventListener('click', (e) => {
+            // if user clicked directly on the input, let native behavior happen
+            if (e.target === monthInput) return;
+            // Try showPicker (supported in Chromium). Fallback to focus+click.
+            try {
+                if (typeof monthInput.showPicker === 'function') {
+                    monthInput.showPicker();
+                    return;
+                }
+            } catch (err) {
+                // ignore
+            }
+
+            monthInput.focus();
+            monthInput.click();
+        });
+
+        // also open on keyboard Enter/Space when wrapper focused
+        pickerArea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                monthInput.focus();
+                try { monthInput.showPicker && monthInput.showPicker(); } catch (err) {}
+                monthInput.click();
+            }
+        });
+    }
+
+    // attach when DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachMonthPickerArea);
+    } else {
+        attachMonthPickerArea();
+    }
+})();
 
 function shouldDisplayNotification(message) {
     return /sudah ada laporan/i.test(String(message || ''));
@@ -1123,13 +1189,12 @@ function showAttendance() {
         panel.style.display = 'block';
         button.style.display = 'none';
 
-        populateAttendanceDesaFilter();
-
         const now = new Date();
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         document.getElementById('attendanceMonthFilter').value = `${year}-${month}`;
 
+        updateAttendanceSelectedDesaLabel();
         loadAttendanceData();
     }
 }
@@ -1141,25 +1206,6 @@ function hideAttendance() {
     if (panel && button) {
         panel.style.display = 'none';
         button.style.display = 'block';
-    }
-}
-
-function populateAttendanceDesaFilter() {
-    const filter = document.getElementById('attendanceDesaFilter');
-    const selectDesa = document.getElementById('selectDesa');
-
-    if (!filter || !selectDesa) return;
-
-    filter.innerHTML = '<option value="">Semua Desa</option>';
-
-    for (let i = 1; i < selectDesa.options.length; i++) {
-        const option = selectDesa.options[i];
-        const desaInfo = normalizeDesaName(option.getAttribute('data-raw-name') || option.text);
-
-        const newOption = document.createElement('option');
-        newOption.value = desaInfo.cleanName;
-        newOption.textContent = desaInfo.cleanName;
-        filter.appendChild(newOption);
     }
 }
 
@@ -1176,7 +1222,7 @@ async function loadAttendanceData() {
 
     try {
         const result = await sendToBackend('listFiles', {
-            desaFilter: document.getElementById('attendanceDesaFilter').value,
+            desaFilter: selectedDesa ? normalizeDesaName(selectedDesa).cleanName : '',
             monthFilter: document.getElementById('attendanceMonthFilter').value,
             readZips: 'true'
         });
@@ -1312,7 +1358,7 @@ function displayAttendanceList(files) {
 
         html += `
             <div class="desa-card" style="margin-bottom: 20px;">
-                <div class="desa-header" style="background: #2b4d2b;">
+                <div class="desa-header" style="background: #cc5500;">
                     <div class="desa-name">
                         <i class="fas fa-folder"></i> ${monthName} ${year}
                     </div>
@@ -1362,28 +1408,17 @@ function displayAttendanceList(files) {
 
                 const fileSize = file.size ? formatFileSize(file.size) : 'Ukuran tidak tersedia';
                 const zipContents = file.zipContents ?
-                    `<div class="file-meta" style="color: #4dff4d; margin-top: 3px;">
-                        <i class="fas fa-file-archive"></i> Isi ZIP: ${file.zipContents}
-                    </div>` : '';
+                    `** Isi ZIP: ${file.zipContents}` : '';
 
+                const displayIndex = desaFiles.length - index;
                 html += `
                     <div class="file-item" style="padding: 6px 0;">
                         <div class="file-info">
                             <div style="flex: 1;">
-                                <div class="file-name" style="font-size: 13px;">${file.name}</div>
-                                <div class="file-meta" style="font-size: 11px;">
-                                    <i class="far fa-clock"></i> ${dateStr}
-                                    <span style="margin-left: 10px;">
-                                        <i class="fas fa-hdd"></i> ${fileSize}
-                                    </span>
-                                </div>
-                                ${zipContents}
+                                <div class="file-name" style="font-size: 13px;">${displayIndex}. ${file.name}</div>
+                                <div class="file-meta">** ${dateStr} ** ${fileSize}</div>
+                                ${zipContents ? `<div class="file-zip">** ${zipContents}</div>` : ''}
                             </div>
-                            ${file.webViewLink !== '#' ? `
-                                <a href="${file.webViewLink}" target="_blank" class="file-link" title="Buka di Drive">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </a>
-                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -1449,11 +1484,7 @@ function displayAttendanceSummary(files) {
             achievementPercent >= 70 ? '#FF9800' : '#f44336';
     }
 
-    if (progressBar) {
-        progressBar.style.width = `${achievementPercent}%`;
-        progressBar.style.background = achievementPercent >= 100 ? '#4CAF50' :
-            achievementPercent >= 70 ? '#FF9800' : '#f44336';
-    }
+    // progress bar removed from attendance summary — no UI update needed here
 }
 
 function extractDesaFromFileName(filename) {
@@ -1921,10 +1952,10 @@ function updateJadwalPreview() {
         return days[date.getDay()] + ", " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
     };
 
-    let result = "=======================\n" +
+let result = "_______________________\n" +
         "*KORAMIL 1609-05/SUKASADA*\n" +
         "    *JADWAL DINAS DALAM*\n" +
-        "=======================\n\n";
+        "_______________________\n\n";
 
     const sections = [
         {

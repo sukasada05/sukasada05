@@ -2,7 +2,10 @@
    HEADER DUKOPS - GREEN ARMY TUA (TANPA CARD PROFILE)
    ============================================================ */
 .dukops-header {
-    background: linear-gradient(145deg, #0a1a0a, #0d2b0d, #0a1a0a) !important;
+    background-image: url('header/header-background.png'), linear-gradient(145deg, rgba(10, 26, 10, 0.95), rgba(13, 43, 13, 0.95), rgba(10, 26, 10, 0.95));
+    background-size: cover, cover !important;
+    background-position: center center, center center !important;
+    background-repeat: no-repeat, no-repeat !important;
     border-radius: 16px !important;
     border: 1px solid rgba(255, 215, 0, 0.08) !important;
     padding: clamp(12px, 2vw, 22px) clamp(14px, 2.5vw, 30px) !important;
@@ -41,7 +44,7 @@
 .dukops-header-row {
     display: flex !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
     gap: clamp(10px, 2vw, 25px) !important;
     flex-wrap: nowrap !important;
     position: relative !important;
@@ -51,18 +54,31 @@
 
 .dukops-profile-area {
     flex: 0 0 auto !important;
-    width: 90px !important;
-    height: 80px !important;
+    width: 110px !important;
+    min-height: 80px !important;
+    height: auto !important;
     display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .dukops-profile-img {
     width: 90px !important;
     height: 80px !important;
-    object-fit: cover !important;
-    border-radius: 12px !important;
+    object-fit: contain !important;
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    margin-bottom: 4px !important;
+    background: transparent !important;
+    border: none !important;
 }
 
 .dukops-title-area {
@@ -74,32 +90,47 @@
     text-align: center !important;
     min-width: 0 !important;
     padding: 0 clamp(8px, 1.5vw, 20px) !important;
+    margin: 0 auto !important;
 }
 
 .dukops-header-title {
     font-size: clamp(20px, 4vw, 42px) !important;
     font-weight: 900 !important;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
+    color: #f8e28e !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    line-height: 1.1 !important;
     margin: 0 !important;
-    letter-spacing: 3px !important;
-    line-height: 1.2 !important;
-    text-shadow: none !important;
-    filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.15)) !important;
+    text-shadow:
+        0 1px 0 rgba(0,0,0,0.85),
+        0 2px 0 rgba(0,0,0,0.85),
+        0 3px 0 rgba(0,0,0,0.75),
+        0 5px 10px rgba(0,0,0,0.65),
+        0 0 1px rgba(255,255,255,0.15);
+    -webkit-text-stroke: 0.8px rgba(0,0,0,0.8) !important;
+    -webkit-text-fill-color: currentColor !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
 }
 
 .dukops-header-title:last-of-type {
     font-size: clamp(16px, 2.8vw, 30px) !important;
-    font-weight: 700 !important;
-    background: linear-gradient(135deg, #FFC107 0%, #FF8F00 50%, #FFC107 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    letter-spacing: 2px !important;
-    margin-top: 2px !important;
-    filter: drop-shadow(0 2px 6px rgba(255, 193, 7, 0.1)) !important;
+    font-weight: 800 !important;
+    color: #f8e2a0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    margin-top: 4px !important;
+    text-shadow:
+        0 1px 0 rgba(0,0,0,0.85),
+        0 2px 0 rgba(0,0,0,0.75),
+        0 4px 8px rgba(0,0,0,0.6),
+        0 0 1px rgba(255,255,255,0.12);
+    -webkit-text-stroke: 0.7px rgba(0,0,0,0.8) !important;
+    -webkit-text-fill-color: currentColor !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
 }
 
 .dukops-header-address {
@@ -230,9 +261,6 @@
         padding: 1px 6px 1px 4px !important;
         gap: 4px !important;
         margin-top: 2px !important;
-    }
-    .telegram-running-text {
-        font-size: 9px !important;
     }
 }
 
