@@ -2,10 +2,10 @@
 const GOOGLE_APPS_SCRIPT_WEBHOOK = "https://script.google.com/macros/s/AKfycbz3sB1d0PRRzlvAJwdr8nl5dQa6qpyfHQCJbYxBMz0Jpj2o-i1_WnwMzJEy3Z4GA9uh/exec";
 const TARGET_LAPORAN = 9;
 
-// KONFIGURASI JADWAL PIKET (TIDAK ADA TOKEN DI SINI - SEMUA PAKAI BACKEND)
+// KONFIGURASI JADWAL PIKET (URL HANPANGAN sekarang pakai raw GitHub)
 const GITHUB_URLS = {
-    HANPANGAN: "data/hanpangan.txt",
-    PIKET: "data/piket.txt"
+    HANPANGAN: "https://raw.githubusercontent.com/sukasada05/dukops4/main/data/hanpangan.txt",
+    PIKET: "data/piket.txt"  // tetap lokal, bisa disesuaikan
 };
 
 // ================= VARIABEL GLOBAL =================
@@ -71,9 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Fade transition from 75% to 98%
         if (progress >= 75 && progress < 98) {
-            // Progress: 75% → 98% (range 23%)
-            // Splash opacity: 1 → 0
-            // App opacity: 0 → 1
             const transitionProgress = (progress - 75) / (98 - 75); // 0 to 1
 
             if (splashScreen) {
@@ -1680,7 +1677,7 @@ function updateDesaHeaderImage(desaName) {
     };
 }
 
-// ================= FUNGSI POPUP UCAPAN TERIMA KASIH =================
+// ================= POPUP UCAPAN TERIMA KASIH =================
 function showThankYouPopup(desaName, count) {
     // Buat modal popup
     const modal = document.createElement('div');
@@ -1769,7 +1766,7 @@ Terima kasih atas dedikasi dan kerja keras dalam melaksanakan tugas DUKOPS.
     }
 }
 
-// ================= FUNGSI JADWAL PIKET =================
+// ================= FUNGSI JADWAL PIKET (VERSI LAMA) =================
 async function initJadwalPiket() {
     showJadwalToast("Memuat data jadwal piket...");
 
@@ -1789,7 +1786,7 @@ async function initJadwalPiket() {
             await loadJadwalPiketFromGitHub();
         }
 
-        // Load hanpangan dari GitHub
+        // Load hanpangan dari GitHub (dengan Epoch Day)
         await loadJadwalHanpanganFromGitHub();
 
         // Setup dropdown
@@ -1837,6 +1834,7 @@ async function loadJadwalPiketFromGitHub() {
     }
 }
 
+// 🔥 FUNGSI HANPANGAN DIPERBAIKI DENGAN EPOCH DAY (sesuai HTML)
 async function loadJadwalHanpanganFromGitHub() {
     try {
         const response = await fetch(GITHUB_URLS.HANPANGAN + '?t=' + new Date().getTime());
@@ -1847,15 +1845,46 @@ async function loadJadwalHanpanganFromGitHub() {
 
         if (lines.length > 0) {
             JadwalData.daftarHanpangan = lines;
+
+            // Gunakan Epoch Day untuk indeks yang tidak reset tiap bulan
             const today = new Date();
-            const dayOfMonth = today.getDate();
-            JadwalData.currentHanpangan = lines[(dayOfMonth - 1) % lines.length];
-            console.log("Data hanpangan dimuat:", JadwalData.daftarHanpangan.length, "item");
+            const epochDays = Math.floor(today.getTime() / (24 * 60 * 60 * 1000));
+            // Tanggal referensi: 1 Januari 2024 (agar rotasi konsisten)
+            const referenceDate = new Date(2024, 0, 1);
+            const epochDaysRef = Math.floor(referenceDate.getTime() / (24 * 60 * 60 * 1000));
+
+            // Hitung offset agar indeks ke-0 dimulai dari tanggal referensi
+            let offset = (0 - epochDaysRef) % lines.length;
+            if (offset < 0) offset += lines.length;
+
+            let index = (epochDays + offset) % lines.length;
+            if (index < 0) index += lines.length;
+
+            JadwalData.currentHanpangan = lines[index];
+            console.log(`🌾 Hanpangan dimuat (Epoch Day): ${JadwalData.currentHanpangan} (index ${index})`);
         }
 
         return true;
     } catch (error) {
         console.error("Error loading hanpangan data:", error);
+        // Fallback ke daftar default
+        const defaultHanpangan = [
+            "Serka Wahyu Hidayat", "Pelda I Komang Karia", "Serma Mujiburrahman",
+            "Sertu Nyoman Warsa", "Serma I Kadek Teges Suardana", "Serda I Putu Suwidana Yasa",
+            "Serka Satriyo", "Serka I Made Widiasa", "Serka Nyoman Join Amitaba",
+            "Serka I Nyoman Arta"
+        ];
+        JadwalData.daftarHanpangan = defaultHanpangan;
+        const today = new Date();
+        const epochDays = Math.floor(today.getTime() / (24 * 60 * 60 * 1000));
+        const referenceDate = new Date(2024, 0, 1);
+        const epochDaysRef = Math.floor(referenceDate.getTime() / (24 * 60 * 60 * 1000));
+        let offset = (0 - epochDaysRef) % defaultHanpangan.length;
+        if (offset < 0) offset += defaultHanpangan.length;
+        let index = (epochDays + offset) % defaultHanpangan.length;
+        if (index < 0) index += defaultHanpangan.length;
+        JadwalData.currentHanpangan = defaultHanpangan[index];
+        console.log("🌾 Hanpangan fallback (Epoch Day):", JadwalData.currentHanpangan);
         return false;
     }
 }
@@ -1952,7 +1981,7 @@ function updateJadwalPreview() {
         return days[date.getDay()] + ", " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
     };
 
-let result = "_______________________\n" +
+    let result = "_______________________\n" +
         "*KORAMIL 1609-05/SUKASADA*\n" +
         "    *JADWAL DINAS DALAM*\n" +
         "_______________________\n\n";
