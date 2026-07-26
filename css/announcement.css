@@ -1,40 +1,158 @@
 /* ================================================================
-   ANNOUNCEMENT.CSS - ANNOUNCEMENT BAR
+   ANNOUNCEMENT.CSS - ANNOUNCEMENT BAR DUKOPS
+   VERSI DIPERBAIKI - AKSESIBILITAS & RESPONSIF
    ================================================================ */
 
-.dukops-announcement-bar {
-    width: 100%;
-    background: #1a2a4a !important;
-    padding: 10px 0 !important;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.04);
-    overflow: hidden;
-    white-space: nowrap;
+:root {
+    --announcement-bg: #1a2a4a;
+    --announcement-text: #ffdd77;
+    --announcement-font-size: 1rem;
+    --announcement-duration: 30s;
+    --announcement-padding: 10px 0;
 }
 
+/* ===== CONTAINER ===== */
+.dukops-announcement-bar {
+    width: 100%;
+    background: var(--announcement-bg);
+    padding: var(--announcement-padding);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===== RUNNING TEXT ===== */
 .dukops-announcement-text {
     display: inline-block;
     padding-left: 100%;
-    animation: dukops-running-text 25s linear infinite;
-    font-size: 1rem !important;
-    color: #ffdd77 !important;
+    animation: dukops-running-text var(--announcement-duration) linear infinite;
+    font-size: var(--announcement-font-size);
+    color: var(--announcement-text);
     font-weight: 600;
     letter-spacing: 0.5px;
+    white-space: nowrap;
+    will-change: transform;
 }
 
-@keyframes dukops-running-text {
-    from { transform: translateX(0); }
-    to { transform: translateX(-100%); }
-}
-
-.dukops-announcement-bar:hover .dukops-announcement-text {
+/* ===== PAUSE ON HOVER ===== */
+.dukops-announcement-bar:hover .dukops-announcement-text,
+.dukops-announcement-bar:focus-within .dukops-announcement-text {
     animation-play-state: paused;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 480px) {
-    .dukops-announcement-text {
-        font-size: 0.75rem !important;
-        animation-duration: 15s;
+/* ===== ANIMATION ===== */
+@keyframes dukops-running-text {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
     }
 }
+
+/* ================================================================
+   GAYA TAMBAHAN UNTUK TEKS ANNOUNCEMENT
+   ================================================================ */
+
+/* Ikon di announcement */
+.dukops-announcement-icon {
+    margin: 0 12px;
+    color: #ffd700;
+    font-size: 0.9em;
+}
+
+/* Teks penting di announcement */
+.dukops-announcement-highlight {
+    color: #ffd700;
+    font-weight: 700;
+    background: rgba(255, 215, 0, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    :root {
+        --announcement-font-size: 0.9rem;
+        --announcement-duration: 25s;
+    }
+}
+
+/* HP Besar */
+@media (max-width: 480px) {
+    :root {
+        --announcement-font-size: 0.75rem;
+        --announcement-duration: 18s;
+        --announcement-padding: 8px 0;
+    }
+    
+    .dukops-announcement-icon {
+        margin: 0 6px;
+        font-size: 0.8em;
+    }
+}
+
+/* HP Kecil */
+@media (max-width: 360px) {
+    :root {
+        --announcement-font-size: 0.65rem;
+        --announcement-duration: 14s;
+        --announcement-padding: 6px 0;
+    }
+}
+
+/* ================================================================
+   AKSESIBILITAS - REDUCED MOTION
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .dukops-announcement-text {
+        animation: none !important;
+        padding-left: 0 !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        text-align: center !important;
+    }
+    
+    .dukops-announcement-bar:hover .dukops-announcement-text,
+    .dukops-announcement-bar:focus-within .dukops-announcement-text {
+        animation-play-state: running !important;
+    }
+}
+
+/* ================================================================
+   MODE DARK - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .dukops-announcement-bar {
+        background: #0a1a2a;
+    }
+}
+
+/* ================================================================
+   KEYBOARD FOCUS
+   ================================================================ */
+.dukops-announcement-bar:focus-visible {
+    outline: 2px solid #ffd700;
+    outline-offset: 2px;
+}
+
+/* ================================================================
+   SCREEN READER - TEKS TERSEMBUNYI
+   ================================================================ */
+.dukops-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 /* ===== End of announcement.css ===== */

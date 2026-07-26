@@ -1,73 +1,89 @@
 /* ================================================================
-   PREVIEW-FIXES.CSS - PERBAIKAN PREVIEW
+   PREVIEW-FIXES.CSS - PERBAIKAN PREVIEW ELEMENTS
+   VERSI DIPERBAIKI - WARNA KONSISTEN
    ================================================================ */
 
-/* ===== HILANGKAN PREVIEW DESA ===== */
+/* ================================================================
+   HILANGKAN PREVIEW DESA (TIDAK DIPERLUKAN)
+   ================================================================ */
 #previewDesa {
     display: none !important;
 }
 
-/* ===== PERBAIKAN PREVIEW KOORDINAT ===== */
+/* ================================================================
+   PREVIEW KOORDINAT - DITAMPILKAN
+   ================================================================ */
 #previewKordinat {
-    display: none !important;
-    visibility: hidden !important;
     color: #0a1a2e !important;
-    font-weight: 500 !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    height: auto !important;
+    font-weight: 600 !important;
+    min-height: 30px !important;
+    padding: 8px 14px !important;
+    border: 2px solid #2a5a8a !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    margin: 4px 0 10px 0 !important;
+    font-size: 14px !important;
 }
 
+/* ================================================================
+   LOADING KOORDINAT - SEMBUNYIKAN
+   ================================================================ */
 #loadingKoordinat {
     display: none !important;
 }
 
+/* ================================================================
+   PREVIEW GAMBAR - DITAMPILKAN
+   ================================================================ */
 #previewGambar {
-    display: none !important;
-    visibility: hidden !important;
     color: #0a1a2e !important;
     font-weight: 500 !important;
-    border: none !important;
-    padding: 0 !important;
-    min-height: 0 !important;
-    height: auto !important;
+    border: 2px solid #2a5a8a !important;
+    border-radius: 10px !important;
+    background: #ffffff !important;
+    padding: 10px 14px !important;
+    min-height: 40px !important;
+    margin: 4px 0 10px 0 !important;
+    font-size: 13px !important;
 }
 
+#previewGambar img {
+    max-width: 100% !important;
+    max-height: 200px !important;
+    border-radius: 6px !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* ================================================================
+   PREVIEW TANGGAL - SEMBUNYIKAN (SUDAH ADA LABEL)
+   ================================================================ */
 #previewTanggal {
     display: none !important;
-    visibility: hidden !important;
-    color: #0a1a2e !important;
-    font-weight: 500 !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    height: auto !important;
 }
 
-/* ===== LOADING KOORDINAT ===== */
-#loadingKoordinat {
-    color: #0a1a2e !important;
-    font-weight: 500 !important;
-}
-
-/* ===== PREVIEW BOX ===== */
+/* ================================================================
+   PREVIEW BOX - DENGAN BORDER BIRU
+   ================================================================ */
 .previewBox {
     color: #0a1a2e !important;
     font-weight: 500 !important;
     border: 2px solid #2a5a8a !important;
-    background: #fff5f5 !important;           
-    border-radius: 14px !important;
-    padding: 18px 20px !important;
-    margin: 6px 0 14px 0 !important;
-    font-size: 1.1rem !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    margin: 4px 0 12px 0 !important;
+    font-size: 14px !important;
+    background: #ffffff !important;
+    min-height: 36px !important;
 }
 
 .previewBox * {
     color: #0a1a2e !important;
 }
 
-/* ===== NARASI TEXTAREA ===== */
+/* ================================================================
+   NARASI TEXTAREA - BIRU
+   ================================================================ */
 #narasi {
     min-height: 150px !important;
     height: auto !important;
@@ -77,49 +93,94 @@
     box-sizing: border-box !important;
     display: block !important;
     white-space: pre-wrap !important;
-    padding: 18px 18px 84px 18px !important;
-    font-size: 1.15rem !important;
-    line-height: 1.9 !important;
+    padding: 14px 16px !important;
+    font-size: 14px !important;
+    line-height: 1.8 !important;
     color: #0a1a2e !important;
     background: #ffffff !important;
     font-weight: 500 !important;
     border: 2px solid #2a5a8a !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
+    width: 100% !important;
 }
 
+#narasi:focus {
+    border-color: #1a5a9a !important;
+    box-shadow: 0 0 0 3px rgba(26, 90, 154, 0.15) !important;
+    outline: none !important;
+}
+
+/* ================================================================
+   AUTO-HEIGHT TEXTAREA
+   ================================================================ */
 .auto-height-textarea {
     min-height: 150px !important;
     height: auto !important;
     max-height: 260px !important;
     overflow-y: auto !important;
+    padding: 14px 16px !important;
+    font-size: 14px !important;
+    line-height: 1.8 !important;
+    color: #0a1a2e !important;
+    background: #ffffff !important;
+    border: 2px solid #2a5a8a !important;
+    border-radius: 10px !important;
+    width: 100% !important;
+    resize: vertical !important;
 }
 
-/* ===== SELECT, INPUT, TEXTAREA ===== */
-select, input, textarea {
+.auto-height-textarea:focus {
+    border-color: #1a5a9a !important;
+    box-shadow: 0 0 0 3px rgba(26, 90, 154, 0.15) !important;
+    outline: none !important;
+}
+
+/* ================================================================
+   FORM ELEMENTS - BIRU
+   ================================================================ */
+select,
+input,
+textarea {
     color: #0a1a2e !important;
     background: #ffffff !important;
     font-weight: 500 !important;
     border: 2px solid #2a5a8a !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    width: 100% !important;
 }
 
 select option {
     color: #0a1a2e !important;
     background: #ffffff !important;
     font-weight: 500 !important;
+    padding: 8px !important;
 }
 
+/* ================================================================
+   PLACEHOLDER
+   ================================================================ */
 ::placeholder {
-    color: #6a7a8a !important;
+    color: #8a9aaa !important;
     font-weight: 400 !important;
     opacity: 1 !important;
 }
 
-select:focus, input:focus, textarea:focus {
+/* ================================================================
+   FOCUS STATE
+   ================================================================ */
+select:focus,
+input:focus,
+textarea:focus {
     border-color: #1a5a9a !important;
-    box-shadow: 0 0 0 4px rgba(26, 90, 154, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(26, 90, 154, 0.15) !important;
     outline: none !important;
 }
 
+/* ================================================================
+   SELECT DROPDOWN - CUSTOM ARROW
+   ================================================================ */
 select {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -130,4 +191,132 @@ select {
     background-size: 18px;
     padding-right: 40px !important;
 }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* HP */
+@media (max-width: 480px) {
+    #previewKordinat {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+    }
+    
+    #previewGambar {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+    }
+    
+    .previewBox {
+        font-size: 12px !important;
+        padding: 8px 12px !important;
+    }
+    
+    #narasi {
+        font-size: 13px !important;
+        padding: 10px 12px !important;
+        min-height: 120px !important;
+    }
+    
+    .auto-height-textarea {
+        font-size: 13px !important;
+        padding: 10px 12px !important;
+        min-height: 120px !important;
+    }
+    
+    select,
+    input,
+    textarea {
+        font-size: 13px !important;
+        padding: 8px 12px !important;
+    }
+}
+
+/* HP Kecil */
+@media (max-width: 360px) {
+    #previewKordinat {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+    }
+    
+    .previewBox {
+        font-size: 11px !important;
+        padding: 6px 10px !important;
+    }
+    
+    #narasi {
+        font-size: 12px !important;
+        padding: 8px 10px !important;
+        min-height: 100px !important;
+    }
+    
+    select,
+    input,
+    textarea {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+    }
+}
+
+/* ================================================================
+   DARK MODE - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    #previewKordinat {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a6a8a !important;
+    }
+    
+    #previewGambar {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a6a8a !important;
+    }
+    
+    .previewBox {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a6a8a !important;
+    }
+    
+    .previewBox * {
+        color: #e6ffe6 !important;
+    }
+    
+    #narasi {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a6a8a !important;
+    }
+    
+    .auto-height-textarea {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a6a8a !important;
+    }
+    
+    select,
+    input,
+    textarea {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a6a8a !important;
+    }
+    
+    select option {
+        background: #1a2a2a !important;
+        color: #e6ffe6 !important;
+    }
+    
+    ::placeholder {
+        color: #6a8a8a !important;
+    }
+    
+    select {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e6ffe6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+    }
+}
+
 /* ===== End of preview-fixes.css ===== */

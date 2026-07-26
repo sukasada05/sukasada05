@@ -1,7 +1,19 @@
 /* ================================================================
-   THANKYOU-POPUP.CSS - POPUP TERIMA KASIH
+   THANKYOU-POPUP.CSS - POPUP TERIMA KASIH DUKOPS
+   VERSI FLAT - TANPA ANIMASI & 3D
    ================================================================ */
 
+:root {
+    --thankyou-bg: #1a2a1a;
+    --thankyou-border: #4CAF50;
+    --thankyou-radius: 16px;
+    --thankyou-padding: 32px;
+    --thankyou-z-index: 99999;
+}
+
+/* ================================================================
+   OVERLAY
+   ================================================================ */
 .thankyou-popup {
     position: fixed;
     top: 0;
@@ -12,46 +24,233 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
-    animation: fadeIn 0.5s ease;
+    z-index: var(--thankyou-z-index);
 }
 
+/* ================================================================
+   CONTENT
+   ================================================================ */
 .thankyou-content {
-    background: linear-gradient(135deg, #1a2a1a, #2b4d2b);
-    padding: 40px;
-    border-radius: 20px;
+    background: var(--thankyou-bg);
+    padding: var(--thankyou-padding);
+    border-radius: var(--thankyou-radius);
     max-width: 400px;
     width: 90%;
     text-align: center;
-    border: 2px solid #4CAF50;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: scaleIn 0.5s ease;
+    border: 2px solid var(--thankyou-border);
 }
 
+/* ================================================================
+   ICON
+   ================================================================ */
 .thankyou-content .fa-trophy {
-    animation: pulse 2s infinite;
+    font-size: 56px;
+    color: #FFD700;
+    display: block;
+    margin-bottom: 12px;
 }
 
-@keyframes fadeIn {
+/* ================================================================
+   TITLE
+   ================================================================ */
+.thankyou-content h2 {
+    color: #FFD700;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* ================================================================
+   TEXT
+   ================================================================ */
+.thankyou-content p {
+    color: #b2d8b2;
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.thankyou-content .highlight {
+    background: rgba(76, 175, 80, 0.12);
+    border: 1px solid rgba(76, 175, 80, 0.15);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 12px 0;
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.thankyou-content .sub {
+    color: #889988;
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
+/* ================================================================
+   BUTTON
+   ================================================================ */
+.thankyou-content button {
+    background: #2d6a2d;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    font-family: var(--sys-font);
+}
+
+.thankyou-content button:hover {
+    background: #3d8a3d;
+}
+
+.thankyou-content button:active {
+    background: #1d4a1d;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* HP */
+@media (max-width: 480px) {
+    :root {
+        --thankyou-padding: 20px;
+    }
+    
+    .thankyou-content {
+        padding: 20px;
+        width: 92%;
+        border-radius: 12px;
+    }
+    
+    .thankyou-content .fa-trophy {
+        font-size: 44px;
+    }
+    
+    .thankyou-content h2 {
+        font-size: 18px;
+    }
+    
+    .thankyou-content p {
+        font-size: 13px;
+    }
+    
+    .thankyou-content .highlight {
+        font-size: 12px;
+        padding: 8px;
+    }
+    
+    .thankyou-content button {
+        font-size: 13px;
+        padding: 8px 16px;
+    }
+}
+
+/* HP Kecil */
+@media (max-width: 360px) {
+    :root {
+        --thankyou-padding: 16px;
+    }
+    
+    .thankyou-content {
+        padding: 16px;
+    }
+    
+    .thankyou-content .fa-trophy {
+        font-size: 36px;
+    }
+    
+    .thankyou-content h2 {
+        font-size: 16px;
+    }
+    
+    .thankyou-content p {
+        font-size: 12px;
+    }
+    
+    .thankyou-content .highlight {
+        font-size: 11px;
+        padding: 6px;
+    }
+    
+    .thankyou-content button {
+        font-size: 12px;
+        padding: 6px 14px;
+    }
+}
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .thankyou-popup {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .thankyou-content {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .thankyou-content .fa-trophy {
+        animation: none !important;
+    }
+}
+
+/* ================================================================
+   DARK MODE - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .thankyou-content {
+        background: #0d150d;
+    }
+    
+    .thankyou-content p {
+        color: #889988;
+    }
+    
+    .thankyou-content button {
+        background: #1a3a1a;
+    }
+    
+    .thankyou-content button:hover {
+        background: #2a4a2a;
+    }
+}
+
+/* ================================================================
+   UTILITY - HIDE
+   ================================================================ */
+.thankyou-hidden {
+    display: none !important;
+}
+
+/* ================================================================
+   ANIMASI DIAKTIFKAN KEMBALI (OPSIONAL)
+   ================================================================ */
+/* Jika ingin animasi, aktifkan ini:
+.thankyou-popup {
+    animation: thankyouFade 0.4s ease-out;
+}
+
+.thankyou-content {
+    animation: thankyouScale 0.4s ease-out;
+}
+
+@keyframes thankyouFade {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-@keyframes scaleIn {
-    from { transform: scale(0.8); opacity: 0; }
+@keyframes thankyouScale {
+    from { transform: scale(0.9); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
+*/
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 480px) {
-    .thankyou-content {
-        padding: 24px;
-        width: 92%;
-    }
-}
 /* ===== End of thankyou-popup.css ===== */

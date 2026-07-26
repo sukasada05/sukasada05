@@ -1,34 +1,54 @@
 /* ================================================================
-   FORM.CSS - FORM ELEMENTS
+   FORM.CSS - FORM ELEMENTS DUKOPS
+   VERSI FLAT - TANPA ANIMASI
    ================================================================ */
 
+:root {
+    --form-bg: rgba(0, 0, 0, 0.3);
+    --form-border: rgba(76, 175, 80, 0.15);
+    --form-radius: 8px;
+    --form-padding: 10px 14px;
+    --form-color: #e6ffe6;
+    --form-font-size: 14px;
+    
+    --label-color: #b2d8b2;
+    --label-font-size: 14px;
+}
+
+/* ================================================================
+   LABEL
+   ================================================================ */
 label {
     display: block;
-    margin-top: 16px;
+    margin-top: 14px;
     font-weight: 600;
-    color: #effb04;
-    font-size: 20px;
-    letter-spacing: 0.5px;
+    color: var(--label-color);
+    font-size: var(--label-font-size);
+    letter-spacing: 0.3px;
 }
 
 label i {
-    color: #ffffff;
+    color: #FFD700;
     margin-right: 6px;
+    width: 18px;
+    text-align: center;
 }
 
+/* ================================================================
+   FORM ELEMENTS
+   ================================================================ */
 select,
 input,
 textarea {
     width: 100%;
-    padding: 10px 14px;
-    margin-top: 6px;
-    border-radius: 10px;
-    border: 1px solid rgba(76, 175, 80, 0.12);
-    background: rgba(0, 0, 0, 0.3);
-    color: #e6ffe6;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    font-family: var(--sys-font);
+    padding: var(--form-padding);
+    margin-top: 4px;
+    border-radius: var(--form-radius);
+    border: 1px solid var(--form-border);
+    background: var(--form-bg);
+    color: var(--form-color);
+    font-size: var(--form-font-size);
+    font-family: var(--sys-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif);
 }
 
 select:focus,
@@ -36,7 +56,6 @@ input:focus,
 textarea:focus {
     outline: none;
     border-color: #4CAF50;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.08);
 }
 
 select option {
@@ -45,107 +64,149 @@ select option {
     padding: 8px;
 }
 
+/* ================================================================
+   TEXTAREA
+   ================================================================ */
 textarea {
-    min-height: 120px;
+    min-height: 100px;
     resize: vertical;
     line-height: 1.6;
 }
 
+/* ================================================================
+   AUTO-HEIGHT TEXTAREA
+   ================================================================ */
+.auto-height-textarea {
+    width: 100%;
+    padding: var(--form-padding);
+    margin-top: 4px;
+    border-radius: var(--form-radius);
+    border: 1px solid var(--form-border);
+    background: var(--form-bg);
+    color: var(--form-color);
+    font-size: var(--form-font-size);
+    font-family: var(--sys-font);
+    resize: none;
+    overflow-y: hidden;
+    line-height: 1.6;
+}
+
+.auto-height-textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+/* ================================================================
+   DATETIME WRAPPER
+   ================================================================ */
 .datetime-wrapper {
     position: relative;
 }
 
 .datetime-wrapper input[type="datetime-local"] {
-    position: relative;
-    z-index: 1;
-    background: transparent;
-    color: transparent;
-    caret-color: #ffffff;
+    padding-right: 40px;
 }
 
-.datetime-wrapper .datetime-display {
-    position: absolute;
-    top: 50%;
-    left: 20px;
-    right: 20px;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #e6ffe6;
-    font-size: 14px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
+/* ================================================================
+   NARASI WRAPPER
+   ================================================================ */
 .narasi-wrapper {
     position: relative;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 .narasi-wrapper textarea {
-        margin-top: 0;
-        box-sizing: border-box;
-        padding-right: 18px;
-        min-height: 150px;
-        height: auto;
-        overflow: hidden;
-        resize: vertical;
-        width: 100%;
-        font-family: var(--sys-font);
-    }
+    margin-top: 0;
+    padding-right: 18px;
+    min-height: 120px;
+    height: auto;
+    overflow: hidden;
+    resize: vertical;
+    width: 100%;
+}
 
+/* ================================================================
+   AI TEMPLATE BUTTON - FLAT
+   ================================================================ */
 .ai-template-container {
-        position: absolute;
-        right: 12px;
-        top: -24px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 20;
-        padding: 0;
-        background: transparent;
-        border: none;
-        pointer-events: auto;
-    }
+    position: absolute;
+    right: 12px;
+    top: -22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    padding: 0;
+    background: transparent;
+    border: none;
+    pointer-events: auto;
+}
 
 .ai-template-container .ai-template-btn {
-        pointer-events: auto;
-    }
+    pointer-events: auto;
+}
+
 .ai-template-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: #1a4a2a;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 30px;
-    color: #fff;
+    border: 1px solid rgba(46, 204, 113, 0.15);
+    padding: 6px 16px;
+    border-radius: 20px;
+    color: #ffffff;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
-    transition: none;
     margin-top: 0;
     width: auto;
     font-family: var(--sys-font);
-    border: 1px solid rgba(46, 204, 113, 0.15);
 }
 
 .ai-template-btn i {
-    font-size: 15px;
+    font-size: 14px;
     color: #2ecc71;
 }
 
 .ai-template-btn:hover {
-    transform: none;
-    box-shadow: none;
-    background: #1a4a2a;
+    background: #2a5a3a;
 }
 
 .ai-template-btn:active {
-    transform: none;
+    background: #1a3a1a;
 }
 
+/* ================================================================
+   PREVIEW BOX
+   ================================================================ */
+.previewBox {
+    font-size: 13px;
+    color: #889988;
+    margin-top: 4px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: var(--form-radius);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    min-height: 2em;
+    word-break: break-word;
+}
+
+/* ================================================================
+   CANVAS
+   ================================================================ */
+canvas {
+    display: block;
+    margin-top: 14px;
+    width: 100%;
+    height: auto;
+    border-radius: var(--form-radius);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #000000;
+}
+
+/* ================================================================
+   GRID LAYOUT
+   ================================================================ */
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -158,27 +219,9 @@ textarea {
     min-width: 0;
 }
 
-.previewBox {
-    font-size: 13px;
-    color: #889988;
-    margin-top: 6px;
-    padding: 8px 12px;
-    background: rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    min-height: 2em;
-}
-
-canvas {
-    display: block;
-    margin-top: 16px;
-    width: 100%;
-    height: auto;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: #000;
-}
-
+/* ================================================================
+   LOADING
+   ================================================================ */
 .app-loading {
     text-align: center;
     padding: 20px;
@@ -187,28 +230,121 @@ canvas {
     font-weight: 600;
 }
 
-.auto-height-textarea {
-    width: 100%;
-    padding: 10px 14px;
-    margin-top: 6px;
-    border-radius: 10px;
-    border: 1px solid rgba(76, 175, 80, 0.12);
-    background: rgba(0, 0, 0, 0.3);
-    color: #e6ffe6;
-    font-size: 14px;
-    font-family: var(--sys-font);
-    resize: none;
-    overflow-y: hidden;
-    transition: height 0.1s ease;
-    line-height: 1.6;
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    :root {
+        --form-padding: 8px 12px;
+        --form-font-size: 13px;
+        --label-font-size: 13px;
+    }
+    
+    .ai-template-btn {
+        font-size: 11px;
+        padding: 4px 12px;
+    }
+    
+    .ai-template-btn i {
+        font-size: 12px;
+    }
 }
 
-.auto-height-textarea:focus {
-    outline: none;
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.08);
+/* HP */
+@media (max-width: 480px) {
+    :root {
+        --form-padding: 6px 10px;
+        --form-font-size: 12px;
+        --form-radius: 6px;
+        --label-font-size: 12px;
+    }
+    
+    label {
+        margin-top: 10px;
+    }
+    
+    .row {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .ai-template-btn {
+        font-size: 10px;
+        padding: 4px 10px;
+        gap: 4px;
+    }
+    
+    .ai-template-btn i {
+        font-size: 11px;
+    }
+    
+    textarea {
+        min-height: 80px;
+    }
+    
+    .auto-height-textarea {
+        min-height: 80px;
+    }
+    
+    .previewBox {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+}
+
+/* HP Kecil */
+@media (max-width: 360px) {
+    :root {
+        --form-padding: 4px 8px;
+        --form-font-size: 11px;
+        --label-font-size: 11px;
+    }
+    
+    .ai-template-container {
+        top: -18px;
+        right: 8px;
+    }
+    
+    .ai-template-btn {
+        font-size: 9px;
+        padding: 3px 8px;
+    }
+    
+    .ai-template-btn i {
+        font-size: 10px;
+    }
 }
 
 /* ================================================================
-   TELEGRAM GROUP SELECTOR - DIHAPUS
+   REDUCED MOTION - AKSESIBILITAS
    ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .auto-height-textarea {
+        transition: none !important;
+    }
+}
+
+/* ================================================================
+   MODE DARK
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    select,
+    input,
+    textarea,
+    .auto-height-textarea {
+        background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .previewBox {
+        background: rgba(0, 0, 0, 0.25);
+    }
+}
+
+/* ================================================================
+   UTILITY - HIDE TELEGRAM GROUP SELECTOR
+   ================================================================ */
+/* Telegram group selector dihapus, tidak perlu style tambahan */
+
+/* ===== End of form.css ===== */

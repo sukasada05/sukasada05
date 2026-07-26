@@ -1,146 +1,276 @@
 /* ================================================================
-   SPLASH.CSS - SPLASH SCREEN
+   SPLASH.CSS - SPLASH SCREEN DUKOPS
+   VERSI FLAT - TANPA ANIMASI & 3D
    ================================================================ */
 
+:root {
+    --splash-bg: #0a1a2a;
+    --splash-title-color: #FFD700;
+    --splash-sub-color: #88aacc;
+    --splash-progress-bg: rgba(255, 255, 255, 0.06);
+    --splash-progress-fill: #FFD700;
+}
+
+/* ================================================================
+   SPLASH CONTAINER
+   ================================================================ */
 .splash-container-modern {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(145deg, #050d1a 0%, #0a1a3a 40%, #0d2a4a 70%, #0a1a2a 100%);
+    background: var(--splash-bg);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.splash-container-modern::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.03) 0%, transparent 70%);
-    animation: splashGlow 6s ease-in-out infinite;
-}
-
-@keyframes splashGlow {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.2); opacity: 1; }
-}
-
+/* ================================================================
+   SPLASH CONTENT
+   ================================================================ */
 .splash-content {
     text-align: center;
     padding: 20px;
     max-width: 400px;
     position: relative;
     z-index: 1;
-    animation: splashFadeUp 0.8s ease-out;
 }
 
-@keyframes splashFadeUp {
-    from { opacity: 0; transform: translateY(40px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
+/* ================================================================
+   LOGO
+   ================================================================ */
 .splash-logo-center img {
-    width: 90px;
+    width: 80px;
     height: auto;
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.2));
-    animation: splashPulse 2s ease-in-out infinite;
+    display: block;
+    margin: 0 auto 8px;
 }
 
-@keyframes splashPulse {
-    0%, 100% { transform: scale(1); opacity: 0.9; }
-    50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.3)); }
-}
-
+/* ================================================================
+   TITLE
+   ================================================================ */
 .splash-title-center {
-    font-size: 34px;
+    font-size: 30px;
     font-weight: 800;
-    color: #FFD700;
-    letter-spacing: 4px;
-    margin: 5px 0;
-    text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+    color: var(--splash-title-color);
+    letter-spacing: 3px;
+    margin: 4px 0;
 }
 
 .splash-title-center:last-of-type {
-    font-size: 20px;
+    font-size: 18px;
     color: #FFC107;
     letter-spacing: 2px;
 }
 
+/* ================================================================
+   DIVIDER
+   ================================================================ */
 .splash-divider-center {
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #FFD700, transparent);
-    margin: 10px auto;
-    border-radius: 3px;
+    width: 50px;
+    height: 2px;
+    background: var(--splash-title-color);
+    margin: 8px auto;
+    border-radius: 2px;
 }
 
+/* ================================================================
+   SUBTITLE
+   ================================================================ */
 .splash-subtitle-center {
-    font-size: 12px;
-    color: #88aacc;
+    font-size: 11px;
+    color: var(--splash-sub-color);
     letter-spacing: 2px;
-    margin-top: 8px;
+    margin-top: 6px;
     text-transform: uppercase;
 }
 
 .splash-unit-center {
-    font-size: 14px;
+    font-size: 13px;
     color: #aaccee;
     font-weight: 500;
-    margin-top: 12px;
+    margin-top: 10px;
     letter-spacing: 1px;
 }
 
 .splash-kodim-center {
-    font-size: 11px;
+    font-size: 10px;
     color: #6688aa;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
+/* ================================================================
+   PROGRESS BAR
+   ================================================================ */
 .splash-progress-center {
-    width: 200px;
+    width: 180px;
     height: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--splash-progress-bg);
     border-radius: 4px;
-    margin: 25px auto 10px;
+    margin: 20px auto 8px;
     overflow: hidden;
-    position: relative;
 }
 
 .splash-progress-bar-center {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, #FFD700, #FFA500);
+    background: var(--splash-progress-fill);
     border-radius: 4px;
-    transition: width 0.3s ease;
-    position: relative;
 }
 
-.splash-progress-bar-center::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    animation: progressShine 1.5s infinite;
-}
-
-@keyframes progressShine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
+/* ================================================================
+   PERCENTAGE TEXT
+   ================================================================ */
 .splash-percentage-center {
-    font-size: 12px;
-    color: #FFD700;
+    font-size: 11px;
+    color: var(--splash-title-color);
     font-weight: bold;
     letter-spacing: 1px;
 }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .splash-title-center {
+        font-size: 26px;
+    }
+    
+    .splash-title-center:last-of-type {
+        font-size: 16px;
+    }
+    
+    .splash-logo-center img {
+        width: 65px;
+    }
+    
+    .splash-progress-center {
+        width: 150px;
+    }
+}
+
+/* HP */
+@media (max-width: 480px) {
+    .splash-title-center {
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+    
+    .splash-title-center:last-of-type {
+        font-size: 14px;
+    }
+    
+    .splash-logo-center img {
+        width: 50px;
+    }
+    
+    .splash-progress-center {
+        width: 120px;
+        height: 3px;
+    }
+    
+    .splash-subtitle-center {
+        font-size: 10px;
+    }
+    
+    .splash-unit-center {
+        font-size: 11px;
+    }
+    
+    .splash-kodim-center {
+        font-size: 9px;
+    }
+    
+    .splash-percentage-center {
+        font-size: 10px;
+    }
+}
+
+/* HP Kecil */
+@media (max-width: 360px) {
+    .splash-title-center {
+        font-size: 18px;
+    }
+    
+    .splash-title-center:last-of-type {
+        font-size: 12px;
+    }
+    
+    .splash-logo-center img {
+        width: 40px;
+    }
+    
+    .splash-progress-center {
+        width: 100px;
+        height: 2px;
+    }
+}
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .splash-container-modern {
+        transition: none !important;
+    }
+    
+    .splash-content {
+        animation: none !important;
+    }
+    
+    .splash-logo-center img {
+        animation: none !important;
+    }
+    
+    .splash-container-modern::before {
+        animation: none !important;
+        display: none !important;
+    }
+    
+    .splash-progress-bar-center::after {
+        animation: none !important;
+        display: none !important;
+    }
+}
+
+/* ================================================================
+   DARK MODE - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .splash-container-modern {
+        background: #050d0d;
+    }
+}
+
+/* ================================================================
+   ANIMASI DIAKTIFKAN KEMBALI (OPSIONAL)
+   ================================================================ */
+/* Jika ingin animasi, aktifkan ini:
+.splash-container-modern {
+    animation: splashFadeIn 0.6s ease-out;
+}
+
+@keyframes splashFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.splash-logo-center img {
+    animation: splashPulse 2s ease-in-out infinite;
+}
+
+@keyframes splashPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+
+.splash-progress-bar-center {
+    transition: width 0.2s ease;
+}
+*/
+
+/* ===== End of splash.css ===== */

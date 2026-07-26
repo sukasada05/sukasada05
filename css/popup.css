@@ -1,18 +1,27 @@
 /* ================================================================
-   POPUP.CSS - MODAL AI & THANK YOU
+   POPUP.CSS - MODAL AI & THANK YOU POPUP
+   VERSI FLAT - TANPA ANIMASI & 3D
    ================================================================ */
 
-/* ============ AI TEMPLATE MODAL ============ */
+:root {
+    --popup-bg: #1a2a1f;
+    --popup-border: rgba(46, 204, 113, 0.15);
+    --popup-radius: 16px;
+    --popup-z-index: 10000;
+}
+
+/* ================================================================
+   AI TEMPLATE MODAL
+   ================================================================ */
 .modal-ai {
     display: none;
     position: fixed;
-    z-index: 10000;
+    z-index: var(--popup-z-index);
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
 }
@@ -21,41 +30,41 @@
     display: flex !important;
 }
 
+/* ================================================================
+   MODAL CONTENT
+   ================================================================ */
 .modal-ai-content {
-    background: linear-gradient(145deg, #1a2a1f, #0f1a12);
+    background: var(--popup-bg);
     margin: 0 auto;
     padding: 0;
     width: 95%;
     max-width: 680px;
     height: 80vh;
     max-height: 580px;
-    border-radius: 20px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(46, 204, 113, 0.15);
+    border-radius: var(--popup-radius);
+    border: 1px solid var(--popup-border);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    animation: modalSlideIn 0.3s ease;
 }
 
-@keyframes modalSlideIn {
-    from { opacity: 0; transform: translateY(-30px) scale(0.95); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
+/* ================================================================
+   MODAL HEADER
+   ================================================================ */
 .modal-ai-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    background: linear-gradient(135deg, #0d2a1d, #0a1f15);
-    border-bottom: 1px solid #2e8b57;
+    padding: 14px 20px;
+    background: #0d1a0d;
+    border-bottom: 1px solid rgba(46, 204, 113, 0.1);
     flex-shrink: 0;
 }
 
 .modal-ai-header h3 {
     margin: 0;
     color: #9fd49f;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 600;
 }
 
@@ -64,15 +73,17 @@
     color: #2ecc71;
 }
 
+/* ================================================================
+   MODAL CLOSE BUTTON
+   ================================================================ */
 .modal-close {
     background: none;
     border: none;
-    font-size: 28px;
+    font-size: 24px;
     cursor: pointer;
     color: #9fd49f;
-    transition: all 0.2s;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,43 +91,46 @@
 }
 
 .modal-close:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     color: #ff6b6b;
-    transform: rotate(90deg);
 }
 
+/* ================================================================
+   MODAL TABS
+   ================================================================ */
 .modal-ai-tabs {
-    padding: 12px 16px;
-    background: #0e1712;
-    border-bottom: 1px solid #1e3a2a;
+    padding: 10px 16px;
+    background: #0a150a;
+    border-bottom: 1px solid rgba(46, 204, 113, 0.06);
     flex-shrink: 0;
 }
 
 #categorySelect {
     width: 100%;
-    padding: 10px 14px;
-    border-radius: 12px;
+    padding: 8px 14px;
+    border-radius: 10px;
     background: #1a2a1f;
     color: #e6ffe6;
-    border: 1px solid rgba(46, 204, 113, 0.2);
-    font-size: 14px;
+    border: 1px solid rgba(46, 204, 113, 0.12);
+    font-size: 13px;
     cursor: pointer;
-    transition: all 0.2s;
     font-family: var(--sys-font);
 }
 
 #categorySelect:hover {
-    border-color: #2ecc71;
-    background: #2a3a2a;
+    border-color: rgba(46, 204, 113, 0.3);
 }
 
 #categorySelect:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+    border-color: #2ecc71;
 }
 
+/* ================================================================
+   MODAL BODY
+   ================================================================ */
 .modal-ai-body {
-    padding: 16px;
+    padding: 14px 16px;
     overflow-y: auto;
     flex: 1;
     scrollbar-width: thin;
@@ -129,58 +143,59 @@
 
 .modal-ai-body::-webkit-scrollbar-track {
     background: #1a2a1f;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .modal-ai-body::-webkit-scrollbar-thumb {
     background: #2ecc71;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
+/* ================================================================
+   TEMPLATE LIST
+   ================================================================ */
 .modal-template-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
 .modal-template-item {
     background: #0f1a12;
-    border-radius: 12px;
-    padding: 12px 16px;
+    border-radius: 10px;
+    padding: 10px 14px;
     cursor: pointer;
-    transition: all 0.25s ease;
-    border: 1px solid #2a4a2a;
+    border: 1px solid rgba(46, 204, 113, 0.06);
 }
 
 .modal-template-item:hover {
     background: #1a2a1f;
-    border-color: #2ecc71;
-    transform: translateX(4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
-.modal-template-item:active {
-    transform: scale(0.98);
+    border-color: rgba(46, 204, 113, 0.2);
 }
 
 .modal-template-text {
-    font-size: 0.8rem;
+    font-size: 13px;
     line-height: 1.5;
     color: #c8e6d0;
 }
 
+/* ================================================================
+   LOADING STATE
+   ================================================================ */
 .loading-templates {
     text-align: center;
     padding: 40px;
     color: #9fd49f;
-    font-size: 0.9rem;
+    font-size: 14px;
 }
 
 .loading-templates i {
     margin-right: 8px;
 }
 
-/* ================= THANK YOU POPUP ================= */
+/* ================================================================
+   THANK YOU POPUP
+   ================================================================ */
 .thankyou-popup {
     position: fixed;
     top: 0;
@@ -188,49 +203,38 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    animation: popupFade 0.4s ease-out;
 }
 
-@keyframes popupFade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
+/* ================================================================
+   THANK YOU CONTENT
+   ================================================================ */
 .thankyou-content {
-    background: linear-gradient(145deg, #0d1a0d, #1a3a1a);
-    padding: 32px 36px;
-    border-radius: 20px;
+    background: #0d1a0d;
+    padding: 28px 32px;
+    border-radius: var(--popup-radius);
     max-width: 90%;
-    width: 440px;
+    width: 420px;
     text-align: center;
     border: 1px solid rgba(255, 215, 0, 0.06);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: popupScale 0.4s ease-out;
-}
-
-@keyframes popupScale {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
 }
 
 .thankyou-content .icon {
-    font-size: 56px;
+    font-size: 48px;
     color: #FFD700;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: block;
 }
 
 .thankyou-content h2 {
     color: #FFD700;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
 }
 
 .thankyou-content p {
@@ -240,11 +244,11 @@
 }
 
 .thankyou-content .highlight {
-    background: rgba(255, 215, 0, 0.04);
+    background: rgba(255, 215, 0, 0.03);
     border: 1px solid rgba(255, 215, 0, 0.06);
-    border-radius: 12px;
-    padding: 12px;
-    margin: 14px 0;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 12px 0;
     color: #FFD700;
     font-weight: 600;
     font-size: 13px;
@@ -253,24 +257,194 @@
 .thankyou-content .sub {
     color: #889988;
     font-size: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .thankyou-content button {
-    background: linear-gradient(135deg, #1a4a1a, #2d6a2d);
+    background: #1a4a1a;
     border: 1px solid rgba(76, 175, 80, 0.1);
-    border-radius: 12px;
-    padding: 12px 24px;
-    color: #fff;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #ffffff;
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    transition: all 0.3s ease;
     width: 100%;
     font-family: var(--sys-font);
 }
 
 .thankyou-content button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(76, 175, 80, 0.15);
+    background: #2a5a2a;
 }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .modal-ai-content {
+        max-height: 500px;
+        height: 75vh;
+    }
+    
+    .thankyou-content {
+        padding: 24px 20px;
+        width: 380px;
+    }
+    
+    .thankyou-content .icon {
+        font-size: 40px;
+    }
+    
+    .thankyou-content h2 {
+        font-size: 18px;
+    }
+}
+
+/* HP */
+@media (max-width: 480px) {
+    .modal-ai-content {
+        max-height: 450px;
+        height: 80vh;
+        max-width: 98%;
+        border-radius: 12px;
+    }
+    
+    .modal-ai-header {
+        padding: 10px 14px;
+    }
+    
+    .modal-ai-header h3 {
+        font-size: 14px;
+    }
+    
+    .modal-ai-body {
+        padding: 10px 12px;
+    }
+    
+    .modal-template-item {
+        padding: 8px 12px;
+    }
+    
+    .modal-template-text {
+        font-size: 12px;
+    }
+    
+    .thankyou-content {
+        padding: 20px 16px;
+        width: 95%;
+    }
+    
+    .thankyou-content .icon {
+        font-size: 36px;
+    }
+    
+    .thankyou-content h2 {
+        font-size: 16px;
+    }
+    
+    .thankyou-content p {
+        font-size: 13px;
+    }
+    
+    .thankyou-content .highlight {
+        font-size: 12px;
+        padding: 8px;
+    }
+    
+    .thankyou-content button {
+        font-size: 13px;
+        padding: 8px 16px;
+    }
+}
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .modal-ai-content {
+        transition: none !important;
+    }
+    
+    .modal-template-item {
+        transition: none !important;
+    }
+    
+    .thankyou-content {
+        transition: none !important;
+    }
+    
+    .modal-close {
+        transition: none !important;
+    }
+    
+    .thankyou-content button {
+        transition: none !important;
+    }
+}
+
+/* ================================================================
+   DARK MODE - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .modal-ai-content {
+        background: #0d150d;
+    }
+    
+    .modal-ai-header {
+        background: #0a120a;
+    }
+    
+    .modal-template-item {
+        background: #0d150d;
+    }
+    
+    .modal-template-item:hover {
+        background: #1a2a1a;
+    }
+    
+    .thankyou-content {
+        background: #0a120a;
+    }
+    
+    .thankyou-content button {
+        background: #0d2a0d;
+    }
+    
+    .thankyou-content button:hover {
+        background: #1a3a1a;
+    }
+}
+
+/* ================================================================
+   UTILITY
+   ================================================================ */
+.popup-hidden {
+    display: none !important;
+}
+
+/* ================================================================
+   ANIMASI DIAKTIFKAN KEMBALI (OPSIONAL)
+   ================================================================ */
+/* Jika ingin animasi, aktifkan ini:
+.modal-ai-content {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.thankyou-content {
+    animation: popupScale 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes popupScale {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+}
+*/
+
+/* ===== End of popup.css ===== */

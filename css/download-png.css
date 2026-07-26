@@ -1,27 +1,41 @@
 /* ================================================================
    DOWNLOAD-PNG.CSS - CSS UNTUK DOWNLOAD ABSEN PNG
+   VERSI FLAT - TANPA ANIMASI & 3D
    ================================================================ */
 
-/* Container utama untuk area screenshot */
+:root {
+    --png-bg: #ffffff;
+    --png-header-bg: #1a2332;
+    --png-header-color: #ffffff;
+    --png-border: #e9ecef;
+    --png-radius: 10px;
+    --png-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+}
+
+/* ================================================================
+   CONTAINER UTAMA
+   ================================================================ */
 .png-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background: #ffffff;
-    border-radius: 12px;
-    font-family: var(--sys-font);
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    background: var(--png-bg);
+    border-radius: var(--png-radius);
+    font-family: var(--png-font);
+    border: 1px solid var(--png-border);
 }
 
-/* Header PNG */
+/* ================================================================
+   HEADER PNG
+   ================================================================ */
 .png-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px 10px 16px;
-    background: linear-gradient(135deg, #1a2332, #2c3e50);
-    border-radius: 10px 10px 0 0;
-    color: white;
+    background: var(--png-header-bg);
+    border-radius: var(--png-radius) var(--png-radius) 0 0;
+    color: var(--png-header-color);
 }
 
 .png-header div:first-child {
@@ -35,12 +49,16 @@
     opacity: 0.7;
 }
 
-/* Body PNG */
+/* ================================================================
+   BODY PNG
+   ================================================================ */
 .png-body {
     padding: 16px;
 }
 
-/* Tanggal */
+/* ================================================================
+   TANGGAL
+   ================================================================ */
 .png-date {
     text-align: center;
     margin-bottom: 12px;
@@ -57,7 +75,9 @@
     color: #666666;
 }
 
-/* Stats grid untuk PNG */
+/* ================================================================
+   STATS GRID
+   ================================================================ */
 .png-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -70,7 +90,7 @@
     border-radius: 8px;
     padding: 10px 4px;
     text-align: center;
-    border: 1px solid #e9ecef;
+    border: 1px solid var(--png-border);
 }
 
 .png-stat-card .stat-value {
@@ -86,7 +106,9 @@
     letter-spacing: 0.3px;
 }
 
-/* Progress bar PNG */
+/* ================================================================
+   PROGRESS BAR
+   ================================================================ */
 .png-progress-container {
     margin: 12px 0;
 }
@@ -113,12 +135,13 @@
 
 .png-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #ff1744, #ff6d00, #ffea00, #76ff03, #00e676);
+    background: #2d6a2d;
     border-radius: 6px;
-    transition: width 0.5s ease;
 }
 
-/* Daftar Desa PNG */
+/* ================================================================
+   DAFTAR DESA
+   ================================================================ */
 .png-desa-title {
     font-size: 11px;
     font-weight: 600;
@@ -131,6 +154,9 @@
     overflow: hidden;
 }
 
+/* ================================================================
+   ITEM DESA
+   ================================================================ */
 .png-desa-item {
     display: flex;
     align-items: center;
@@ -148,6 +174,7 @@
     width: 24px;
     font-size: 14px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .png-desa-item .desa-name {
@@ -155,6 +182,7 @@
     font-weight: 500;
     color: #000000;
     font-size: 12px;
+    word-break: break-word;
 }
 
 .png-desa-item .desa-count {
@@ -162,10 +190,12 @@
     text-align: center;
     font-size: 11px;
     color: #000000;
+    flex-shrink: 0;
 }
 
 .png-desa-item .desa-progress {
     width: 60px;
+    flex-shrink: 0;
 }
 
 .png-desa-item .desa-progress-bar {
@@ -187,9 +217,12 @@
     padding: 2px 6px;
     border-radius: 8px;
     font-weight: 600;
+    flex-shrink: 0;
 }
 
-/* Status badge untuk PNG */
+/* ================================================================
+   STATUS BADGE PNG
+   ================================================================ */
 .png-status-lengkap {
     background: #e8f5e9;
     color: #2e7d32;
@@ -205,7 +238,9 @@
     color: #c62828;
 }
 
-/* Footer PNG */
+/* ================================================================
+   FOOTER PNG
+   ================================================================ */
 .png-footer {
     text-align: center;
     padding: 8px 0 4px 0;
@@ -215,42 +250,54 @@
     margin-top: 8px;
 }
 
-/* Tombol download di halaman absen */
+/* ================================================================
+   TOMBOL DOWNLOAD - FLAT
+   ================================================================ */
 .absen-btn-download-png {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: linear-gradient(135deg, #e91e63, #c2185b);
+    background: #c2185b;
     color: white;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 12px 28px;
-    border-radius: 10px;
+    border-radius: var(--png-radius);
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
     margin: 10px 0;
+    width: auto;
 }
 
 .absen-btn-download-png:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+    background: #d81b60;
 }
 
 .absen-btn-download-png:active {
-    transform: translateY(0);
+    background: #a0154a;
 }
 
 .absen-btn-download-png i {
     font-size: 18px;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .png-container {
+        padding: 16px;
+    }
+}
+
+/* HP */
 @media (max-width: 480px) {
     .png-container {
         padding: 12px;
         max-width: 100%;
+        border-radius: 8px;
     }
     
     .png-stats {
@@ -260,6 +307,7 @@
     
     .png-stat-card {
         padding: 6px 2px;
+        border-radius: 6px;
     }
     
     .png-stat-card .stat-value {
@@ -310,20 +358,60 @@
     .png-progress-label {
         font-size: 9px;
     }
+    
+    .absen-btn-download-png {
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+    
+    .absen-btn-download-png i {
+        font-size: 15px;
+    }
 }
 
-/* ===== PRINT STYLE ===== */
+/* HP Kecil */
+@media (max-width: 360px) {
+    .png-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    
+    .png-stat-card {
+        padding: 8px 4px;
+    }
+    
+    .png-desa-item {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+    
+    .png-desa-item .desa-name {
+        flex: 1 1 100%;
+        font-size: 10px;
+    }
+    
+    .png-desa-item .desa-progress {
+        width: 100%;
+    }
+}
+
+/* ================================================================
+   PRINT STYLE
+   ================================================================ */
 @media print {
     .png-container {
         box-shadow: none !important;
         border: 1px solid #ddd !important;
         max-width: 100% !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
     }
     
     .png-header {
         background: #1a2332 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        border-radius: 0 !important;
     }
     
     .png-stat-card {
@@ -333,7 +421,7 @@
     }
     
     .png-progress-fill {
-        background: linear-gradient(90deg, #ff1744, #ff6d00, #ffea00, #76ff03, #00e676) !important;
+        background: #2d6a2d !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
@@ -344,5 +432,19 @@
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
+    
+    .absen-btn-download-png {
+        display: none !important;
+    }
 }
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .png-progress-fill {
+        transition: none !important;
+    }
+}
+
 /* ===== End of download-png.css ===== */

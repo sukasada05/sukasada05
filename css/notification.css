@@ -1,71 +1,211 @@
 /* ================================================================
-   NOTIFICATION.CSS - NOTIFIKASI
+   NOTIFICATION.CSS - NOTIFIKASI TOAST DUKOPS
+   VERSI FLAT - TANPA ANIMASI & 3D
    ================================================================ */
 
+:root {
+    --toast-radius: 12px;
+    --toast-padding: 14px 24px;
+    --toast-font-size: 13px;
+    --toast-z-index: 1000;
+    
+    --toast-success-bg: #1a4a1a;
+    --toast-success-color: #a5d6a7;
+    
+    --toast-error-bg: #4a1a1a;
+    --toast-error-color: #ef9a9a;
+    
+    --toast-warning-bg: #4a2a0a;
+    --toast-warning-color: #ffcc80;
+    
+    --toast-info-bg: #1a2a4a;
+    --toast-info-color: #90caf9;
+}
+
+/* ================================================================
+   NOTIFIKASI UTAMA
+   ================================================================ */
 .notification {
     position: fixed;
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    padding: 14px 24px;
-    border-radius: 14px;
-    z-index: 1000;
-    font-size: 13px;
-    font-weight: 500;
+    padding: var(--toast-padding);
+    border-radius: var(--toast-radius);
+    z-index: var(--toast-z-index);
+    font-size: var(--toast-font-size);
+    font-weight: 600;
     text-align: center;
     max-width: 90%;
     min-width: 280px;
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
-    animation: notifSlideUp 0.4s ease-out;
+    display: none;
 }
 
-@keyframes notifSlideUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+.notification.show {
+    display: block;
 }
 
+/* ================================================================
+   JENIS NOTIFIKASI - WARNA FLAT
+   ================================================================ */
+
+/* Success - Hijau */
 .notification.success {
-    background: rgba(46, 125, 50, 0.9);
-    color: #a5d6a7;
-    border-color: rgba(76, 175, 80, 0.2);
+    background: var(--toast-success-bg);
+    color: var(--toast-success-color);
+    border-color: rgba(76, 175, 80, 0.15);
 }
 
+/* Error - Merah */
 .notification.error {
-    background: rgba(183, 28, 28, 0.9);
-    color: #ef9a9a;
-    border-color: rgba(244, 67, 54, 0.2);
+    background: var(--toast-error-bg);
+    color: var(--toast-error-color);
+    border-color: rgba(244, 67, 54, 0.15);
 }
 
+/* Warning - Oranye */
 .notification.warning {
-    background: rgba(230, 81, 0, 0.9);
-    color: #ffcc80;
-    border-color: rgba(255, 152, 0, 0.2);
+    background: var(--toast-warning-bg);
+    color: var(--toast-warning-color);
+    border-color: rgba(255, 152, 0, 0.15);
 }
 
+/* Info - Biru */
+.notification.info {
+    background: var(--toast-info-bg);
+    color: var(--toast-info-color);
+    border-color: rgba(33, 150, 243, 0.15);
+}
+
+/* ================================================================
+   TOAST JADWAL PIKET
+   ================================================================ */
 .jadwal-toast {
     position: fixed;
     bottom: 80px;
     left: 50%;
-    transform: translateX(-50%) translateY(20px);
+    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    color: white;
-    padding: 14px 24px;
+    color: #ffffff;
+    padding: 12px 20px;
     border-radius: 30px;
     z-index: 10000;
     opacity: 0;
-    transition: all 0.4s ease;
     max-width: 90%;
     text-align: center;
     font-size: 13px;
     font-weight: 500;
-    pointer-events: none;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    pointer-events: none;
+    transition: none;
 }
 
 .jadwal-toast.show {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
 }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .notification {
+        min-width: 200px;
+        padding: 12px 20px;
+        font-size: 12px;
+        bottom: 20px;
+    }
+    
+    .jadwal-toast {
+        bottom: 70px;
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+}
+
+/* HP */
+@media (max-width: 480px) {
+    .notification {
+        min-width: 160px;
+        padding: 10px 16px;
+        font-size: 12px;
+        border-radius: 10px;
+        bottom: 16px;
+        max-width: 95%;
+    }
+    
+    .jadwal-toast {
+        bottom: 60px;
+        padding: 8px 14px;
+        font-size: 11px;
+        border-radius: 20px;
+        max-width: 95%;
+    }
+}
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .notification {
+        transition: none !important;
+    }
+    
+    .jadwal-toast {
+        transition: none !important;
+    }
+}
+
+/* ================================================================
+   MODE DARK - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .notification.success {
+        background: #0a2a0a;
+        color: #81c784;
+    }
+    
+    .notification.error {
+        background: #2a0a0a;
+        color: #ef9a9a;
+    }
+    
+    .notification.warning {
+        background: #2a1a0a;
+        color: #ffb74d;
+    }
+    
+    .notification.info {
+        background: #0a1a2a;
+        color: #64b5f6;
+    }
+    
+    .jadwal-toast {
+        background: rgba(0, 0, 0, 0.95);
+    }
+}
+
+/* ================================================================
+   UTILITY - HIDE TOAST
+   ================================================================ */
+.toast-hidden {
+    display: none !important;
+}
+
+/* ================================================================
+   ANIMASI DIAKTIFKAN KEMBALI (OPSIONAL)
+   ================================================================ */
+/* Jika ingin animasi, aktifkan ini:
+.notification.show {
+    animation: notifSlideUp 0.3s ease-out;
+}
+
+@keyframes notifSlideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(15px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+*/
+
+/* ===== End of notification.css ===== */

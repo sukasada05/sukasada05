@@ -1,16 +1,27 @@
 /* ================================================================
-   SLIDER-VOLUME.CSS - GARIS PANJANG + PUTIH
+   SLIDER-VOLUME.CSS - AUDIO VOLUME SLIDER
+   VERSI FLAT - TANPA ANIMASI
    ================================================================ */
 
-/* ===== SLIDER - PANJANG MENGIKUTI ALAMAT ===== */
+:root {
+    --slider-height: 3px;
+    --slider-bg: rgba(255, 255, 255, 0.2);
+    --slider-thumb-size: 10px;
+    --slider-thumb-color: #ffffff;
+    --slider-max-width: 360px;
+}
+
+/* ================================================================
+   SLIDER UTAMA
+   ================================================================ */
 .audio-volume-slider {
     -webkit-appearance: none !important;
     appearance: none !important;
-    width: 100% !important;           /* ← MENGIKUTI LEBAR */
-    max-width: 380px !important;      /* ← SEPANJANG ALAMAT */
-    height: 3px !important;
-    background: rgba(255, 255, 255, 0.25) !important;
-    border-radius: 3px !important;
+    width: 100% !important;
+    max-width: var(--slider-max-width) !important;
+    height: var(--slider-height) !important;
+    background: var(--slider-bg) !important;
+    border-radius: var(--slider-height) !important;
     outline: none !important;
     cursor: pointer !important;
     border: none !important;
@@ -20,48 +31,46 @@
     vertical-align: middle !important;
 }
 
-/* ===== TANPA WARNA KUNING ===== */
-.audio-volume-slider {
-    background: rgba(255, 255, 255, 0.25) !important;
-}
-
-/* ===== BULAT PUTIH KECIL ===== */
+/* ================================================================
+   THUMB - WEBKIT (Chrome, Edge, Safari)
+   ================================================================ */
 .audio-volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none !important;
     appearance: none !important;
-    width: 10px !important;
-    height: 10px !important;
+    width: var(--slider-thumb-size) !important;
+    height: var(--slider-thumb-size) !important;
     border-radius: 50% !important;
-    background: #ffffff !important;
+    background: var(--slider-thumb-color) !important;
     cursor: pointer !important;
     margin-top: -3.5px !important;
     border: none !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) !important;
-    transition: all 0.2s ease !important;
 }
 
-.audio-volume-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.15) !important;
-}
-
-/* ===== FIREFOX ===== */
+/* ================================================================
+   THUMB - FIREFOX
+   ================================================================ */
 .audio-volume-slider::-moz-range-thumb {
-    width: 10px !important;
-    height: 10px !important;
+    width: var(--slider-thumb-size) !important;
+    height: var(--slider-thumb-size) !important;
     border-radius: 50% !important;
-    background: #ffffff !important;
+    background: var(--slider-thumb-color) !important;
     cursor: pointer !important;
     border: none !important;
 }
 
+/* ================================================================
+   TRACK - FIREFOX
+   ================================================================ */
 .audio-volume-slider::-moz-range-track {
-    height: 3px !important;
-    background: rgba(255, 255, 255, 0.25) !important;
+    height: var(--slider-height) !important;
+    background: var(--slider-bg) !important;
     border: none !important;
-    border-radius: 3px !important;
+    border-radius: var(--slider-height) !important;
 }
 
-/* ===== WRAPPER ===== */
+/* ================================================================
+   WRAPPER
+   ================================================================ */
 .audio-control-wrapper {
     display: flex !important;
     align-items: center !important;
@@ -69,51 +78,69 @@
     margin-top: 4px !important;
     padding: 2px 0 !important;
     width: 100% !important;
-    max-width: 380px !important;
+    max-width: var(--slider-max-width) !important;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ================================================================
+   RESPONSIVE - TABLET
+   ================================================================ */
+@media (max-width: 768px) {
+    :root {
+        --slider-max-width: 300px;
+        --slider-thumb-size: 9px;
+    }
+}
+
+/* ================================================================
+   RESPONSIVE - HP
+   ================================================================ */
 @media (max-width: 480px) {
-    .audio-volume-slider {
-        height: 2px !important;
-        max-width: 280px !important;
+    :root {
+        --slider-height: 2px;
+        --slider-max-width: 220px;
+        --slider-thumb-size: 8px;
     }
     
     .audio-volume-slider::-webkit-slider-thumb {
-        width: 8px !important;
-        height: 8px !important;
         margin-top: -3px !important;
     }
-    
-    .audio-volume-slider::-moz-range-thumb {
-        width: 8px !important;
-        height: 8px !important;
-    }
-    
-    .audio-control-wrapper {
-        max-width: 280px !important;
-    }
 }
 
+/* ================================================================
+   RESPONSIVE - HP KECIL
+   ================================================================ */
 @media (max-width: 360px) {
-    .audio-volume-slider {
-        max-width: 200px !important;
-        height: 2px !important;
+    :root {
+        --slider-max-width: 160px;
+        --slider-thumb-size: 6px;
     }
     
     .audio-volume-slider::-webkit-slider-thumb {
-        width: 6px !important;
-        height: 6px !important;
         margin-top: -2px !important;
     }
-    
-    .audio-volume-slider::-moz-range-thumb {
-        width: 6px !important;
-        height: 6px !important;
+}
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .audio-volume-slider {
+        transition: none !important;
     }
     
-    .audio-control-wrapper {
-        max-width: 200px !important;
+    .audio-volume-slider::-webkit-slider-thumb {
+        transition: none !important;
     }
 }
+
+/* ================================================================
+   DARK MODE - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --slider-bg: rgba(255, 255, 255, 0.12);
+        --slider-thumb-color: #e0e0e0;
+    }
+}
+
 /* ===== End of slider-volume.css ===== */

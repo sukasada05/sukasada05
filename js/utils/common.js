@@ -1,19 +1,35 @@
 // ========================================
 // COMMON.JS - Shared Utilities & Constants
+// VERSI DIPERBAIKI - TANPA DUPLIKASI
 // ========================================
-// Utility functions dan constants yang dipakai oleh semua modules
 
-// ================= KONFIGURASI AMAN =================
+// ================================================================
+// 1. KONFIGURASI
+// ================================================================
+
+/**
+ * Google Apps Script Webhook URL
+ * Digunakan untuk semua komunikasi dengan backend
+ */
 const GOOGLE_APPS_SCRIPT_WEBHOOK = "https://script.google.com/macros/s/AKfycbz3sB1d0PRRzlvAJwdr8nl5dQa6qpyfHQCJbYxBMz0Jpj2o-i1_WnwMzJEy3Z4GA9uh/exec";
+
+/**
+ * Target laporan per desa per bulan
+ */
 const TARGET_LAPORAN = 9;
 
-// KONFIGURASI JADWAL PIKET (TIDAK ADA TOKEN DI SINI - SEMUA PAKAI BACKEND)
+/**
+ * URL data dari GitHub
+ */
 const GITHUB_URLS = {
     HANPANGAN: "data/hanpangan.txt",
     PIKET: "data/piket.txt"
 };
 
-// ================= VARIABEL GLOBAL =================
+// ================================================================
+// 2. VARIABEL GLOBAL
+// ================================================================
+
 let img = new Image();
 let selectedDesa = "";
 let kordinatList = [];
@@ -25,18 +41,24 @@ let desaCounter = {};
 let attendanceData = [];
 let deferredPrompt = null;
 
-// Variabel untuk Jadwal Piket
-let JadwalData = {
+/**
+ * Data Jadwal Piket
+ */
+const JadwalData = {
     daftarNama: [],
     daftarHanpangan: [],
     currentHanpangan: ""
 };
 
-// Variabel status aplikasi
-let currentApp = null; // 'dukops' atau 'jadwal'
-let isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+/**
+ * Status aplikasi
+ */
+let currentApp = null;
+const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// ================= SHARED UTILITY FUNCTIONS =================
+// ================================================================
+// 3. UTILITY FUNCTIONS
+// ================================================================
 
 /**
  * Normalisasi nama desa dari berbagai format
@@ -67,22 +89,29 @@ function normalizeDesaName(desaName) {
  * @param {string} message - Pesan yang ditampilkan
  * @param {string} type - Tipe: success, error, warning, info
  */
-function shouldDisplayNotification(message) {
-    return /sudah ada laporan/i.test(String(message || ''));
-}
+function showNotification(message, type = 'info') {
+    // Cari toast element
+    let toast = document.getElementById('win98Toast');
+    if (!toast) {
+        toast = document.getElementById('j_toastNotificationBaru');
+    }
+    if (!toast) {
+        // Buat toast jika tidak ada
+        toast = document.createElement('div');
+        toast.id = 'win98Toast';
+        toast.className = 'win98-toast';
+        document.body.appendChild(toast);
+    }
 
-function showNotification(message, type) {
-    if (!shouldDisplayNotification(message)) return;
+    toast.textContent = message;
+    toast.className = 'win98-toast show';
+    if (type === 'success') toast.className += ' success';
+    else if (type === 'error') toast.className += ' error';
+    else if (type === 'warning') toast.className += ' warning';
 
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 500);
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+        toast.classList.remove('show');
     }, 3000);
 }
 
@@ -140,17 +169,14 @@ function formatFileSize(bytes) {
 async function sendToBackend(action, data = {}) {
     try {
         // Untuk GET requests
-        if (action === 'listFiles' || action === 'getConfig' || action === 'test' || action === 'telegramTest' || action === 'getJadwalData') {
+        if (['listFiles', 'getConfig', 'test', 'telegramTest', 'getJadwalData'].includes(action)) {
             let url = `${GOOGLE_APPS_SCRIPT_WEBHOOK}?action=${action}`;
 
-            // Tambahkan parameter untuk listFiles
             if (action === 'listFiles') {
                 if (data.desaFilter) url += `&desaFilter=${encodeURIComponent(data.desaFilter)}`;
                 if (data.monthFilter) url += `&monthFilter=${encodeURIComponent(data.monthFilter)}`;
                 if (data.readZips) url += `&readZips=true`;
-            }
-            // Tambahkan parameter untuk getJadwalData
-            else if (action === 'getJadwalData') {
+            } else if (action === 'getJadwalData') {
                 if (data.type) url += `&type=${encodeURIComponent(data.type)}`;
             }
 
@@ -162,7 +188,6 @@ async function sendToBackend(action, data = {}) {
             const formData = new FormData();
             formData.append('action', action);
 
-            // Tambahkan semua data ke formData
             Object.keys(data).forEach(key => {
                 if (data[key] !== undefined && data[key] !== null) {
                     if (key === 'fileData' && typeof data[key] === 'string') {
@@ -242,11 +267,12 @@ async function sendZipToTelegram(zipBlob, filename, desaName) {
     }
 }
 
-// ================= LOCALSTORAGE HELPERS =================
+// ================================================================
+// 4. LOCALSTORAGE HELPERS
+// ================================================================
 
 /**
  * Save submission count ke localStorage
- * @param {number} count - Jumlah submission
  */
 function saveSubmissionCount(count) {
     localStorage.setItem('dukopsSubmissionCount', count.toString());
@@ -254,7 +280,6 @@ function saveSubmissionCount(count) {
 
 /**
  * Load submission count dari localStorage
- * @returns {number} - Jumlah submission
  */
 function loadSubmissionCount() {
     const saved = localStorage.getItem('dukopsSubmissionCount');
@@ -263,7 +288,6 @@ function loadSubmissionCount() {
 
 /**
  * Load last submitted dates dari localStorage
- * Mengembalikan array tanggal pengiriman
  */
 function loadLastSubmittedDates() {
     try {
@@ -277,7 +301,6 @@ function loadLastSubmittedDates() {
 
 /**
  * Save submitted dates ke localStorage
- * @param {array} dates - Array tanggal
  */
 function saveSubmittedDates(dates) {
     try {
@@ -289,7 +312,6 @@ function saveSubmittedDates(dates) {
 
 /**
  * Load desa counter dari localStorage
- * Counter untuk tracking pengiriman per desa
  */
 function loadDesaCounter() {
     try {
@@ -303,7 +325,6 @@ function loadDesaCounter() {
 
 /**
  * Save desa counter ke localStorage
- * @param {object} counter - Object dengan key=desaName, value=count
  */
 function saveDesaCounter(counter) {
     try {
@@ -313,10 +334,17 @@ function saveDesaCounter(counter) {
     }
 }
 
-/**
- * Load send logs dari localStorage
- * Logs of all sent submissions
- */
-// send logs helpers removed
+// ================================================================
+// 5. EXPOSE GLOBAL FUNCTIONS
+// ================================================================
+
+// Pastikan fungsi-fungsi ini tersedia di window
+window.normalizeDesaName = normalizeDesaName;
+window.showNotification = showNotification;
+window.sendToBackend = sendToBackend;
+window.blobToBase64 = blobToBase64;
+window.formatFileSize = formatFileSize;
+window.uploadToGoogleDrive = uploadToGoogleDrive;
+window.sendZipToTelegram = sendZipToTelegram;
 
 console.log("✅ Common.js loaded - Constants, utilities, and helpers ready");
