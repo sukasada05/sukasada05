@@ -412,7 +412,7 @@
             color: #f44336;
         }
 
-        /* CSS untuk jadwal piket */
+        /* ===== CSS JADWAL PIKET ===== */
         .jadwal-header {
             text-align: center;
             padding: 10px 0;
@@ -429,13 +429,15 @@
             letter-spacing: 3px;
         }
 
-        .app-logo-container {
-            margin: 8px 0;
-        }
-
         .jadwal-logo {
             max-width: 80px;
             height: auto;
+        }
+
+        .jadwal-subtitle {
+            color: #88dd88;
+            font-size: 14px;
+            margin: 4px 0;
         }
 
         .running-text-container {
@@ -483,31 +485,24 @@
             }
         }
 
-        .section-title-koramil {
-            color: #FFD700;
+        .section-title {
             font-size: 13px;
             font-weight: 700;
             margin: 0 0 8px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        .section-title-koramil {
+            color: #FFD700;
         }
 
         .section-title-kediaman {
             color: #4fc3f7;
-            font-size: 13px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .section-title-makodim {
             color: #ff8a65;
-            font-size: 13px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .section-title-date {
@@ -517,18 +512,19 @@
             opacity: 0.7;
             margin-top: 2px;
             letter-spacing: 0.5px;
+            color: #aabbcc;
         }
 
-        .row {
+        .row-select {
             display: flex;
             gap: 8px;
         }
 
-        .col {
+        .col-select {
             flex: 1;
         }
 
-        .col select {
+        .col-select select {
             width: 100%;
             padding: 8px 10px;
             border-radius: 8px;
@@ -539,12 +535,12 @@
             cursor: pointer;
         }
 
-        .col select:focus {
+        .col-select select:focus {
             outline: none;
             border-color: #FFD700;
         }
 
-        .col select option {
+        .col-select select option {
             background: #1a2a1a;
             color: #e6ffe6;
         }
@@ -613,6 +609,25 @@
 
         .jadwal-toast.show {
             display: block;
+        }
+
+        /* Preview textarea */
+        .preview-textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e6ffe6;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 150px;
+            font-family: monospace;
+            font-size: 13px;
+            resize: vertical;
+        }
+
+        .preview-textarea:focus {
+            outline: none;
+            border-color: #FFD700;
         }
     </style>
 
@@ -746,14 +761,14 @@
             </div>
         </div>
 
-        <!-- JADWAL PIKET -->
+        <!-- ===== JADWAL PIKET ===== -->
         <div id="jadwalPiketContainerBaru" style="display: none;">
             <div class="jadwal-header">
                 <h1 class="jadwal-title">JADWAL PIKET</h1>
                 <div class="app-logo-container">
                     <img src="LOGO KOREM163 Wirasatya.png" alt="Logo Korem 163 Wirasatya" class="jadwal-logo">
                 </div>
-                <p style="color: #88dd88; font-size: 14px; margin: 4px 0;">KORAMIL 1609-05/SUKASADA<br>Kodim 1609/Buleleng</p>
+                <p class="jadwal-subtitle">KORAMIL 1609-05/SUKASADA<br>Kodim 1609/Buleleng</p>
             </div>
 
             <div class="running-text-container">
@@ -766,23 +781,23 @@
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
-                        <h3 class="section-title-koramil">
+                        <h3 class="section-title section-title-koramil">
                             Piket Koramil Hari Ini
                             <span class="section-title-date" id="labelHariIni">📅 Memuat...</span>
                         </h3>
-                        <div class="row">
-                            <div class="col"><select id="j_nama1a_baru"><option value="">- pilih nama -</option></select></div>
-                            <div class="col"><select id="j_nama1b_baru"><option value="">- pilih nama -</option></select></div>
+                        <div class="row-select">
+                            <div class="col-select"><select id="j_nama1a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col-select"><select id="j_nama1b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="section-title-koramil">
+                        <h3 class="section-title section-title-koramil">
                             Piket Koramil Besok
                             <span class="section-title-date" id="labelBesok">📅 Memuat...</span>
                         </h3>
-                        <div class="row">
-                            <div class="col"><select id="j_nama2a_baru"><option value="">- pilih nama -</option></select></div>
-                            <div class="col"><select id="j_nama2b_baru"><option value="">- pilih nama -</option></select></div>
+                        <div class="row-select">
+                            <div class="col-select"><select id="j_nama2a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col-select"><select id="j_nama2b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                 </div>
@@ -792,23 +807,23 @@
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
-                        <h3 class="section-title-kediaman">
+                        <h3 class="section-title section-title-kediaman">
                             Jaga Kediaman Hari Ini
                             <span class="section-title-date" id="labelKediamanHariIni">📅 Memuat...</span>
                         </h3>
-                        <div class="row">
-                            <div class="col"><select id="j_nama3a_baru"><option value="">- pilih nama -</option></select></div>
-                            <div class="col"><select id="j_nama3b_baru"><option value="">- pilih nama -</option></select></div>
+                        <div class="row-select">
+                            <div class="col-select"><select id="j_nama3a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col-select"><select id="j_nama3b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="section-title-kediaman">
+                        <h3 class="section-title section-title-kediaman">
                             Jaga Kediaman Besok
                             <span class="section-title-date" id="labelKediamanBesok">📅 Memuat...</span>
                         </h3>
-                        <div class="row">
-                            <div class="col"><select id="j_nama3c_baru"><option value="">- pilih nama -</option></select></div>
-                            <div class="col"><select id="j_nama3d_baru"><option value="">- pilih nama -</option></select></div>
+                        <div class="row-select">
+                            <div class="col-select"><select id="j_nama3c_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col-select"><select id="j_nama3d_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                 </div>
@@ -818,23 +833,23 @@
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
-                        <h3 class="section-title-makodim">
+                        <h3 class="section-title section-title-makodim">
                             Piket Makodim Hari Ini
                             <span class="section-title-date" id="labelMakodimHariIni">📅 Memuat...</span>
                         </h3>
-                        <div class="row">
-                            <div class="col"><select id="j_nama4a_baru"><option value="">- pilih nama -</option></select></div>
-                            <div class="col"><select id="j_nama4b_baru"><option value="">- pilih nama -</option></select></div>
+                        <div class="row-select">
+                            <div class="col-select"><select id="j_nama4a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col-select"><select id="j_nama4b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="section-title-makodim">
+                        <h3 class="section-title section-title-makodim">
                             Piket Makodim Besok
                             <span class="section-title-date" id="labelMakodimBesok">📅 Memuat...</span>
                         </h3>
-                        <div class="row">
-                            <div class="col"><select id="j_nama4c_baru"><option value="">- pilih nama -</option></select></div>
-                            <div class="col"><select id="j_nama4d_baru"><option value="">- pilih nama -</option></select></div>
+                        <div class="row-select">
+                            <div class="col-select"><select id="j_nama4c_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col-select"><select id="j_nama4d_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                 </div>
@@ -846,7 +861,7 @@
             </button>
 
             <div class="jadwal-section">
-                <textarea id="j_hasilPesanBaru" class="auto-height-textarea" readonly placeholder="Preview pesan akan muncul di sini setelah memilih nama..." style="width:100%; padding:12px; border-radius:8px; background:rgba(255,255,255,0.05); color:#e6ffe6; border:1px solid rgba(255,255,255,0.1); min-height:150px; font-family:monospace; font-size:13px;"></textarea>
+                <textarea id="j_hasilPesanBaru" class="preview-textarea" readonly placeholder="Preview pesan akan muncul di sini setelah memilih nama..."></textarea>
                 <div class="preview-status" id="previewInfo">⏳ Memuat data dari Supabase...</div>
                 <div class="auto-save-status" id="autoSaveStatus">
                     <span class="saved">✅ Tersimpan otomatis</span>
@@ -1453,6 +1468,11 @@
                 if (labelMakodimHariIni) labelMakodimHariIni.textContent = '📅 ' + todayShort;
                 if (labelMakodimBesok) labelMakodimBesok.textContent = '📅 ' + tomorrowShort;
                 if (tanggalInfo) tanggalInfo.textContent = '📅 Hari Ini: ' + todayStr + ' | Besok: ' + tomorrowStr;
+
+                if (currentHanpangan) {
+                    const runningText = document.getElementById('runningTextJadwalBaru');
+                    if (runningText) runningText.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' + currentHanpangan + ' 🌾';
+                }
             }
 
             // ===== INDIKATOR SUPABASE =====
@@ -1534,8 +1554,6 @@
                             let index = (epochDays + offset) % lines.length;
                             if (index < 0) index += lines.length;
                             currentHanpangan = lines[index];
-                            const el = document.getElementById('runningTextJadwalBaru');
-                            if (el) el.textContent = '🌾 JADWAL HANPANGAN HARI INI: ' + currentHanpangan + ' 🌾';
                             return true;
                         }
                     }
@@ -1570,15 +1588,31 @@
                 const tomorrow = new Date();
                 tomorrow.setDate(now.getDate() + 1);
 
-                const getVal = (id) => document.getElementById(id)?.value || "";
+                const getVal = (id) => {
+                    const el = document.getElementById(id);
+                    return el ? el.value : "";
+                };
+
+                const nama1a = getVal('j_nama1a_baru');
+                const nama1b = getVal('j_nama1b_baru');
+                const nama2a = getVal('j_nama2a_baru');
+                const nama2b = getVal('j_nama2b_baru');
+                const nama3a = getVal('j_nama3a_baru');
+                const nama3b = getVal('j_nama3b_baru');
+                const nama3c = getVal('j_nama3c_baru');
+                const nama3d = getVal('j_nama3d_baru');
+                const nama4a = getVal('j_nama4a_baru');
+                const nama4b = getVal('j_nama4b_baru');
+                const nama4c = getVal('j_nama4c_baru');
+                const nama4d = getVal('j_nama4d_baru');
 
                 const sections = [
-                    { names: [getVal('j_nama1a_baru'), getVal('j_nama1b_baru')], title: formatTanggal(now), suffix: "" },
-                    { names: [getVal('j_nama2a_baru'), getVal('j_nama2b_baru')], title: formatTanggal(tomorrow), suffix: "" },
-                    { names: [getVal('j_nama3a_baru'), getVal('j_nama3b_baru')], title: formatTanggal(now), suffix: " (Kediaman)" },
-                    { names: [getVal('j_nama3c_baru'), getVal('j_nama3d_baru')], title: formatTanggal(tomorrow), suffix: " (Kediaman)" },
-                    { names: [getVal('j_nama4a_baru'), getVal('j_nama4b_baru')], title: formatTanggal(now), suffix: " (Makodim)" },
-                    { names: [getVal('j_nama4c_baru'), getVal('j_nama4d_baru')], title: formatTanggal(tomorrow), suffix: " (Makodim)" }
+                    { names: [nama1a, nama1b], title: formatTanggal(now), suffix: "" },
+                    { names: [nama2a, nama2b], title: formatTanggal(tomorrow), suffix: "" },
+                    { names: [nama3a, nama3b], title: formatTanggal(now), suffix: " (Kediaman)" },
+                    { names: [nama3c, nama3d], title: formatTanggal(tomorrow), suffix: " (Kediaman)" },
+                    { names: [nama4a, nama4b], title: formatTanggal(now), suffix: " (Makodim)" },
+                    { names: [nama4c, nama4d], title: formatTanggal(tomorrow), suffix: " (Makodim)" }
                 ];
 
                 let result = "_____________________________\n*KORAMIL 1609-05/SUKASADA*\n    *JADWAL DINAS DALAM*\n_____________________________\n\n";
@@ -1586,7 +1620,7 @@
 
                 for (const s of sections) {
                     const valid = s.names.filter(n => n && n.trim());
-                    if (valid.length) {
+                    if (valid.length > 0) {
                         result += String.fromCharCode(65 + sectionCount) + ". " + s.title + s.suffix + "\n";
                         valid.forEach((n, i) => result += "   " + (i + 1) + ". " + n + "\n");
                         result += "\n";
@@ -1681,24 +1715,32 @@
                             'makodim_besok': ['j_nama4c_baru', 'j_nama4d_baru']
                         };
 
+                        let loadedCount = 0;
                         data.forEach(item => {
                             const ids = mapping[item.jenis];
                             if (ids) {
                                 if (item.nama1 && daftarNamaGlobal.includes(item.nama1)) {
                                     const select1 = document.getElementById(ids[0]);
-                                    if (select1) select1.value = item.nama1;
+                                    if (select1) {
+                                        select1.value = item.nama1;
+                                        loadedCount++;
+                                    }
                                 }
                                 if (item.nama2 && daftarNamaGlobal.includes(item.nama2)) {
                                     const select2 = document.getElementById(ids[1]);
-                                    if (select2) select2.value = item.nama2;
+                                    if (select2) {
+                                        select2.value = item.nama2;
+                                        loadedCount++;
+                                    }
                                 }
                             }
                         });
 
-                        document.getElementById('previewInfo').textContent = '✅ Data dari Supabase (' + data.length + ' item)';
+                        document.getElementById('previewInfo').textContent = '✅ Data dari Supabase (' + data.length + ' item, ' + loadedCount + ' nama terisi)';
                         document.getElementById('previewInfo').style.color = '#4caf50';
                         updateAutoSaveStatus('saved', 'Data dimuat dari Supabase');
                         showToast('✅ Data jadwal dimuat dari Supabase', 'success');
+                        console.log('✅ Data loaded:', data.length, 'items,', loadedCount, 'names filled');
                     } else {
                         document.getElementById('previewInfo').textContent = '📭 Belum ada data - silakan pilih nama';
                         document.getElementById('previewInfo').style.color = '#ff9800';
@@ -1707,6 +1749,8 @@
                     }
 
                     updatePreview();
+                    updateDateLabels();
+
                 } catch (error) {
                     console.error('❌ Error load data:', error);
                     document.getElementById('previewInfo').textContent = '❌ Gagal memuat data';
@@ -1728,7 +1772,11 @@
                 try {
                     updateAutoSaveStatus('saving', 'Menyimpan...');
 
-                    const getVal = (id) => document.getElementById(id)?.value.trim() || '';
+                    const getVal = (id) => {
+                        const el = document.getElementById(id);
+                        return el ? el.value.trim() : '';
+                    };
+                    
                     const now = new Date();
                     const tomorrow = new Date();
                     tomorrow.setDate(now.getDate() + 1);
@@ -1799,20 +1847,14 @@
 
                 console.log('🔍 Inisialisasi Aplikasi Piket...');
 
-                // Update label tanggal
-                updateDateLabels();
-
-                // Load data dari GitHub
                 await loadPiketDataFromGitHub();
                 await loadHanpanganData();
 
-                // Populate dropdown
                 populateDropdowns();
+                updateDateLabels();
 
-                // Inisialisasi Supabase
                 await initSupabase();
 
-                // Load data dari Supabase
                 if (isSupabaseConnected) {
                     await loadDataFromSupabase();
                 } else {
@@ -1822,7 +1864,6 @@
                     showToast('⚠️ Supabase tidak terhubung', 'error');
                 }
 
-                // Setup event listeners
                 JADWAL_DROPDOWN_IDS.forEach(id => {
                     const sel = document.getElementById(id);
                     if (sel) {
@@ -1831,7 +1872,6 @@
                     }
                 });
 
-                // Setup WhatsApp button
                 const btn = document.getElementById('whatsappBtnBaru');
                 if (btn) {
                     const newBtn = btn.cloneNode(true);
@@ -1854,6 +1894,7 @@
 
                 console.log('✅ Inisialisasi selesai. Supabase:', isSupabaseConnected ? 'Terhubung' : 'Tidak terhubung');
                 console.log('📋 Total nama:', daftarNamaGlobal.length);
+                console.log('🌾 Hanpangan:', currentHanpangan);
             }
 
             // ===== EXPOSE FUNCTIONS =====
