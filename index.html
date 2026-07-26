@@ -12,7 +12,6 @@
     <title>SISTEM PELAPORAN DUKOPS BABINSA dan JADWAL PIKET KORAMIL</title>
     <meta name="theme-color" content="#0a1a3a">
     
-    <!-- ===== BASE URL UNTUK PWA ===== -->
     <base href="/dukops4/">
 
     <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
@@ -27,25 +26,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Twemoji -->
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
 
-    <!-- ===== CSS MODULAR ===== -->
     <link rel="stylesheet" href="css/main.css">
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <style>
-        /* ============================================================
-           ROOT VARIABLES - FIXED
-           ============================================================ */
         :root {
             --sys-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
         }
 
-        /* ============================================================
-           SUPABASE INDICATOR - BULAT KECIL POJOK KANAN ATAS (FLAT)
-           ============================================================ */
         .supabase-indicator {
             position: fixed;
             top: 14px;
@@ -102,9 +93,6 @@
             .indicator-tooltip { font-size: 9px; padding: 3px 8px; right: 18px; }
         }
 
-        /* ============================================================
-           TOAST
-           ============================================================ */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -128,9 +116,6 @@
         .toast-info { background: #1565c0; }
         .toast-warning { background: #e65100; }
 
-        /* ============================================================
-           HEADER DUKOPS - GREEN ARMY TUA (FLAT)
-           ============================================================ */
         .dukops-header {
             background-image: url('header/header-background.png');
             background-size: cover;
@@ -315,9 +300,6 @@
             display: none;
         }
 
-        /* ============================================================
-           RESPONSIVE HEADER
-           ============================================================ */
         @media (max-width: 480px) {
             .dukops-header { padding: 8px 10px; min-height: 50px; }
             .dukops-header-row { gap: 6px; flex-wrap: nowrap; }
@@ -357,9 +339,6 @@
             .counter-value { font-size: 44px; padding: 4px 20px; }
         }
 
-        /* ============================================================
-           TAB HANPANGAN (IFRAME)
-           ============================================================ */
         #hanpanganContent {
             display: none;
             width: 100%;
@@ -381,9 +360,6 @@
         @media (max-width: 768px) { #hanpanganContent { height: 500px; } }
         @media (max-width: 480px) { #hanpanganContent { height: 400px; } }
 
-        /* ============================================================
-           TOMBOL DOWNLOAD PNG ABSEN
-           ============================================================ */
         .absen-btn-download {
             background: #1a73e8;
             color: white;
@@ -413,9 +389,6 @@
             padding: 0 4px;
         }
 
-        /* ============================================================
-           AUTO-SAVE INDICATOR
-           ============================================================ */
         .auto-save-status {
             font-size: 11px;
             color: #8899aa;
@@ -438,19 +411,211 @@
         .auto-save-status .error {
             color: #f44336;
         }
+
+        /* CSS untuk jadwal piket */
+        .jadwal-header {
+            text-align: center;
+            padding: 10px 0;
+            background: linear-gradient(135deg, #1a2a1a, #0d1a0d);
+            border-radius: 12px 12px 0 0;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .jadwal-title {
+            font-size: 24px;
+            color: #FFD700;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: 3px;
+        }
+
+        .app-logo-container {
+            margin: 8px 0;
+        }
+
+        .jadwal-logo {
+            max-width: 80px;
+            height: auto;
+        }
+
+        .running-text-container {
+            background: rgba(255, 215, 0, 0.05);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+        }
+
+        .running-text {
+            text-align: center;
+            font-size: 14px;
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        .tanggal-info {
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            color: #88dd88;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        .jadwal-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .section-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-title-koramil {
+            color: #FFD700;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title-kediaman {
+            color: #4fc3f7;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title-makodim {
+            color: #ff8a65;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .col select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e6ffe6;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .col select:focus {
+            outline: none;
+            border-color: #FFD700;
+        }
+
+        .col select option {
+            background: #1a2a1a;
+            color: #e6ffe6;
+        }
+
+        .whatsapp-transparent-btn {
+            background: rgba(37, 211, 102, 0.15);
+            color: #25D366;
+            border: 2px solid #25D366;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .whatsapp-transparent-btn:hover {
+            background: rgba(37, 211, 102, 0.25);
+            transform: scale(1.02);
+        }
+
+        .whatsapp-transparent-btn i {
+            font-size: 20px;
+        }
+
+        .preview-status {
+            text-align: center;
+            font-size: 12px;
+            padding: 6px;
+            color: #8899aa;
+        }
+
+        .data-info {
+            text-align: center;
+            font-size: 11px;
+            color: #667788;
+            padding: 6px;
+        }
+
+        .app-loading {
+            text-align: center;
+            padding: 20px;
+            color: #8899aa;
+        }
+
+        .jadwal-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 9999;
+            display: none;
+            max-width: 90%;
+        }
+
+        .jadwal-toast.show {
+            display: block;
+        }
     </style>
 
 </head>
 
 <body>
 
-    <!-- ===== INDICATOR SUPABASE ===== -->
     <div id="supabaseIndicator" class="supabase-indicator indicator-checking" title="Status Koneksi Supabase">
         <div class="indicator-dot"></div>
         <span class="indicator-tooltip">Menghubungkan...</span>
     </div>
 
-    <!-- ================= SPLASH SCREEN ================= -->
     <div id="splashScreen" class="splash-container-modern">
         <div class="splash-content">
             <div class="splash-logo-center">
@@ -472,16 +637,13 @@
         </div>
     </div>
 
-    <!-- ================= BACKGROUND MP3 PLAYER ================= -->
     <audio id="backgroundMusic" loop preload="auto">
         <source src="assets/audio/background.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- ================= APLIKASI UTAMA ================= -->
     <div id="appContainer" class="container" style="display: none; opacity: 0;">
         <button id="installButton"><i class="fas fa-download"></i> Install App</button>
 
-        <!-- ========== HEADER DUKOPS ========== -->
         <div class="dukops-header">
             <div class="dukops-header-row">
                 <div class="dukops-profile-area" id="desaProfileContainerHeader">
@@ -501,7 +663,6 @@
             </div>
         </div>
 
-        <!-- ========== NAVIGASI ========== -->
         <div class="nav-buttons">
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
             <button class="nav-btn nav-btn-piket" id="btnJadwal" onclick="showJadwalPiketBaru()">PIKET</button>
@@ -509,7 +670,6 @@
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">HANPANGAN</button>
         </div>
 
-        <!-- ==================== DUKOPS CONTENT ==================== -->
         <div id="dukopsContent">
             <div style="width: 100%; margin: 0 auto;">
                 <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa/Kelurahan:</label>
@@ -577,14 +737,14 @@
             </div>
         </div>
 
-        <!-- ==================== JADWAL PIKET ==================== -->
+        <!-- JADWAL PIKET -->
         <div id="jadwalPiketContainerBaru" style="display: none;">
             <div class="jadwal-header">
                 <h1 class="jadwal-title">JADWAL PIKET</h1>
                 <div class="app-logo-container">
                     <img src="LOGO KOREM163 Wirasatya.png" alt="Logo Korem 163 Wirasatya" class="jadwal-logo">
                 </div>
-                <p>KORAMIL 1609-05/SUKASADA<br>Kodim 1609/Buleleng</p>
+                <p style="color: #88dd88; font-size: 14px; margin: 4px 0;">KORAMIL 1609-05/SUKASADA<br>Kodim 1609/Buleleng</p>
             </div>
 
             <div class="running-text-container">
@@ -656,7 +816,7 @@
             </button>
 
             <div class="jadwal-section">
-                <textarea id="j_hasilPesanBaru" class="auto-height-textarea" readonly placeholder="Preview pesan akan muncul di sini setelah memilih nama..."></textarea>
+                <textarea id="j_hasilPesanBaru" class="auto-height-textarea" readonly placeholder="Preview pesan akan muncul di sini setelah memilih nama..." style="width:100%; padding:12px; border-radius:8px; background:rgba(255,255,255,0.05); color:#e6ffe6; border:1px solid rgba(255,255,255,0.1); min-height:150px; font-family:monospace; font-size:13px;"></textarea>
                 <div class="preview-status" id="previewInfo">⏳ Memuat data dari Supabase...</div>
                 <div class="auto-save-status" id="autoSaveStatus">
                     <span class="saved">✅ Tersimpan otomatis</span>
@@ -667,7 +827,6 @@
             <div class="app-loading" id="j_loadingIndicatorBaru"><i class="fas fa-spinner fa-spin"></i> Memuat data...</div>
         </div>
 
-        <!-- ==================== TAB ABSENSI ==================== -->
         <div id="absenContent" style="display: none;">
             <div class="absen-card">
                 <div class="absen-filter-row">
@@ -690,7 +849,6 @@
             <div class="absen-info-text">✨ Mangsatria@2026</div>
         </div>
 
-        <!-- ==================== TAB HANPANGAN ==================== -->
         <div id="hanpanganContent">
             <iframe src="https://sukasada05.github.io/Hanpangan/" title="HANPANGAN"></iframe>
         </div>
@@ -700,7 +858,6 @@
 
     <div id="absenScreenshotArea" style="position: fixed; left: -9999px; top: 0; width: 500px; background: white;"></div>
 
-    <!-- ==================== MODAL TEMPLATE AI ==================== -->
     <div id="templateModal" class="modal-ai">
         <div class="modal-ai-content">
             <div class="modal-ai-header">
@@ -714,7 +871,6 @@
 
     <!-- ==================== JAVASCRIPT ==================== -->
 
-    <!-- ============ MP3 BACKGROUND ============ -->
     <script>
         (function() {
             const audio = document.getElementById('backgroundMusic');
@@ -770,7 +926,6 @@
         })();
     </script>
 
-    <!-- ============ DATA DESA & KOORDINAT ============ -->
     <script>
         const DESA_LIST_URL = 'data/desa-list.json';
         const COORDINATES_BASE_URL = 'data/coordinates/';
@@ -986,7 +1141,6 @@
         });
     </script>
 
-    <!-- ============ SPLASH SCREEN ============ -->
     <script>
         let splashProgress = 0;
         let splashInterval;
@@ -1034,7 +1188,6 @@
         });
     </script>
 
-    <!-- ============ INSTALL BUTTON ============ -->
     <script>
         (function() {
             let deferredPrompt;
@@ -1064,7 +1217,6 @@
         })();
     </script>
 
-    <!-- ============ AI TEMPLATE ============ -->
     <script>
         (function() {
             const TEMPLATE_JSON_URL = 'template-narasi.json';
@@ -1196,7 +1348,6 @@
         })();
     </script>
 
-    <!-- ============ APPLICATION SCRIPTS ============ -->
     <script src="js/common.js"></script>
     <script src="app.js"></script>
 
@@ -1225,6 +1376,7 @@
             let daftarNamaGlobal = [];
             let currentHanpangan = "";
             let isLoadingData = false;
+            let isInitialized = false;
 
             // ===== INDIKATOR SUPABASE =====
             function updateIndicator(status, message = '') {
@@ -1255,6 +1407,19 @@
                 } else if (status === 'error') {
                     el.innerHTML = `<span class="error">❌ ${message || 'Gagal menyimpan'}</span>`;
                 }
+            }
+
+            function showToast(message, type = 'info') {
+                const toast = document.getElementById('j_toastNotificationBaru');
+                if (!toast) return;
+                toast.textContent = message;
+                toast.className = 'jadwal-toast show';
+                if (type === 'success') toast.style.border = '2px solid #4caf50';
+                else if (type === 'error') toast.style.border = '2px solid #f44336';
+                else toast.style.border = '2px solid #ffc107';
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
             }
 
             // ===== FETCH DARI GITHUB =====
@@ -1307,8 +1472,6 @@
                     const select = document.getElementById(id);
                     if (select) {
                         const currentValue = select.value;
-                        // Cek apakah nilai saat ini ada di daftar nama
-                        const isValid = currentValue && daftarNamaGlobal.includes(currentValue);
                         select.innerHTML = '<option value="">- pilih nama -</option>';
                         daftarNamaGlobal.forEach(nama => {
                             const opt = document.createElement('option');
@@ -1316,11 +1479,8 @@
                             opt.textContent = nama;
                             select.appendChild(opt);
                         });
-                        // Kembalikan nilai jika valid
-                        if (isValid) {
+                        if (currentValue && daftarNamaGlobal.includes(currentValue)) {
                             select.value = currentValue;
-                        } else {
-                            select.value = '';
                         }
                     }
                 });
@@ -1433,6 +1593,8 @@
                     const todayStr = formatDateDB(now);
                     const tomorrowStr = formatDateDB(tomorrow);
 
+                    console.log('📡 Mencari data untuk tanggal:', todayStr, 'dan', tomorrowStr);
+
                     const { data, error } = await supabaseClient
                         .from('jadwal_piket')
                         .select('*')
@@ -1474,10 +1636,12 @@
                         document.getElementById('previewInfo').textContent = '✅ Data dari Supabase (' + data.length + ' item)';
                         document.getElementById('previewInfo').style.color = '#4caf50';
                         updateAutoSaveStatus('saved', 'Data dimuat dari Supabase');
+                        showToast('✅ Data jadwal dimuat dari Supabase', 'success');
                     } else {
                         document.getElementById('previewInfo').textContent = '📭 Belum ada data - silakan pilih nama';
                         document.getElementById('previewInfo').style.color = '#ff9800';
                         updateAutoSaveStatus('saved', 'Belum ada data tersimpan');
+                        showToast('📭 Belum ada data jadwal, silakan pilih nama', 'info');
                     }
 
                     updatePreview();
@@ -1486,6 +1650,7 @@
                     document.getElementById('previewInfo').textContent = '❌ Gagal memuat data';
                     document.getElementById('previewInfo').style.color = '#f44336';
                     updateAutoSaveStatus('error', 'Gagal memuat data');
+                    showToast('❌ Gagal memuat data dari Supabase', 'error');
                 } finally {
                     isLoadingData = false;
                 }
@@ -1494,6 +1659,7 @@
             async function autoSaveToSupabase() {
                 if (!supabaseClient || !isSupabaseConnected) {
                     updateAutoSaveStatus('error', 'Supabase tidak terhubung');
+                    showToast('❌ Supabase tidak terhubung', 'error');
                     return;
                 }
 
@@ -1538,12 +1704,14 @@
                         updateAutoSaveStatus('saved', 'Data tersimpan (' + valid.length + ' item)');
                         document.getElementById('previewInfo').textContent = '✅ Data tersimpan ke Supabase';
                         document.getElementById('previewInfo').style.color = '#4caf50';
+                        showToast('✅ Data jadwal tersimpan ke Supabase', 'success');
                     } else {
                         updateAutoSaveStatus('saved', 'Tidak ada data untuk disimpan');
                     }
                 } catch (error) {
                     console.error('❌ Auto-save error:', error);
                     updateAutoSaveStatus('error', 'Gagal menyimpan: ' + error.message);
+                    showToast('❌ Gagal menyimpan: ' + error.message, 'error');
                 }
             }
 
@@ -1561,6 +1729,15 @@
 
             // ===== INISIALISASI =====
             async function initJadwalBaru() {
+                if (isInitialized) {
+                    // Jika sudah diinisialisasi, refresh data
+                    if (isSupabaseConnected) {
+                        await loadDataFromSupabase();
+                    }
+                    return;
+                }
+                isInitialized = true;
+
                 console.log('🔍 Inisialisasi Aplikasi Piket...');
 
                 // 1. Load data dari GitHub
@@ -1587,12 +1764,15 @@
                     document.getElementById('previewInfo').textContent = '⚠️ Supabase tidak terhubung - menggunakan data lokal';
                     document.getElementById('previewInfo').style.color = '#ff9800';
                     updatePreview();
+                    showToast('⚠️ Supabase tidak terhubung', 'error');
                 }
 
                 // 6. Setup event listeners untuk dropdown
                 JADWAL_DROPDOWN_IDS.forEach(id => {
                     const sel = document.getElementById(id);
                     if (sel) {
+                        // Hapus listener lama untuk menghindari duplikasi
+                        sel.removeEventListener('change', triggerAutoSave);
                         sel.addEventListener('change', triggerAutoSave);
                     }
                 });
@@ -1624,7 +1804,7 @@
             }
 
             // ===== EXPOSE FUNCTIONS =====
-            window.showJadwalPiketBaru = function() {
+            window.showJadwalPiketBaru = async function() {
                 document.getElementById('dukopsContent').style.display = 'none';
                 document.getElementById('jadwalPiketContainerBaru').style.display = 'block';
                 document.getElementById('absenContent').style.display = 'none';
@@ -1634,15 +1814,7 @@
                 document.getElementById('btnAbsen').classList.remove('active');
                 document.getElementById('btnHanpangan').classList.remove('active');
 
-                if (!window._jadwalInitialized) {
-                    window._jadwalInitialized = true;
-                    initJadwalBaru();
-                } else {
-                    // Refresh data jika sudah diinisialisasi
-                    if (isSupabaseConnected) {
-                        loadDataFromSupabase();
-                    }
-                }
+                await initJadwalBaru();
             };
 
             window.showDukops = function() {
@@ -1923,7 +2095,6 @@ window.shareAsPNGAbsen = async function() {
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> MEMBUAT PNG...';
     }
 
-    // ===== CEK DATA =====
     if (!currentDataAbsen) {
         alert('⚠️ Belum ada data absensi. Silakan pilih Tahun dan Bulan terlebih dahulu.');
         if (btn) {
@@ -1933,7 +2104,6 @@ window.shareAsPNGAbsen = async function() {
         return;
     }
 
-    // ===== CEK LIBRARY =====
     if (typeof html2canvas === 'undefined') {
         alert('❌ Library html2canvas tidak ditemukan. Silakan refresh halaman.');
         if (btn) {
@@ -1943,7 +2113,6 @@ window.shareAsPNGAbsen = async function() {
         return;
     }
 
-    // ===== CEK ELEMEN =====
     var screenshotArea = document.getElementById('absenScreenshotArea');
     if (!screenshotArea) {
         alert('❌ Elemen screenshot tidak ditemukan.');
@@ -1957,7 +2126,6 @@ window.shareAsPNGAbsen = async function() {
     try {
         var d = currentDataAbsen;
         
-        // ===== VALIDASI DATA =====
         var totalDesa = d.total_desa || 0;
         var desaLengkap = d.desa_lengkap || 0;
         var persentase = totalDesa > 0 ? Math.round((desaLengkap / totalDesa) * 100) : 0;
@@ -1967,11 +2135,9 @@ window.shareAsPNGAbsen = async function() {
             year: 'numeric' 
         });
 
-        // ===== FALLBACK UNTUK NAMA BULAN & TAHUN =====
         var bulanTahun = d.nama_bulan || '';
         var tahun = d.tahun || '';
         
-        // Jika bulan kosong, ambil dari input
         if (!bulanTahun) {
             var bulanSelect = document.getElementById('absenBulanSelect');
             if (bulanSelect && bulanSelect.value) {
@@ -1982,7 +2148,6 @@ window.shareAsPNGAbsen = async function() {
             }
         }
 
-        // ===== BUILD HTML UNTUK SCREENSHOT =====
         var lh = '';
         if (d.details && d.details.length > 0) {
             for (var i = 0; i < d.details.length; i++) {
@@ -2063,7 +2228,6 @@ window.shareAsPNGAbsen = async function() {
             </div>
         `;
 
-        // Tunggu sebentar agar DOM siap
         await new Promise(resolve => setTimeout(resolve, 300));
 
         var el = screenshotArea.firstChild;
@@ -2095,7 +2259,6 @@ window.shareAsPNGAbsen = async function() {
         alert('❌ Gagal membuat gambar: ' + e.message);
     }
 
-    // Bersihkan screenshot area
     setTimeout(function() {
         var sa = document.getElementById('absenScreenshotArea');
         if (sa) sa.innerHTML = '';
@@ -2110,7 +2273,6 @@ window.loadAbsenTahun = loadAbsenTahun;
         })();
     </script>
 
-    <!-- ============ PLAY MP3 SETIAP KLIK TAB ============ -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -2123,7 +2285,6 @@ window.loadAbsenTahun = loadAbsenTahun;
         });
     </script>
 
-    <!-- ============ RESET CANVAS ============ -->
     <script>
         function resetCanvas() {
             const canvas = document.getElementById('canvas');
@@ -2160,28 +2321,27 @@ window.loadAbsenTahun = loadAbsenTahun;
         });
     </script>
 
-<!-- ============ SERVICE WORKER ============ -->
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            console.log('🔧 Registering Service Worker...');
-            navigator.serviceWorker.register('/dukops4/sw.js')
-                .then(function(registration) {
-                    console.log('✅ Service Worker registered successfully!');
-                    console.log('📦 Scope:', registration.scope);
-                    
-                    if (registration.active) {
-                        console.log('✅ Service Worker is active!');
-                    }
-                })
-                .catch(function(error) {
-                    console.log('❌ Service Worker registration failed:', error);
-                });
-        });
-    } else {
-        console.log('⚠️ Service Worker not supported in this browser.');
-    }
-</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                console.log('🔧 Registering Service Worker...');
+                navigator.serviceWorker.register('/dukops4/sw.js')
+                    .then(function(registration) {
+                        console.log('✅ Service Worker registered successfully!');
+                        console.log('📦 Scope:', registration.scope);
+                        
+                        if (registration.active) {
+                            console.log('✅ Service Worker is active!');
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('❌ Service Worker registration failed:', error);
+                    });
+            });
+        } else {
+            console.log('⚠️ Service Worker not supported in this browser.');
+        }
+    </script>
 
 </body>
 </html>
