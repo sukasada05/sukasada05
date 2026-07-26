@@ -598,15 +598,15 @@
                     <div>
                         <h3 class="section-title-koramil">Piket Koramil Hari Ini :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama1a_baru"><option value="">「 ✦ 𝐍𝐚𝐦a ✦ 」</option></select></div>
-                            <div class="col"><select id="j_nama1b_baru"><option value="">=✪=Nama=✪=</option></select></div>
+                            <div class="col"><select id="j_nama1a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col"><select id="j_nama1b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
                         <h3 class="section-title-koramil">Piket Koramil Besok :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama2a_baru"><option value="">-- Pilih Nama --</option></select></div>
-                            <div class="col"><select id="j_nama2b_baru"><option value="">-- Pilih Nama --</option></select></div>
+                            <div class="col"><select id="j_nama2a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col"><select id="j_nama2b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                 </div>
@@ -617,15 +617,15 @@
                     <div>
                         <h3 class="section-title-kediaman">Jaga Kediaman Hari Ini :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama3a_baru"><option value="">-- Pilih Nama --</option></select></div>
-                            <div class="col"><select id="j_nama3b_baru"><option value="">-- Pilih Nama --</option></select></div>
+                            <div class="col"><select id="j_nama3a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col"><select id="j_nama3b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
                         <h3 class="section-title-kediaman">Jaga Kediaman Besok :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama3c_baru"><option value="">-- Pilih Nama --</option></select></div>
-                            <div class="col"><select id="j_nama3d_baru"><option value="">-- Pilih Nama --</option></select></div>
+                            <div class="col"><select id="j_nama3c_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col"><select id="j_nama3d_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                 </div>
@@ -636,15 +636,15 @@
                     <div>
                         <h3 class="section-title-makodim">Piket Makodim Hari ini :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama4a_baru"><option value="">-- Pilih Nama --</option></select></div>
-                            <div class="col"><select id="j_nama4b_baru"><option value="">-- Pilih Nama --</option></select></div>
+                            <div class="col"><select id="j_nama4a_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col"><select id="j_nama4b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
                         <h3 class="section-title-makodim">Piket Makodim Besok :</h3>
                         <div class="row">
-                            <div class="col"><select id="j_nama4c_baru"><option value="">-- Pilih Nama --</option></select></div>
-                            <div class="col"><select id="j_nama4d_baru"><option value="">-- Pilih Nama --</option></select></div>
+                            <div class="col"><select id="j_nama4c_baru"><option value="">- pilih nama -</option></select></div>
+                            <div class="col"><select id="j_nama4d_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                 </div>
@@ -1224,6 +1224,7 @@
             let autoSaveTimer = null;
             let daftarNamaGlobal = [];
             let currentHanpangan = "";
+            let isLoadingData = false;
 
             // ===== INDIKATOR SUPABASE =====
             function updateIndicator(status, message = '') {
@@ -1270,23 +1271,7 @@
                 return fetchFromGitHub(GITHUB_URLS.PIKET).then(data => {
                     if (data) {
                         daftarNamaGlobal = data.trim().split('\n').filter(l => l.trim()).map(n => n.trim());
-                        JADWAL_DROPDOWN_IDS.forEach(id => {
-                            const select = document.getElementById(id);
-                            if (select) {
-                                const currentValue = select.value;
-                                select.innerHTML = '<option value="">-- Pilih Nama --</option>';
-                                daftarNamaGlobal.forEach(nama => {
-                                    const opt = document.createElement('option');
-                                    opt.value = nama;
-                                    opt.textContent = nama;
-                                    select.appendChild(opt);
-                                });
-                                // Kembalikan nilai jika masih valid
-                                if (currentValue && daftarNamaGlobal.includes(currentValue)) {
-                                    select.value = currentValue;
-                                }
-                            }
-                        });
+                        console.log('📋 Nama dari GitHub:', daftarNamaGlobal.length, 'nama');
                         return true;
                     }
                     return false;
@@ -1314,6 +1299,32 @@
                     }
                     return false;
                 });
+            }
+
+            // ===== POPULATE DROPDOWN =====
+            function populateDropdowns() {
+                JADWAL_DROPDOWN_IDS.forEach(id => {
+                    const select = document.getElementById(id);
+                    if (select) {
+                        const currentValue = select.value;
+                        // Cek apakah nilai saat ini ada di daftar nama
+                        const isValid = currentValue && daftarNamaGlobal.includes(currentValue);
+                        select.innerHTML = '<option value="">- pilih nama -</option>';
+                        daftarNamaGlobal.forEach(nama => {
+                            const opt = document.createElement('option');
+                            opt.value = nama;
+                            opt.textContent = nama;
+                            select.appendChild(opt);
+                        });
+                        // Kembalikan nilai jika valid
+                        if (isValid) {
+                            select.value = currentValue;
+                        } else {
+                            select.value = '';
+                        }
+                    }
+                });
+                console.log('📋 Dropdown dipopulate dengan', daftarNamaGlobal.length, 'nama');
             }
 
             // ===== FORMAT TANGGAL =====
@@ -1381,7 +1392,6 @@
                         return false;
                     }
                     supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    // Test koneksi
                     const { error } = await supabaseClient.from('jadwal_piket').select('id').limit(1);
                     if (error) {
                         updateIndicator('offline', 'Error: ' + error.message);
@@ -1399,13 +1409,24 @@
             }
 
             async function loadDataFromSupabase() {
-                if (!supabaseClient || !isSupabaseConnected) {
-                    document.getElementById('previewInfo').textContent = '⚠️ Supabase tidak terhubung';
-                    document.getElementById('previewInfo').style.color = '#ff9800';
-                    return;
-                }
+                if (isLoadingData) return;
+                isLoadingData = true;
 
                 try {
+                    // Pastikan dropdown sudah terisi dari GitHub dulu
+                    if (daftarNamaGlobal.length === 0) {
+                        await loadPiketDataFromGitHub();
+                        populateDropdowns();
+                    }
+
+                    if (!supabaseClient || !isSupabaseConnected) {
+                        document.getElementById('previewInfo').textContent = '⚠️ Supabase tidak terhubung - menggunakan data lokal';
+                        document.getElementById('previewInfo').style.color = '#ff9800';
+                        updatePreview();
+                        isLoadingData = false;
+                        return;
+                    }
+
                     const now = new Date();
                     const tomorrow = new Date();
                     tomorrow.setDate(now.getDate() + 1);
@@ -1420,7 +1441,7 @@
 
                     if (error) throw error;
 
-                    // Reset semua dropdown
+                    // Reset semua dropdown ke default
                     JADWAL_DROPDOWN_IDS.forEach(id => {
                         const select = document.getElementById(id);
                         if (select) select.value = '';
@@ -1454,7 +1475,7 @@
                         document.getElementById('previewInfo').style.color = '#4caf50';
                         updateAutoSaveStatus('saved', 'Data dimuat dari Supabase');
                     } else {
-                        document.getElementById('previewInfo').textContent = '📭 Belum ada data, silakan pilih nama';
+                        document.getElementById('previewInfo').textContent = '📭 Belum ada data - silakan pilih nama';
                         document.getElementById('previewInfo').style.color = '#ff9800';
                         updateAutoSaveStatus('saved', 'Belum ada data tersimpan');
                     }
@@ -1465,6 +1486,8 @@
                     document.getElementById('previewInfo').textContent = '❌ Gagal memuat data';
                     document.getElementById('previewInfo').style.color = '#f44336';
                     updateAutoSaveStatus('error', 'Gagal memuat data');
+                } finally {
+                    isLoadingData = false;
                 }
             }
 
@@ -1493,10 +1516,9 @@
                         { tanggal: tomorrowStr, jenis: 'makodim_besok', nama1: getVal('j_nama4c_baru'), nama2: getVal('j_nama4d_baru') }
                     ];
 
-                    // Hanya simpan yang punya nama
                     const valid = jadwalList.filter(j => j.nama1 || j.nama2);
 
-                    // Hapus data lama untuk tanggal hari ini dan besok
+                    // Hapus data lama
                     await supabaseClient
                         .from('jadwal_piket')
                         .delete()
@@ -1526,11 +1548,8 @@
             }
 
             function triggerAutoSave() {
-                // Update preview dulu
                 updatePreview();
-                // Clear timer sebelumnya
                 if (autoSaveTimer) clearTimeout(autoSaveTimer);
-                // Set timer untuk auto-save
                 autoSaveTimer = setTimeout(() => {
                     if (isSupabaseConnected) {
                         autoSaveToSupabase();
@@ -1548,17 +1567,20 @@
                 await loadPiketDataFromGitHub();
                 await loadHanpanganData();
 
-                // 2. Update tanggal info
+                // 2. Populate dropdown dengan nama dari GitHub
+                populateDropdowns();
+
+                // 3. Update tanggal info
                 const now = new Date();
                 const tanggalInfo = document.getElementById('tanggalInfo');
                 if (tanggalInfo) {
                     tanggalInfo.textContent = '📅 ' + formatTanggal(now) + ' | Besok: ' + formatTanggal(new Date(now.getTime() + 86400000));
                 }
 
-                // 3. Inisialisasi Supabase
+                // 4. Inisialisasi Supabase
                 await initSupabase();
 
-                // 4. Load data dari Supabase jika terhubung
+                // 5. Load data dari Supabase jika terhubung
                 if (isSupabaseConnected) {
                     await loadDataFromSupabase();
                 } else {
@@ -1567,7 +1589,7 @@
                     updatePreview();
                 }
 
-                // 5. Setup event listeners untuk dropdown
+                // 6. Setup event listeners untuk dropdown
                 JADWAL_DROPDOWN_IDS.forEach(id => {
                     const sel = document.getElementById(id);
                     if (sel) {
@@ -1575,14 +1597,13 @@
                     }
                 });
 
-                // 6. Setup WhatsApp button
+                // 7. Setup WhatsApp button
                 const btn = document.getElementById('whatsappBtnBaru');
                 if (btn) {
                     const newBtn = btn.cloneNode(true);
                     btn.parentNode.replaceChild(newBtn, btn);
                     newBtn.addEventListener('click', (e) => {
                         e.preventDefault();
-                        // Auto-save sebelum kirim
                         if (isSupabaseConnected) {
                             autoSaveToSupabase();
                         }
@@ -1594,11 +1615,12 @@
                     });
                 }
 
-                // 7. Sembunyikan loading
+                // 8. Sembunyikan loading
                 const loading = document.getElementById('j_loadingIndicatorBaru');
                 if (loading) loading.style.display = 'none';
 
                 console.log('✅ Inisialisasi selesai. Supabase:', isSupabaseConnected ? 'Terhubung' : 'Tidak terhubung');
+                console.log('📋 Total nama:', daftarNamaGlobal.length);
             }
 
             // ===== EXPOSE FUNCTIONS =====
@@ -1658,17 +1680,7 @@
                 if (typeof window.triggerPlayMusic === 'function') window.triggerPlayMusic();
             };
 
-            // Auto init jika DOM sudah siap
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                // Tunggu sebentar agar elemen lain siap
-                setTimeout(() => {
-                    if (document.getElementById('jadwalPiketContainerBaru')?.style?.display !== 'none') {
-                        // Jika tab piket aktif, init
-                    }
-                }, 500);
-            }
-
-            console.log('📌 Modul Piket siap. Klik tab PIKET untuk mengaktifkan Supabase');
+            console.log('📌 Modul Piket siap. Klik tab PIKET untuk mengaktifkan');
         })();
     </script>
 
