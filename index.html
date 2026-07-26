@@ -510,6 +510,15 @@
             letter-spacing: 1px;
         }
 
+        .section-title-date {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.7;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
         .row {
             display: flex;
             gap: 8px;
@@ -753,17 +762,24 @@
 
             <div class="tanggal-info" id="tanggalInfo">📅 Memuat tanggal...</div>
 
+            <!-- Piket Koramil -->
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
-                        <h3 class="section-title-koramil">Piket Koramil Hari Ini :</h3>
+                        <h3 class="section-title-koramil">
+                            Piket Koramil Hari Ini
+                            <span class="section-title-date" id="labelHariIni">📅 Memuat...</span>
+                        </h3>
                         <div class="row">
                             <div class="col"><select id="j_nama1a_baru"><option value="">- pilih nama -</option></select></div>
                             <div class="col"><select id="j_nama1b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="section-title-koramil">Piket Koramil Besok :</h3>
+                        <h3 class="section-title-koramil">
+                            Piket Koramil Besok
+                            <span class="section-title-date" id="labelBesok">📅 Memuat...</span>
+                        </h3>
                         <div class="row">
                             <div class="col"><select id="j_nama2a_baru"><option value="">- pilih nama -</option></select></div>
                             <div class="col"><select id="j_nama2b_baru"><option value="">- pilih nama -</option></select></div>
@@ -772,17 +788,24 @@
                 </div>
             </div>
 
+            <!-- Jaga Kediaman -->
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
-                        <h3 class="section-title-kediaman">Jaga Kediaman Hari Ini :</h3>
+                        <h3 class="section-title-kediaman">
+                            Jaga Kediaman Hari Ini
+                            <span class="section-title-date" id="labelKediamanHariIni">📅 Memuat...</span>
+                        </h3>
                         <div class="row">
                             <div class="col"><select id="j_nama3a_baru"><option value="">- pilih nama -</option></select></div>
                             <div class="col"><select id="j_nama3b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="section-title-kediaman">Jaga Kediaman Besok :</h3>
+                        <h3 class="section-title-kediaman">
+                            Jaga Kediaman Besok
+                            <span class="section-title-date" id="labelKediamanBesok">📅 Memuat...</span>
+                        </h3>
                         <div class="row">
                             <div class="col"><select id="j_nama3c_baru"><option value="">- pilih nama -</option></select></div>
                             <div class="col"><select id="j_nama3d_baru"><option value="">- pilih nama -</option></select></div>
@@ -791,17 +814,24 @@
                 </div>
             </div>
 
+            <!-- Piket Makodim -->
             <div class="jadwal-section">
                 <div class="section-content">
                     <div>
-                        <h3 class="section-title-makodim">Piket Makodim Hari ini :</h3>
+                        <h3 class="section-title-makodim">
+                            Piket Makodim Hari Ini
+                            <span class="section-title-date" id="labelMakodimHariIni">📅 Memuat...</span>
+                        </h3>
                         <div class="row">
                             <div class="col"><select id="j_nama4a_baru"><option value="">- pilih nama -</option></select></div>
                             <div class="col"><select id="j_nama4b_baru"><option value="">- pilih nama -</option></select></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="section-title-makodim">Piket Makodim Besok :</h3>
+                        <h3 class="section-title-makodim">
+                            Piket Makodim Besok
+                            <span class="section-title-date" id="labelMakodimBesok">📅 Memuat...</span>
+                        </h3>
                         <div class="row">
                             <div class="col"><select id="j_nama4c_baru"><option value="">- pilih nama -</option></select></div>
                             <div class="col"><select id="j_nama4d_baru"><option value="">- pilih nama -</option></select></div>
@@ -1378,6 +1408,53 @@
             let isLoadingData = false;
             let isInitialized = false;
 
+            // ===== FORMAT TANGGAL =====
+            function formatTanggal(date) {
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                ];
+                return days[date.getDay()] + ", " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+            }
+
+            function formatTanggalShort(date) {
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+                return days[date.getDay()] + ", " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+            }
+
+            function formatDateDB(date) {
+                return date.toISOString().split('T')[0];
+            }
+
+            // ===== UPDATE LABEL TANGGAL =====
+            function updateDateLabels() {
+                const now = new Date();
+                const tomorrow = new Date();
+                tomorrow.setDate(now.getDate() + 1);
+
+                const labelHariIni = document.getElementById('labelHariIni');
+                const labelBesok = document.getElementById('labelBesok');
+                const labelKediamanHariIni = document.getElementById('labelKediamanHariIni');
+                const labelKediamanBesok = document.getElementById('labelKediamanBesok');
+                const labelMakodimHariIni = document.getElementById('labelMakodimHariIni');
+                const labelMakodimBesok = document.getElementById('labelMakodimBesok');
+                const tanggalInfo = document.getElementById('tanggalInfo');
+
+                const todayStr = formatTanggal(now);
+                const tomorrowStr = formatTanggal(tomorrow);
+                const todayShort = formatTanggalShort(now);
+                const tomorrowShort = formatTanggalShort(tomorrow);
+
+                if (labelHariIni) labelHariIni.textContent = '📅 ' + todayShort;
+                if (labelBesok) labelBesok.textContent = '📅 ' + tomorrowShort;
+                if (labelKediamanHariIni) labelKediamanHariIni.textContent = '📅 ' + todayShort;
+                if (labelKediamanBesok) labelKediamanBesok.textContent = '📅 ' + tomorrowShort;
+                if (labelMakodimHariIni) labelMakodimHariIni.textContent = '📅 ' + todayShort;
+                if (labelMakodimBesok) labelMakodimBesok.textContent = '📅 ' + tomorrowShort;
+                if (tanggalInfo) tanggalInfo.textContent = '📅 Hari Ini: ' + todayStr + ' | Besok: ' + tomorrowStr;
+            }
+
             // ===== INDIKATOR SUPABASE =====
             function updateIndicator(status, message = '') {
                 const indicator = document.getElementById('supabaseIndicator');
@@ -1487,19 +1564,6 @@
                 console.log('📋 Dropdown dipopulate dengan', daftarNamaGlobal.length, 'nama');
             }
 
-            // ===== FORMAT TANGGAL =====
-            function formatTanggal(date) {
-                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-                ];
-                return days[date.getDay()] + ", " + date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
-            }
-
-            function formatDateDB(date) {
-                return date.toISOString().split('T')[0];
-            }
-
             // ===== UPDATE PREVIEW =====
             function updatePreview() {
                 const now = new Date();
@@ -1573,7 +1637,6 @@
                 isLoadingData = true;
 
                 try {
-                    // Pastikan dropdown sudah terisi dari GitHub dulu
                     if (daftarNamaGlobal.length === 0) {
                         await loadPiketDataFromGitHub();
                         populateDropdowns();
@@ -1603,7 +1666,6 @@
 
                     if (error) throw error;
 
-                    // Reset semua dropdown ke default
                     JADWAL_DROPDOWN_IDS.forEach(id => {
                         const select = document.getElementById(id);
                         if (select) select.value = '';
@@ -1684,13 +1746,11 @@
 
                     const valid = jadwalList.filter(j => j.nama1 || j.nama2);
 
-                    // Hapus data lama
                     await supabaseClient
                         .from('jadwal_piket')
                         .delete()
                         .or(`tanggal_jadwal.eq.${todayStr},tanggal_jadwal.eq.${tomorrowStr}`);
 
-                    // Insert data baru
                     if (valid.length > 0) {
                         for (const j of valid) {
                             await supabaseClient.from('jadwal_piket').insert([{
@@ -1730,7 +1790,6 @@
             // ===== INISIALISASI =====
             async function initJadwalBaru() {
                 if (isInitialized) {
-                    // Jika sudah diinisialisasi, refresh data
                     if (isSupabaseConnected) {
                         await loadDataFromSupabase();
                     }
@@ -1740,24 +1799,20 @@
 
                 console.log('🔍 Inisialisasi Aplikasi Piket...');
 
-                // 1. Load data dari GitHub
+                // Update label tanggal
+                updateDateLabels();
+
+                // Load data dari GitHub
                 await loadPiketDataFromGitHub();
                 await loadHanpanganData();
 
-                // 2. Populate dropdown dengan nama dari GitHub
+                // Populate dropdown
                 populateDropdowns();
 
-                // 3. Update tanggal info
-                const now = new Date();
-                const tanggalInfo = document.getElementById('tanggalInfo');
-                if (tanggalInfo) {
-                    tanggalInfo.textContent = '📅 ' + formatTanggal(now) + ' | Besok: ' + formatTanggal(new Date(now.getTime() + 86400000));
-                }
-
-                // 4. Inisialisasi Supabase
+                // Inisialisasi Supabase
                 await initSupabase();
 
-                // 5. Load data dari Supabase jika terhubung
+                // Load data dari Supabase
                 if (isSupabaseConnected) {
                     await loadDataFromSupabase();
                 } else {
@@ -1767,17 +1822,16 @@
                     showToast('⚠️ Supabase tidak terhubung', 'error');
                 }
 
-                // 6. Setup event listeners untuk dropdown
+                // Setup event listeners
                 JADWAL_DROPDOWN_IDS.forEach(id => {
                     const sel = document.getElementById(id);
                     if (sel) {
-                        // Hapus listener lama untuk menghindari duplikasi
                         sel.removeEventListener('change', triggerAutoSave);
                         sel.addEventListener('change', triggerAutoSave);
                     }
                 });
 
-                // 7. Setup WhatsApp button
+                // Setup WhatsApp button
                 const btn = document.getElementById('whatsappBtnBaru');
                 if (btn) {
                     const newBtn = btn.cloneNode(true);
@@ -1795,7 +1849,6 @@
                     });
                 }
 
-                // 8. Sembunyikan loading
                 const loading = document.getElementById('j_loadingIndicatorBaru');
                 if (loading) loading.style.display = 'none';
 
