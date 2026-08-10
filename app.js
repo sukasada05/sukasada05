@@ -684,7 +684,7 @@ async function processSubmission() {
         a.click();
         document.body.removeChild(a);
 
-        // Upload Drive (Telegram sudah dihapus)
+        // Upload Drive
         const driveUploaded = await uploadToGoogleDrive(content, zipFileNameForBackend, selectedDesa, date);
 
         // Update counter
@@ -1088,8 +1088,12 @@ function formatFileSize(bytes) {
 
 function refreshAttendanceData() { loadAttendanceData(); }
 
-// ================= POPUP UCAPAN TERIMA KASIH =================
+// ================= POPUP UCAPAN TERIMA KASIH (DIPERBAIKI) =================
 function showThankYouPopup(desaName, count) {
+    // Ambil bulan dan tahun dari tanggal yang dipilih user
+    const date = new Date(tanggalWaktu);
+    const monthYear = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    
     const modal = document.createElement('div');
     modal.className = 'thankyou-popup';
     modal.style.cssText = `
@@ -1109,7 +1113,7 @@ function showThankYouPopup(desaName, count) {
             <h2 style="color: #9fd49f; margin-bottom: 15px; font-size: 28px;">🎉 SELAMAT! 🎉</h2>
             <p style="color: #f5f5f5; font-size: 18px; line-height: 1.5; margin-bottom: 20px;">
                 <strong>Babinsa ${desaName}</strong><br>
-                Telah menyelesaikan <strong>${count} laporan</strong> untuk bulan ini!
+                Telah menyelesaikan <strong>${count} laporan</strong> untuk <strong>${monthYear}</strong>!
             </p>
             <div style="background: rgba(76, 175, 80, 0.2); border: 2px solid #4CAF50;
                 border-radius: 10px; padding: 15px; margin: 20px 0; font-size: 16px; color: #b2d8b2;">
