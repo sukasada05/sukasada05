@@ -1,5 +1,5 @@
 // ================= KONFIGURASI AMAN =================
-const GOOGLE_APPS_SCRIPT_WEBHOOK = "https://script.google.com/macros/s/AKfycbz3sB1d0PRRzlvAJwdr8nl5dQa6qpyfHQCJbYxBMz0Jpj2o-i1_WnwMzJEy3Z4GA9uh/exec";
+const GOOGLE_APPS_SCRIPT_WEBHOOK = "https://script.google.com/macros/s/AKfycbyiJ0uO36CdtGUiy8m03jzwMAUWWMwIILpdBLt5J41ne6aQWHYIp_Cr_Ke6K8iqn4gZ/exec";
 const TARGET_LAPORAN = 9;
 
 // ================= VARIABEL GLOBAL =================
@@ -8,11 +8,44 @@ let selectedDesa = "";
 let kordinatList = [];
 let currentKoordinat = "";
 let tanggalWaktu = "";
-let submissionCount = 0;
 let submittedDates = [];
 let desaCounter = {};
 let attendanceData = [];
 let deferredPrompt = null;
+let swWaiting = null;
+
+function getInstallButton() {
+    return document.getElementById('installButton');
+}
+
+function isStandaloneMode() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+function updateInstallButtonState() {
+    const btn = getInstallButton();
+    if (!btn) return;
+
+    if (swWaiting) {
+        btn.style.display = 'flex';
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i> Update';
+        return;
+    }
+
+    if (!isStandaloneMode() && deferredPrompt) {
+        btn.style.display = 'flex';
+        btn.innerHTML = '<i class="fas fa-download"></i> Install App';
+        return;
+    }
+
+    btn.style.display = 'none';
+}
+
+function setWaitingServiceWorker(worker) {
+    swWaiting = worker;
+    updateInstallButtonState();
+    showNotification('⚡ Update tersedia! Tekan tombol untuk memperbarui.', 'success');
+}
 
 let currentApp = null;
 let isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -144,12 +177,24 @@ window.showHanpangan = function() {
 // ================= BACKEND =================
 async function sendToBackend(action, data = {}) {
     try {
-        if (action === 'listFiles' || action === 'getConfig' || action === 'test' || action === 'telegramTest') {
+        // Daftar action yang diizinkan (sesuai backend)
+        const allowedActions = [
+            'listFiles', 'getConfig', 'test', 'uploadDrive',
+            'getJadwalData', 'getDesaList', 'getPetugas', 
+            'getPetugasByDate', 'getJadwalEpoch', 'cekGiliran',
+            'getPersonelList', 'status', 'saveFile', 'getFile'
+        ];
+        
+        if (!allowedActions.includes(action)) {
+            console.warn(`⚠️ Action "${action}" tidak tersedia di backend`);
+            return { success: false, error: `Action "${action}" tidak tersedia` };
+        }
+        
+        if (action === 'listFiles' || action === 'getConfig' || action === 'test') {
             let url = `${GOOGLE_APPS_SCRIPT_WEBHOOK}?action=${action}`;
             if (action === 'listFiles') {
                 if (data.desaFilter) url += `&desaFilter=${encodeURIComponent(data.desaFilter)}`;
                 if (data.monthFilter) url += `&monthFilter=${encodeURIComponent(data.monthFilter)}`;
-                if (data.readZips) url += `&readZips=true`;
             }
             const response = await fetch(url);
             return await response.json();
@@ -197,23 +242,6 @@ async function uploadToGoogleDrive(zipBlob, zipFileName, desaName, date) {
     }
 }
 
-async function sendZipToTelegram(zipBlob, filename, desaName) {
-    try {
-        const base64Data = await blobToBase64(zipBlob);
-        const desaInfo = normalizeDesaName(desaName);
-        const result = await sendToBackend('sendTelegram', {
-            fileName: filename,
-            desaName: desaInfo.cleanName,
-            fileData: base64Data,
-            mimeType: 'application/zip'
-        });
-        return result.success === true;
-    } catch (error) {
-        console.error('Error send to Telegram:', error);
-        return false;
-    }
-}
-
 async function blobToBase64(blob) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -224,48 +252,57 @@ async function blobToBase64(blob) {
 
 // ================= PWA INSTALL =================
 function setupInstallPrompt() {
+    const btn = getInstallButton();
+
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        setTimeout(() => {
-            const btn = document.getElementById('installButton');
-            if (btn) {
-                btn.style.display = 'flex';
-                btn.addEventListener('click', async () => {
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        const { outcome } = await deferredPrompt.userChoice;
-                        if (outcome === 'accepted') {
-                            btn.style.display = 'none';
-                            showNotification('✅ Aplikasi berhasil diinstall!', 'success');
-                        }
-                        deferredPrompt = null;
-                    }
-                });
+        updateInstallButtonState();
+    });
+
+    if (btn) {
+        btn.addEventListener('click', async () => {
+            if (swWaiting) {
+                swWaiting.postMessage({ type: 'SKIP_WAITING' });
+                return;
             }
-        }, 3000);
-    });
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                deferredPrompt = null;
+                showNotification('✅ Aplikasi berhasil diinstall!', 'success');
+            }
+            updateInstallButtonState();
+        });
+    }
+
     window.addEventListener('appinstalled', () => {
-        const btn = document.getElementById('installButton');
-        if (btn) btn.style.display = 'none';
         deferredPrompt = null;
+        updateInstallButtonState();
     });
+
+    window.addEventListener('load', updateInstallButtonState);
+    document.addEventListener('visibilitychange', updateInstallButtonState);
+    window.addEventListener('focus', updateInstallButtonState);
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            swWaiting = null;
+            updateInstallButtonState();
+            window.location.reload();
+        });
+    }
 }
 
 // ================= FUNGSI DUKOPS =================
-function initializeApp() {
+async function initializeApp() {
     console.log("🔄 Initializing DUKOPS app...");
     try {
-        const savedCount = localStorage.getItem('dukopsSubmissionCount');
-        submissionCount = savedCount ? parseInt(savedCount) : 0;
-        document.getElementById('submissionCounter').textContent = submissionCount;
-        if (submissionCount > 0) {
-            document.getElementById('submissionCounter').style.display = 'inline-block';
-        }
-
-        loadDesaList();
-        loadLastSubmittedDates();
-        loadDesaCounter();
+        console.log('initializeApp: before loadDesaList');
+        try { await loadDesaList(); console.log('initializeApp: loadDesaList OK'); } catch(e){ console.error('initializeApp: loadDesaList error', e); }
+        try { loadLastSubmittedDates(); } catch(e){ console.error('initializeApp: loadLastSubmittedDates error', e); }
+        try { loadDesaCounter(); } catch(e){ console.error('initializeApp: loadDesaCounter error', e); }
 
         const now = new Date();
         const year = now.getFullYear();
@@ -273,8 +310,14 @@ function initializeApp() {
         const day = String(now.getDate()).padStart(2, '0');
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
-        document.getElementById('tanggalWaktu').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-        updateDatePreview();
+        try {
+            const tanggalEl = document.getElementById('tanggalWaktu');
+            if (tanggalEl) tanggalEl.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            updateDatePreview();
+            console.log('initializeApp: set tanggalWaktu and updated preview');
+        } catch (e) {
+            console.error('initializeApp: error setting tanggalWaktu/updateDatePreview', e);
+        }
 
         setupInstallPrompt();
         resetCanvas();
@@ -294,7 +337,7 @@ async function loadDesaList() {
     const select = document.getElementById('selectDesa');
     const loading = document.getElementById('loadingDesa');
     if (!select) return;
-    loading.style.display = 'block';
+    if (loading) loading.style.display = 'block';
 
     try {
         const response = await fetch('data/desa-list.json?t=' + Date.now());
@@ -319,9 +362,61 @@ async function loadDesaList() {
         select.disabled = true;
         showNotification('❌ Gagal memuat daftar desa. Periksa koneksi.', 'error');
     } finally {
-        loading.style.display = 'none';
+        if (loading) loading.style.display = 'none';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    try {
+        const select = document.getElementById('selectDesa');
+        if (select && select.options && select.options.length > 1) {
+            const evt = new Event('change');
+            select.dispatchEvent(evt);
+        }
+    } catch (e) {}
+});
+
+(function tryEarlyLoadDesa(){
+    const run = () => {
+        try {
+            if (typeof loadDesaList === 'function') {
+                loadDesaList().catch(()=>{});
+            }
+        } catch (e) {}
+    };
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', run);
+    } else {
+        setTimeout(run, 0);
+    }
+})();
+
+function ensureDesaListLoaded(maxAttempts = 6, delayMs = 500) {
+    let attempts = 0;
+    const tryLoad = () => {
+        attempts++;
+        try {
+            if (typeof loadDesaList === 'function') {
+                loadDesaList().then(() => {
+                    const select = document.getElementById('selectDesa');
+                    if (select && select.options && select.options.length > 1) return;
+                    if (attempts < maxAttempts) setTimeout(tryLoad, delayMs);
+                }).catch(() => {
+                    if (attempts < maxAttempts) setTimeout(tryLoad, delayMs);
+                });
+            } else {
+                if (attempts < maxAttempts) setTimeout(tryLoad, delayMs);
+            }
+        } catch (e) {
+            if (attempts < maxAttempts) setTimeout(tryLoad, delayMs);
+        }
+    };
+    tryLoad();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => ensureDesaListLoaded()); else ensureDesaListLoaded();
+
+setTimeout(() => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch (e) {} }, 120);
 
 function normalizeDesaName(desaName) {
     if (!desaName) return { original: "", normalized: "", forTelegram: "", cleanName: "" };
@@ -354,14 +449,18 @@ async function loadSelectedDesa() {
     }
 
     const desaInfo = normalizeDesaName(selectedDesa);
-    document.getElementById('previewDesa').textContent = desaInfo.cleanName;
-    document.getElementById('previewDesa').style.display = 'block';
+    const previewDesaEl = document.getElementById('previewDesa');
+    if (previewDesaEl) {
+        previewDesaEl.textContent = desaInfo.cleanName;
+        previewDesaEl.style.display = 'block';
+    }
 
     const fotoLabel = document.getElementById('labelFotoKegiatan');
     if (fotoLabel) fotoLabel.innerHTML = `<i class="fas fa-camera"></i> Foto Kegiatan: ${desaInfo.cleanName}`;
 
-    loading.style.display = 'block';
-    document.getElementById('previewKordinat').textContent = "Memuat koordinat...";
+    if (loading) loading.style.display = 'block';
+    const previewKordinatEl = document.getElementById('previewKordinat');
+    if (previewKordinatEl) previewKordinatEl.textContent = "Memuat koordinat...";
 
     try {
         console.log(`📂 Fetching coordinates from: ${jsonPath}`);
@@ -378,10 +477,10 @@ async function loadSelectedDesa() {
         showNotification(`Koordinat ${desaInfo.cleanName} dimuat (${kordinatList.length} titik)`, "success");
     } catch (error) {
         console.error("❌ Error loading coordinates:", error);
-        document.getElementById('previewKordinat').textContent = "Gagal memuat koordinat";
+        if (previewKordinatEl) previewKordinatEl.textContent = "Gagal memuat koordinat";
         showNotification("Gagal memuat koordinat: " + error.message, "error");
     } finally {
-        loading.style.display = 'none';
+        if (loading) loading.style.display = 'none';
         updatePreview();
         checkInputCompletion();
     }
@@ -411,7 +510,6 @@ function pickRandomKoordinat() {
 
 function previewImage() {
     const file = document.getElementById("gambar").files[0];
-    const preview = document.getElementById("previewGambar");
 
     if (file) {
         const reader = new FileReader();
@@ -422,7 +520,6 @@ function previewImage() {
                 try {
                     if (img.height > img.width) {
                         document.getElementById("gambar").value = "";
-                        if (preview) preview.textContent = "";
                         img = new Image();
                         showNotification("Foto portrait tidak diperbolehkan. Gunakan foto landscape.", "warning");
                         checkInputCompletion();
@@ -430,13 +527,11 @@ function previewImage() {
                     }
                 } catch (e) {}
                 if (kordinatList.length > 0) pickRandomKoordinat();
-                preview.textContent = file.name;
                 updatePreview();
             };
             img.onerror = function() {
                 showNotification("Gagal memuat gambar", "error");
                 document.getElementById("gambar").value = "";
-                preview.textContent = "";
             };
         };
         reader.onerror = function() { showNotification("Gagal membaca file", "error"); };
@@ -449,8 +544,9 @@ function previewImage() {
 }
 
 function updateDatePreview() {
-    const tglInput = document.getElementById("tanggalWaktu").value;
+    const tglEl = document.getElementById("tanggalWaktu");
     const label = document.getElementById('tanggalWaktuLabelText');
+    const tglInput = tglEl ? tglEl.value : '';
 
     if (tglInput) {
         let date = new Date(tglInput);
@@ -460,8 +556,21 @@ function updateDatePreview() {
         const displayText = date.toLocaleString('id-ID', options).replace(/:/g, '.');
         if (label) label.textContent = displayText;
     } else {
-        tanggalWaktu = "";
-        if (label) label.textContent = 'Pilih tanggal & waktu';
+        if (!tglEl) {
+            if (tanggalWaktu) {
+                try {
+                    const date = new Date(tanggalWaktu);
+                    const options = { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                    const displayText = date.toLocaleString('id-ID', options).replace(/:/g, '.');
+                    if (label) label.textContent = displayText;
+                } catch (e) {}
+            } else {
+                if (label) label.textContent = 'Pilih tanggal & waktu';
+            }
+        } else {
+            tanggalWaktu = "";
+            if (label) label.textContent = 'Pilih tanggal & waktu';
+        }
     }
     updatePreview();
     checkInputCompletion();
@@ -469,9 +578,11 @@ function updateDatePreview() {
 
 function updatePreview() {
     const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    if (!canvas) return;
+    const ctx = canvas.getContext && canvas.getContext("2d");
+    if (!ctx) return;
 
-    if (img.src && img.complete) {
+    if (img && img.src && img.complete) {
         canvas.width = 800;
         canvas.height = Math.round(canvas.width * (img.height / img.width));
     } else {
@@ -481,7 +592,7 @@ function updatePreview() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (img.src && img.complete) {
+    if (img && img.src && img.complete) {
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     } else {
         ctx.fillStyle = "#000";
@@ -573,10 +684,7 @@ async function processSubmission() {
         a.click();
         document.body.removeChild(a);
 
-        // Kirim Telegram
-        await sendZipToTelegram(content, zipFileNameForBackend, selectedDesa);
-
-        // Upload Drive
+        // Upload Drive (Telegram sudah dihapus)
         const driveUploaded = await uploadToGoogleDrive(content, zipFileNameForBackend, selectedDesa, date);
 
         // Update counter
@@ -594,10 +702,8 @@ async function processSubmission() {
 
         if (desaData.count >= 9) {
             showThankYouPopup(desaInfo.cleanName, desaData.count);
-            await sendThankYouTelegram(desaInfo.cleanName, desaData.count);
         }
 
-        updateCounter();
         saveSubmittedDate(tanggalWaktu);
 
     } catch (error) {
@@ -629,7 +735,7 @@ function validateSubmission() {
     confirmMsg += `1. Didownload: ${desaInfo.cleanName} ${day} ${monthNum} ${year}.zip\n`;
     confirmMsg += `2. Berisi file:\n   - ${desaInfo.cleanName} ${day} ${monthName} ${year} Dukops.png\n`;
     confirmMsg += `   - ${desaInfo.cleanName} ${day} ${monthName} ${year} Narasi.txt\n`;
-    confirmMsg += `3. Dikirim ke Telegram & Drive: ${desaInfo.cleanName} ${day} ${monthNum} ${year}.zip`;
+    confirmMsg += `3. Dikirim ke Drive: ${desaInfo.cleanName} ${day} ${monthNum} ${year}.zip`;
 
     return confirm(confirmMsg);
 }
@@ -655,10 +761,7 @@ function resetCanvas() {
 }
 
 function resetAll() {
-    if (confirm("Apakah Anda yakin ingin mereset SEMUA data?\n\n• Counter laporan terkirim\n• Log pengiriman\n• Tanggal terakhir\n• Counter per desa\n• Form input\n\nAksi ini tidak dapat dibatalkan!")) {
-        submissionCount = 0;
-        document.getElementById('submissionCounter').textContent = '0';
-        localStorage.setItem('dukopsSubmissionCount', '0');
+    if (confirm("Apakah Anda yakin ingin mereset SEMUA data?\n\n• Log pengiriman\n• Tanggal terakhir\n• Counter per desa\n• Form input\n\nAksi ini tidak dapat dibatalkan!")) {
         submittedDates = [];
         localStorage.removeItem('dukopsSubmittedDates');
         desaCounter = {};
@@ -672,15 +775,20 @@ function resetForm() {
     selectedDesa = "";
     kordinatList = [];
     currentKoordinat = "";
-    document.getElementById('selectDesa').value = "";
-    document.getElementById('previewDesa').textContent = "";
-    document.getElementById('previewKordinat').textContent = "";
-    document.getElementById('narasi').value = "";
-    document.getElementById('gambar').value = "";
-    document.getElementById('tanggalWaktu').value = "";
+    const selectEl = document.getElementById('selectDesa');
+    if (selectEl) selectEl.value = "";
+    const previewDesaEl = document.getElementById('previewDesa');
+    if (previewDesaEl) previewDesaEl.textContent = "";
+    const previewKordinatEl = document.getElementById('previewKordinat');
+    if (previewKordinatEl) previewKordinatEl.textContent = "";
+    const narasiEl = document.getElementById('narasi');
+    if (narasiEl) narasiEl.value = "";
+    const gambarEl = document.getElementById('gambar');
+    if (gambarEl) gambarEl.value = "";
+    const tanggalWaktuEl = document.getElementById('tanggalWaktu');
+    if (tanggalWaktuEl) tanggalWaktuEl.value = "";
     const label = document.getElementById('tanggalWaktuLabelText');
     if (label) label.textContent = 'Pilih tanggal & waktu';
-    document.getElementById('previewGambar').textContent = "";
     updateDesaHeaderImage("");
     checkInputCompletion();
     updatePreview();
@@ -690,13 +798,6 @@ function resetForm() {
 function loadDesaCounter() {
     const saved = localStorage.getItem('dukopsDesaCounter');
     desaCounter = saved ? JSON.parse(saved) : {};
-}
-
-function updateCounter() {
-    submissionCount++;
-    document.getElementById('submissionCounter').textContent = submissionCount;
-    document.getElementById('submissionCounter').style.display = 'inline-block';
-    localStorage.setItem('dukopsSubmissionCount', submissionCount.toString());
 }
 
 function updateDesaCounter(desaName, fileName) {
@@ -732,12 +833,10 @@ function loadLastSubmittedDates() {
 }
 
 function checkInputCompletion() {
-    const isComplete = selectedDesa &&
-        currentKoordinat &&
-        tanggalWaktu &&
-        img.src &&
-        img.complete &&
-        document.getElementById("narasi").value.trim();
+    const narasiEl = document.getElementById("narasi");
+    const narasiVal = narasiEl ? (narasiEl.value || '').trim() : '';
+    const hasImage = img && img.src && img.complete;
+    const isComplete = selectedDesa && currentKoordinat && tanggalWaktu && hasImage && narasiVal;
 
     const submitBtn = document.getElementById("submitBtn");
     if (submitBtn) submitBtn.disabled = !isComplete;
@@ -768,14 +867,7 @@ function updateDesaHeaderImage(desaName) {
     const headerImage = document.getElementById('desaProfileImgHeader');
     if (!headerImage) return;
     const defaultUrl = 'icons/favicon-96x96.png';
-    if (!desaName) {
-        headerImage.src = defaultUrl;
-        return;
-    }
-    const desaInfo = normalizeDesaName(desaName);
-    const imageName = desaInfo.normalized;
-    const localUrl = `profile/${imageName}.png`;
-    headerImage.src = localUrl;
+    headerImage.src = defaultUrl;
 }
 
 // ================= FUNGSI ABSENSI =================
@@ -816,8 +908,7 @@ async function loadAttendanceData() {
     try {
         const result = await sendToBackend('listFiles', {
             desaFilter: selectedDesa ? normalizeDesaName(selectedDesa).cleanName : '',
-            monthFilter: document.getElementById('attendanceMonthFilter').value,
-            readZips: 'true'
+            monthFilter: document.getElementById('attendanceMonthFilter').value
         });
 
         if (result.success) {
@@ -920,11 +1011,10 @@ function displayAttendanceList(files) {
                 const date = new Date(file.createdTime);
                 const dateStr = date.toLocaleDateString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
                 const size = file.size ? formatFileSize(file.size) : '?';
-                const zipContents = file.zipContents ? `** Isi ZIP: ${file.zipContents}` : '';
                 const displayIdx = desaFiles.length - idx;
                 html += `<div style="padding: 4px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-size:13px;">
                     <div>${displayIdx}. ${file.name}</div>
-                    <div style="font-size:11px; color:#8899aa;">${dateStr} • ${size} ${zipContents ? '• '+zipContents : ''}</div>
+                    <div style="font-size:11px; color:#8899aa;">${dateStr} • ${size}</div>
                 </div>`;
             });
             html += `</div></div>`;
@@ -1035,28 +1125,6 @@ function showThankYouPopup(desaName, count) {
     `;
     document.body.appendChild(modal);
     setTimeout(() => { if (modal.parentNode) modal.remove(); }, 10000);
-}
-
-async function sendThankYouTelegram(desaName, count) {
-    try {
-        const message = `🎉 *SELAMAT!* 🎉
-
-*Babinsa ${desaName}* telah menyelesaikan *${count} laporan DUKOPS* untuk bulan ini!
-
-✅ *Target 9 laporan per bulan TERCAPAI!*
-
-Terima kasih atas dedikasi dan kerja keras dalam melaksanakan tugas DUKOPS.
-
-*KORAMIL 1609-05/SUKASADA*
-*Kodim 1609/Buleleng*`;
-
-        await sendToBackend('sendTelegramText', {
-            message: message,
-            chatId: '-1003020813628'
-        });
-    } catch (error) {
-        console.error('Gagal mengirim ucapan terima kasih ke Telegram:', error);
-    }
 }
 
 function showNotification(message, type) {
@@ -1233,11 +1301,7 @@ function showNotification(message, type) {
             d.desa_belum_lengkap +
             '</div><div class="absen-stat-label">BL</div></div><div class="absen-stat-card"><div class="absen-stat-value" style="color:#f44336;">' +
             d.desa_belum +
-            '</div><div class="absen-stat-label">BELUM</div></div></div><div class="absen-progress-container"><div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px;"><span>📈 PROGRESS</span><span><b>' +
-            p +
-            '%</b></span></div><div class="absen-progress-bar"><div class="absen-progress-fill" style="width:' +
-            p +
-            '%"></div></div></div><div style="font-size:0.7rem;font-weight:600;margin:10px 0 5px;">📋 DAFTAR DESA (' +
+            '</div><div class="absen-stat-label">BELUM</div></div></div><div style="font-size:0.7rem;font-weight:600;margin:10px 0 5px;">📋 DAFTAR DESA (' +
             d.total_desa +
             ')</div><div class="absen-desa-list">' + dh +
             '</div></div>';
@@ -1276,171 +1340,42 @@ function showNotification(message, type) {
         alert((s === 'LENGKAP' ? '✅ ' : (s === 'BELUM_LENGKAP' ? '⚠️ ' : '❌ ')) + n + '\n' + j + '/9 (' + p + '%)');
     };
 
-    window.shareAsPNGAbsen = async function() {
-        var btn = document.getElementById('downloadAbsenBtn');
-        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> MEMBUAT PNG...'; }
-
-        if (!currentDataAbsen) {
-            alert('⚠️ Belum ada data absensi. Silakan pilih Tahun dan Bulan terlebih dahulu.');
-            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-download"></i> DOWNLOAD ABSEN PNG'; }
-            return;
-        }
-
-        if (typeof html2canvas === 'undefined') {
-            alert('❌ Library html2canvas tidak ditemukan. Silakan refresh halaman.');
-            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-download"></i> DOWNLOAD ABSEN PNG'; }
-            return;
-        }
-
-        var screenshotArea = document.getElementById('absenScreenshotArea');
-        if (!screenshotArea) {
-            alert('❌ Elemen screenshot tidak ditemukan.');
-            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-download"></i> DOWNLOAD ABSEN PNG'; }
-            return;
-        }
-
-        try {
-            var d = currentDataAbsen;
-            var totalDesa = d.total_desa || 0;
-            var desaLengkap = d.desa_lengkap || 0;
-            var persentase = totalDesa > 0 ? Math.round((desaLengkap / totalDesa) * 100) : 0;
-            var tanggal = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-
-            var bulanTahun = d.nama_bulan || '';
-            var tahun = d.tahun || '';
-            if (!bulanTahun) {
-                var bulanSelect = document.getElementById('absenBulanSelect');
-                if (bulanSelect && bulanSelect.value) {
-                    var bulanText = bulanSelect.options[bulanSelect.selectedIndex]?.text || '';
-                    var tahunSelect = document.getElementById('absenTahunSelect');
-                    var tahunText = tahunSelect ? tahunSelect.value : '';
-                    bulanTahun = bulanText + ' ' + tahunText;
-                }
-            }
-
-            var lh = '';
-            if (d.details && d.details.length > 0) {
-                for (var i = 0; i < d.details.length; i++) {
-                    var de = d.details[i];
-                    var w = (de.status === 'LENGKAP') ? '#4caf50' : ((de.status === 'BELUM_LENGKAP') ? '#ff9800' : '#f44336');
-                    var em = (de.status === 'LENGKAP') ? '✅' : ((de.status === 'BELUM_LENGKAP') ? '⚠️' : '❌');
-                    var st = (de.status === 'LENGKAP') ? 'LENGKAP' : ((de.status === 'BELUM_LENGKAP') ? 'BL' : 'BELUM');
-                    var sb = (de.status === 'LENGKAP') ? '#e8f5e9' : ((de.status === 'BELUM_LENGKAP') ? '#fff3e0' : '#ffebee');
-                    lh += `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid #f0f0f0;font-size:12px;">
-                        <div style="width:24px;font-size:14px;text-align:center;">${em}</div>
-                        <div style="flex:2;font-size:12px;font-weight:500;color:#000;">${escapeHtml(de.nama || '')}</div>
-                        <div style="width:40px;font-size:11px;text-align:center;color:#000;">${de.jumlah_file || 0}/9</div>
-                        <div style="width:60px;"><div style="background:#e0e0e0;border-radius:6px;height:6px;overflow:hidden;">
-                            <div style="background:${w};width:${de.persentase || 0}%;height:6px;border-radius:6px;"></div>
-                        </div></div>
-                        <div style="width:50px;font-size:9px;text-align:center;padding:2px 6px;border-radius:8px;background:${sb};color:${w};font-weight:600;">${st}</div>
-                    </div>`;
-                }
-            } else {
-                lh = '<div style="text-align:center;padding:20px;color:#999;">Tidak ada data desa</div>';
-            }
-
-            screenshotArea.innerHTML = `
-                <div style="max-width:600px;margin:0 auto;padding:20px;background:#ffffff;border-radius:12px;font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#1a2332;border-radius:10px 10px 0 0;color:white;">
-                        <div style="font-size:16px;font-weight:700;">📊 ABSENSI DUKOPS</div>
-                        <div style="font-size:8px;opacity:0.7;">Koramil Monitoring</div>
-                    </div>
-                    <div style="padding:16px;">
-                        <div style="text-align:center;margin-bottom:12px;">
-                            <div style="font-size:16px;font-weight:700;color:#000;">${bulanTahun || 'Data Absensi'}</div>
-                            <div style="font-size:10px;color:#666;">${tanggal}</div>
-                        </div>
-                        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;">
-                            <div style="background:#f8f9fa;border-radius:8px;padding:10px 4px;text-align:center;border:1px solid #e9ecef;">
-                                <div style="font-size:14px;font-weight:700;color:#1a73e8;">${totalDesa}</div>
-                                <div style="font-size:8px;color:#6b7a8f;text-transform:uppercase;">DESA</div>
-                            </div>
-                            <div style="background:#f8f9fa;border-radius:8px;padding:10px 4px;text-align:center;border:1px solid #e9ecef;">
-                                <div style="font-size:14px;font-weight:700;color:#4caf50;">${desaLengkap}</div>
-                                <div style="font-size:8px;color:#6b7a8f;text-transform:uppercase;">LENGKAP</div>
-                            </div>
-                            <div style="background:#f8f9fa;border-radius:8px;padding:10px 4px;text-align:center;border:1px solid #e9ecef;">
-                                <div style="font-size:14px;font-weight:700;color:#ff9800;">${d.desa_belum_lengkap || 0}</div>
-                                <div style="font-size:8px;color:#6b7a8f;text-transform:uppercase;">BL</div>
-                            </div>
-                            <div style="background:#f8f9fa;border-radius:8px;padding:10px 4px;text-align:center;border:1px solid #e9ecef;">
-                                <div style="font-size:14px;font-weight:700;color:#f44336;">${d.desa_belum || 0}</div>
-                                <div style="font-size:8px;color:#6b7a8f;text-transform:uppercase;">BELUM</div>
-                            </div>
-                        </div>
-                        <div style="margin:12px 0;">
-                            <div style="display:flex;justify-content:space-between;font-size:10px;color:#000;">
-                                <span>📈 PROGRESS</span>
-                                <span><b>${persentase}%</b></span>
-                            </div>
-                            <div style="background:#e9ecef;border-radius:6px;height:8px;overflow:hidden;">
-                                <div style="background:linear-gradient(90deg,#4CAF50,#66BB6A);width:${persentase}%;height:8px;border-radius:6px;"></div>
-                            </div>
-                        </div>
-                        <div style="font-size:11px;font-weight:600;margin:12px 0 6px 0;color:#000;">📋 DAFTAR DESA (${totalDesa})</div>
-                        <div style="max-height:400px;overflow:hidden;">${lh}</div>
-                    </div>
-                    <div style="text-align:center;padding:8px 0 4px 0;font-size:8px;color:#999;border-top:1px solid #f0f2f5;margin-top:8px;">
-                        DUKOPS • Koramil Monitoring
-                    </div>
-                </div>
-            `;
-
-            await new Promise(resolve => setTimeout(resolve, 300));
-
-            var el = screenshotArea.firstChild;
-            if (!el) throw new Error('Konten screenshot tidak ditemukan');
-
-            var canvas = await html2canvas(el, {
-                scale: 2,
-                backgroundColor: '#ffffff',
-                useCORS: true,
-                logging: false,
-                allowTaint: true,
-                width: 600
-            });
-
-            var link = document.createElement('a');
-            var fileName = 'Absensi_' + (bulanTahun || 'data') + '_' + new Date().toISOString().slice(0,10) + '.png';
-            link.download = fileName;
-            link.href = canvas.toDataURL('image/png');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            console.log('✅ Download PNG berhasil:', fileName);
-
-        } catch (e) {
-            console.error('❌ Gagal screenshot:', e);
-            alert('❌ Gagal membuat gambar: ' + e.message);
-        }
-
-        setTimeout(function() {
-            var sa = document.getElementById('absenScreenshotArea');
-            if (sa) sa.innerHTML = '';
-        }, 500);
-
-        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-download"></i> DOWNLOAD ABSEN PNG'; }
-    };
-
     window.loadAbsenTahun = loadAbsenTahun;
 })();
 
 // ================= SERVICE WORKER =================
-if ('serviceWorker' in navigator) {
+const isFileProtocol = window.location.protocol === 'file:';
+
+if ('serviceWorker' in navigator && !isFileProtocol) {
     window.addEventListener('load', function() {
         console.log('🔧 Registering Service Worker...');
-        navigator.serviceWorker.register('/dukops4/sw.js')
+        navigator.serviceWorker.register('sw.js')
             .then(function(registration) {
                 console.log('✅ Service Worker registered successfully!');
                 console.log('📦 Scope:', registration.scope);
                 if (registration.active) console.log('✅ Service Worker is active!');
+
+                if (registration.waiting) {
+                    setWaitingServiceWorker(registration.waiting);
+                }
+
+                registration.addEventListener('updatefound', function() {
+                    const newWorker = registration.installing;
+                    if (newWorker) {
+                        newWorker.addEventListener('statechange', function() {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                setWaitingServiceWorker(newWorker);
+                            }
+                        });
+                    }
+                });
             })
             .catch(function(error) {
                 console.log('❌ Service Worker registration failed:', error);
             });
     });
+} else if (isFileProtocol) {
+    console.log('⚠️ Service Worker skipped on file:// origin.');
 } else {
     console.log('⚠️ Service Worker not supported in this browser.');
 }
