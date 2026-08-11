@@ -1,0 +1,118 @@
+/* ============================================
+   CURSOR DUKOPS - SIAP PAKAI
+   Auto Detect Desktop & Android
+   ============================================ */
+
+/* ---------- ROOT VARIABLES ---------- */
+:root {
+    --cursor-path: '../cursors/';
+    --cursor-default: var(--cursor-path) 'cursor1.cur', auto;
+    --cursor-pointer: var(--cursor-path) 'cursor2.cur', pointer;
+    --cursor-text: var(--cursor-path) 'cursor7.cur', text;
+    --cursor-wait: var(--cursor-path) 'cursor3.ani', wait;
+    --cursor-progress: var(--cursor-path) 'cursor4.ani', progress;
+    --cursor-help: var(--cursor-path) 'cursor8.cur', help;
+    --cursor-grab: var(--cursor-path) 'cursor5.ani', grab;
+    --cursor-grabbing: var(--cursor-path) 'cursor6.ani', grabbing;
+    --cursor-not-allowed: var(--cursor-path) 'cursor10.cur', not-allowed;
+    --cursor-zoom-in: var(--cursor-path) 'cursor9.ani', zoom-in;
+}
+
+/* ========== DESKTOP CURSOR ========== */
+@media (hover: hover) and (pointer: fine) {
+    * { cursor: var(--cursor-default); }
+    
+    a, a *, button, input[type="submit"], input[type="button"],
+    input[type="reset"], select, [role="button"], [role="link"],
+    [onclick], .nav-btn, .clickable, .tab {
+        cursor: var(--cursor-pointer);
+    }
+    
+    input[type="text"], input[type="password"], input[type="email"],
+    input[type="number"], input[type="tel"], input[type="url"],
+    input[type="search"], textarea, [contenteditable="true"] {
+        cursor: var(--cursor-text);
+    }
+    
+    .loading, .processing, .waiting, [data-loading="true"],
+    .splash-progress-center {
+        cursor: var(--cursor-wait);
+    }
+    
+    .progress, [data-progress="true"] {
+        cursor: var(--cursor-progress);
+    }
+    
+    [title], [data-tooltip], .help, .tooltip-trigger {
+        cursor: var(--cursor-help);
+    }
+    
+    .draggable, .drag-handle, [data-drag="true"] {
+        cursor: var(--cursor-grab);
+    }
+    
+    .draggable:active, .drag-handle:active, [data-drag="true"]:active {
+        cursor: var(--cursor-grabbing);
+    }
+    
+    .disabled, [disabled], :disabled, [aria-disabled="true"],
+    .not-allowed {
+        cursor: var(--cursor-not-allowed);
+    }
+    
+    .zoom-in, [data-zoom="in"] {
+        cursor: var(--cursor-zoom-in);
+    }
+}
+
+/* ========== ANDROID / TOUCH ========== */
+@media (hover: none) and (pointer: coarse) {
+    * { cursor: default !important; }
+    
+    button, .btn, [onclick], .nav-btn, .tab {
+        transition: transform 0.15s, opacity 0.15s;
+        -webkit-tap-highlight-color: transparent;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    button:active, .btn:active, [onclick]:active,
+    .nav-btn:active, .tab:active {
+        transform: scale(0.93);
+        opacity: 0.7;
+    }
+    
+    button:active::after, .btn:active::after, [onclick]:active::after,
+    .nav-btn:active::after, .tab:active::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(255,255,255,0.2), transparent 70%);
+        animation: touchRipple 0.6s ease-out;
+        pointer-events: none;
+    }
+    
+    @keyframes touchRipple {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(2.5); opacity: 0; }
+    }
+    
+    a:active {
+        opacity: 0.6;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    *:hover {
+        transform: none !important;
+        background: none !important;
+    }
+}
+
+/* ========== FALLBACK ========== */
+@supports not (cursor: var(--cursor-default)) {
+    * { cursor: auto; }
+    a, button, [onclick] { cursor: pointer; }
+    input, textarea { cursor: text; }
+    .loading, .waiting { cursor: wait; }
+    .disabled, [disabled] { cursor: not-allowed; }
+}

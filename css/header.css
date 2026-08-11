@@ -1,0 +1,414 @@
+/* ================================================================
+   HEADER.CSS - HEADER DUKOPS GREEN ARMY
+   VERSI FLAT - TANPA 3D & ANIMASI
+   ================================================================ */
+
+:root {
+    --header-bg: rgba(10, 26, 10, 0.95);
+    --header-border: rgba(255, 215, 0, 0.08);
+    --header-radius: 12px;
+    --header-padding: clamp(12px, 2vw, 20px);
+    --header-min-height: clamp(60px, 8vw, 90px);
+    
+    --title-color: #f8e28e;
+    --title-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    
+    --address-color: #88dd88;
+    --gold-color: #FFD700;
+    
+    --counter-bg: rgba(255, 215, 0, 0.06);
+    --counter-color: #FFD700;
+}
+
+/* ================================================================
+   HEADER UTAMA
+   ================================================================ */
+.dukops-header {
+    background-image: url('header/header-background.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: var(--header-bg);
+    background-blend-mode: overlay;
+    border-radius: var(--header-radius);
+    border: 1px solid var(--header-border);
+    padding: var(--header-padding);
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    min-height: var(--header-min-height);
+    text-align: center;
+}
+
+/* ================================================================
+   GARIS EMAS ATAS & BAWAH
+   ================================================================ */
+.dukops-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold-color);
+    z-index: 2;
+}
+
+.dukops-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255, 215, 0, 0.15);
+    z-index: 2;
+}
+
+/* ================================================================
+   ROW UTAMA
+   ================================================================ */
+.dukops-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 2vw, 20px);
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+/* ================================================================
+   PROFILE AREA
+   ================================================================ */
+.dukops-profile-area {
+    flex: 0 0 auto;
+    width: 100px;
+    min-height: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.dukops-profile-img {
+    width: 80px;
+    height: 70px;
+    object-fit: contain;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+    margin-bottom: 2px;
+    background: transparent;
+    border: none;
+}
+
+/* ================================================================
+   TITLE AREA
+   ================================================================ */
+.dukops-title-area {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 0;
+    padding: 0 clamp(8px, 1.5vw, 16px);
+}
+
+/* ================================================================
+   TITLE
+   ================================================================ */
+.dukops-header-title {
+    font-size: clamp(18px, 3.5vw, 36px);
+    font-weight: 900;
+    color: var(--title-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.dukops-header-title:last-of-type {
+    font-size: clamp(14px, 2.5vw, 26px);
+    font-weight: 800;
+    color: #f8e2a0;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2px;
+}
+
+/* ================================================================
+   ADDRESS
+   ================================================================ */
+.dukops-header-address {
+    font-size: clamp(10px, 1.2vw, 14px);
+    color: var(--address-color);
+    margin-top: 2px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    font-weight: 500;
+}
+
+.dukops-header-address i {
+    color: var(--gold-color);
+    font-size: clamp(10px, 1vw, 13px);
+}
+
+/* ================================================================
+   AUDIO CONTROL
+   ================================================================ */
+.audio-control-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 2px 10px 2px 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 215, 0, 0.04);
+}
+
+.audio-volume-slider {
+    display: none;
+    width: clamp(40px, 6vw, 70px);
+    height: 3px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    outline: none;
+}
+
+.audio-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold-color);
+    cursor: pointer;
+}
+
+/* ================================================================
+   COUNTER
+   ================================================================ */
+.counter-value {
+    font-size: clamp(24px, 4vw, 44px);
+    font-weight: 900;
+    font-family: var(--sys-font);
+    color: var(--gold-color);
+    padding: 2px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 215, 0, 0.06);
+    min-width: 30px;
+    text-align: center;
+    line-height: 1;
+    display: inline-block;
+    background: var(--counter-bg);
+}
+
+.counter-value::before {
+    content: '📊 ';
+    font-size: clamp(12px, 1.8vw, 20px);
+    color: var(--gold-color);
+}
+
+.counter-value[data-count="0"] {
+    display: none;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* HP Kecil */
+@media (max-width: 480px) {
+    :root {
+        --header-padding: 6px 8px;
+        --header-min-height: 45px;
+        --header-radius: 8px;
+    }
+    
+    .dukops-header-row {
+        gap: 4px;
+    }
+    
+    .dukops-profile-area {
+        width: 50px;
+        min-height: 40px;
+    }
+    
+    .dukops-profile-img {
+        width: 40px;
+        height: 36px;
+    }
+    
+    .dukops-header-title {
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
+    
+    .dukops-header-title:last-of-type {
+        font-size: 10px;
+    }
+    
+    .dukops-header-address {
+        font-size: 7px;
+        white-space: nowrap;
+    }
+    
+    .dukops-header-address i {
+        font-size: 7px;
+    }
+    
+    .counter-value {
+        font-size: 18px;
+        padding: 1px 6px;
+        min-width: 18px;
+    }
+    
+    .counter-value::before {
+        font-size: 9px;
+    }
+    
+    .audio-control-wrapper {
+        padding: 1px 4px 1px 3px;
+        gap: 3px;
+        margin-top: 1px;
+    }
+}
+
+/* HP Sedang */
+@media (min-width: 481px) and (max-width: 600px) {
+    .dukops-header-row {
+        gap: 6px;
+    }
+    
+    .dukops-profile-area {
+        width: 60px;
+        min-height: 48px;
+    }
+    
+    .dukops-profile-img {
+        width: 48px;
+        height: 42px;
+    }
+    
+    .dukops-header-title {
+        font-size: 15px;
+    }
+    
+    .dukops-header-title:last-of-type {
+        font-size: 11px;
+    }
+    
+    .dukops-header-address {
+        font-size: 8px;
+    }
+    
+    .counter-value {
+        font-size: 20px;
+        padding: 2px 8px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .dukops-profile-area {
+        width: 80px;
+        min-height: 60px;
+    }
+    
+    .dukops-profile-img {
+        width: 64px;
+        height: 56px;
+    }
+    
+    .dukops-header-title {
+        font-size: 20px;
+    }
+    
+    .dukops-header-title:last-of-type {
+        font-size: 14px;
+    }
+    
+    .dukops-header-address {
+        font-size: 10px;
+    }
+    
+    .counter-value {
+        font-size: 26px;
+        padding: 3px 12px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    .dukops-profile-area {
+        width: 110px;
+        min-height: 80px;
+    }
+    
+    .dukops-profile-img {
+        width: 90px;
+        height: 76px;
+    }
+    
+    .dukops-header-title {
+        font-size: 34px;
+        letter-spacing: 4px;
+    }
+    
+    .dukops-header-title:last-of-type {
+        font-size: 22px;
+        letter-spacing: 3px;
+    }
+    
+    .dukops-header-address {
+        font-size: 13px;
+    }
+    
+    .counter-value {
+        font-size: 40px;
+        padding: 4px 18px;
+    }
+}
+
+/* ================================================================
+   REDUCED MOTION
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .counter-value {
+        transition: none !important;
+    }
+}
+
+/* ================================================================
+   MODE DARK
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .dukops-header {
+        background-color: rgba(5, 15, 5, 0.95);
+    }
+    
+    .dukops-header-title {
+        color: #f0d070;
+    }
+    
+    .dukops-header-title:last-of-type {
+        color: #e8c880;
+    }
+}
+
+/* ===== End of header.css ===== */

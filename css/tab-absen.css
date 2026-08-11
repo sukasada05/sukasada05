@@ -1,0 +1,505 @@
+/* ================================================================
+   TAB-ABSEN.CSS - TAB ABSENSI (FLAT - TANPA ANIMASI)
+   ================================================================ */
+
+:root {
+    --absen-card-bg: #ffffff;
+    --absen-card-border: #e0e0e0;
+    --absen-text-dark: #000000;
+    --absen-text-gray: #444444;
+    --absen-text-muted: #666666;
+    --absen-bg-light: #f8f9fa;
+    --absen-bg-hover: #f5f5f5;
+    --absen-border: #f0f0f0;
+    --absen-radius: 10px;
+}
+
+/* ================================================================
+   CARD UTAMA
+   ================================================================ */
+.absen-card {
+    background: var(--absen-card-bg) !important;
+    border-radius: var(--absen-radius);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    border: 1px solid var(--absen-card-border) !important;
+    box-shadow: none !important;
+}
+
+/* ================================================================
+   FILTER ROW - TAHUN & BULAN
+   ================================================================ */
+.absen-filter-row {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-bottom: 14px;
+    align-items: flex-end;
+}
+
+.absen-filter-row .form-group {
+    flex: 1;
+    margin-bottom: 0 !important;
+}
+
+.absen-filter-row label {
+    display: block;
+    color: var(--absen-text-dark) !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.3px !important;
+    margin-bottom: 3px;
+}
+
+.absen-filter-row select {
+    width: 100%;
+    background: var(--absen-card-bg) !important;
+    border: 2px solid #d0d0d0 !important;
+    border-radius: 8px !important;
+    color: var(--absen-text-dark) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 14px;
+}
+
+.absen-filter-row select:focus {
+    border-color: #1a73e8 !important;
+}
+
+.absen-filter-row select:hover {
+    border-color: #1a73e8 !important;
+}
+
+.absen-filter-row select option {
+    color: var(--absen-text-dark) !important;
+    background: var(--absen-card-bg) !important;
+}
+
+/* ================================================================
+   STATS GRID
+   ================================================================ */
+.absen-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.absen-stat-card {
+    background: var(--absen-bg-light) !important;
+    border-radius: 8px;
+    padding: 12px 6px;
+    text-align: center;
+    border: 1px solid var(--absen-card-border) !important;
+}
+
+.absen-stat-value {
+    font-size: 1.6rem !important;
+    font-weight: 800 !important;
+    color: var(--absen-text-dark) !important;
+}
+
+.absen-stat-label {
+    font-size: 0.65rem !important;
+    color: var(--absen-text-gray) !important;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: 600 !important;
+}
+
+/* ================================================================
+   DAFTAR DESA
+   ================================================================ */
+.absen-desa-title {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: var(--absen-text-dark) !important;
+    margin: 14px 0 10px 0 !important;
+    letter-spacing: 0.3px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--absen-border);
+}
+
+.absen-desa-title .desa-icon {
+    font-size: 18px;
+    margin-right: 4px;
+}
+
+.absen-desa-title .desa-count {
+    background: #1a2332;
+    color: var(--absen-card-bg) !important;
+    padding: 2px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+/* ================================================================
+   DAFTAR DESA ITEM
+   ================================================================ */
+.absen-desa-list {
+    max-height: none;
+    overflow-y: visible;
+}
+
+.absen-desa-item {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--absen-border) !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.absen-desa-item:hover {
+    background: var(--absen-bg-hover) !important;
+}
+
+.absen-desa-name {
+    flex: 2;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--absen-text-dark) !important;
+    letter-spacing: 0.2px;
+}
+
+.absen-desa-stats {
+    min-width: 40px;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-align: center;
+    color: var(--absen-text-dark) !important;
+}
+
+.absen-desa-progress {
+    flex: 1;
+    min-width: 50px;
+}
+
+.absen-desa-progress-bar {
+    background: #e0e0e0 !important;
+    border-radius: 4px;
+    height: 6px !important;
+    overflow: hidden;
+}
+
+.absen-desa-progress-fill {
+    height: 6px !important;
+    border-radius: 4px;
+    background: #2d6a2d !important;
+}
+
+/* ================================================================
+   STATUS BADGE
+   ================================================================ */
+.absen-status-badge {
+    padding: 3px 10px;
+    border-radius: 16px;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    min-width: 50px;
+    text-align: center;
+    letter-spacing: 0.2px;
+}
+
+.absen-status-lengkap {
+    background: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border: 1px solid #c8e6c9 !important;
+}
+
+.absen-status-belum-lengkap {
+    background: #fff3e0 !important;
+    color: #e65100 !important;
+    border: 1px solid #ffe0b2 !important;
+}
+
+.absen-status-belum {
+    background: #ffebee !important;
+    color: #c62828 !important;
+    border: 1px solid #ffcdd2 !important;
+}
+
+/* ================================================================
+   TOMBOL
+   ================================================================ */
+.absen-btn {
+    background: var(--absen-bg-light) !important;
+    color: var(--absen-text-dark) !important;
+    border: 1px solid #d0d0d0 !important;
+    padding: 8px 16px !important;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    font-family: var(--sys-font);
+}
+
+.absen-btn:hover {
+    background: #e9ecef !important;
+    border-color: #b0b0b0 !important;
+}
+
+.absen-btn-primary {
+    background: #c2185b !important;
+    color: white !important;
+    border: none !important;
+    font-size: 14px !important;
+    padding: 10px 24px !important;
+}
+
+.absen-btn-primary:hover {
+    background: #a3154a !important;
+}
+
+/* ================================================================
+   LOADING
+   ================================================================ */
+.absen-loading {
+    text-align: center;
+    padding: 24px;
+    color: var(--absen-text-dark) !important;
+    font-weight: 600 !important;
+}
+
+.absen-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #e0e0e0 !important;
+    border-top-color: #2d6a2d !important;
+    border-radius: 50%;
+}
+
+/* ================================================================
+   INFO TEXT
+   ================================================================ */
+.absen-info-text {
+    text-align: center;
+    font-size: 11px !important;
+    margin-top: 10px;
+    color: var(--absen-text-muted) !important;
+    letter-spacing: 0.2px;
+    font-weight: 500 !important;
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+/* HP */
+@media (max-width: 480px) {
+    .absen-filter-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .absen-filter-row .form-group {
+        width: 100%;
+    }
+    
+    .absen-stat-value {
+        font-size: 1.2rem !important;
+    }
+    
+    .absen-progress-label {
+        font-size: 13px !important;
+    }
+    
+    .absen-progress-label .progress-value {
+        font-size: 15px !important;
+    }
+    
+    .absen-desa-title {
+        font-size: 13px !important;
+    }
+    
+    .absen-desa-name {
+        font-size: 12px !important;
+    }
+    
+    .absen-desa-stats {
+        font-size: 11px !important;
+    }
+    
+    .absen-status-badge {
+        font-size: 9px !important;
+        padding: 2px 6px;
+        min-width: 40px;
+    }
+    
+    .absen-card {
+        padding: 12px;
+    }
+    
+    .absen-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+}
+
+/* HP Kecil */
+@media (max-width: 360px) {
+    .absen-stat-value {
+        font-size: 1rem !important;
+    }
+    
+    .absen-stat-label {
+        font-size: 9px !important;
+    }
+    
+    .absen-desa-item {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .absen-desa-name {
+        flex: 1 1 100%;
+        font-size: 11px !important;
+    }
+    
+    .absen-desa-progress {
+        min-width: 100%;
+    }
+}
+
+/* ================================================================
+   REDUCED MOTION - AKSESIBILITAS
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .absen-progress-fill {
+        transition: none !important;
+    }
+    
+    .absen-desa-progress-fill {
+        transition: none !important;
+    }
+    
+    .absen-spinner {
+        animation: none !important;
+    }
+}
+
+/* ================================================================
+   DARK MODE - SUPPORT
+   ================================================================ */
+@media (prefers-color-scheme: dark) {
+    .absen-card {
+        background: #1a2a1a !important;
+        border-color: #2a4a2a !important;
+    }
+    
+    .absen-filter-row label {
+        color: #b2d8b2 !important;
+    }
+    
+    .absen-filter-row select {
+        background: #2a3a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a5a3a !important;
+    }
+    
+    .absen-filter-row select option {
+        background: #2a3a2a !important;
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-stat-card {
+        background: #2a3a2a !important;
+        border-color: #3a5a3a !important;
+    }
+    
+    .absen-stat-value {
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-stat-label {
+        color: #889988 !important;
+    }
+    
+    .absen-progress-label {
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-progress-label .progress-value {
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-desa-title {
+        color: #e6ffe6 !important;
+        border-bottom-color: #2a4a2a !important;
+    }
+    
+    .absen-desa-name {
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-desa-stats {
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-desa-item {
+        border-bottom-color: #2a4a2a !important;
+    }
+    
+    .absen-desa-item:hover {
+        background: #2a3a2a !important;
+    }
+    
+    .absen-btn {
+        background: #2a3a2a !important;
+        color: #e6ffe6 !important;
+        border-color: #3a5a3a !important;
+    }
+    
+    .absen-btn:hover {
+        background: #3a4a3a !important;
+    }
+    
+    .absen-loading {
+        color: #e6ffe6 !important;
+    }
+    
+    .absen-info-text {
+        color: #889988 !important;
+    }
+    
+    .absen-spinner {
+        border-color: #3a5a3a !important;
+        border-top-color: #4CAF50 !important;
+    }
+}
+
+/* ================================================================
+   ANIMASI DIAKTIFKAN KEMBALI (OPSIONAL)
+   ================================================================ */
+/* Jika ingin animasi, aktifkan ini:
+.absen-progress-fill {
+    transition: width 0.6s ease;
+}
+
+.absen-desa-progress-fill {
+    transition: width 0.4s ease;
+}
+
+.absen-spinner {
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+*/
+
+/* ===== End of tab-absen.css ===== */
