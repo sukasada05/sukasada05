@@ -11,20 +11,27 @@
     <meta name="apple-mobile-web-app-title" content="DUKOPS">
     <title>SISTEM PELAPORAN DUKOPS BABINSA</title>
     <meta name="theme-color" content="#0a1a3a">
-    
-    <base href="/dukops4/">
 
     <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
     <link rel="icon" type="image/png" href="icons/favicon-96x96.png" sizes="96x96" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
+    <script>
+        (function () {
+            if (window.location.protocol !== 'file:') {
+                const link = document.createElement('link');
+                link.rel = 'manifest';
+                link.href = 'site.webmanifest';
+                document.head.appendChild(link);
+            }
+        })();
+    </script>
 
     <!-- Library eksternal -->
-    <script src="https://cdn.polyfill.io/v3/polyfill.min.js?features=default,es6,Promise,fetch,Array.prototype.includes"></script>
+    <!-- Removed failing polyfill CDN: net::ERR_NAME_NOT_RESOLVED -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" onerror="this.onerror=null;this.src='html2canvas.min.js'"></script>
 
     <!-- CSS MODULAR -->
     <link rel="stylesheet" href="css/main.css">
@@ -34,6 +41,8 @@
         .indicator-tooltip { display: none !important; }
         .supabase-indicator { cursor: default; }
     </style>
+
+    
 
 </head>
 <body>
@@ -54,14 +63,13 @@
             <div class="splash-title-center">BABINSA SUKASADA</div>
             <div class="splash-divider-center"></div>
             <div class="splash-subtitle-center">KODIM 1609/BULELENG</div>
-            <div class="splash-unit-center">KORAMIL 1609-05/SUKASADA</div>
             <div class="splash-kodim-center">Sistem Pelaporan Digitalisasi Babinsa</div>
             <div class="splash-progress-center">
                 <div class="splash-progress-bar-center" id="splashProgressBar"></div>
             </div>
             <div class="splash-percentage-center" id="progressPercentage">20%</div>
             <div class="splash-army">
-                <img id="splashArmyGif" src="army.gif" alt="army" style="max-width:240px; width:100%; height:auto; display:block; margin:0 auto;">
+                <!-- Gambar army.gif dihapus untuk kompatibilitas lokal -->
             </div>
         </div>
     </div>
@@ -77,16 +85,9 @@
         <!-- ===== HEADER ===== -->
         <div class="dukops-header">
             <div class="dukops-header-row">
-                <div class="dukops-profile-area" id="desaProfileContainerHeader">
-                    <img id="desaProfileImgHeader" class="dukops-profile-img" src="icons/favicon-96x96.png" alt="">
-                    <div id="desaProfileNameHeader" class="dukops-profile-name" style="display:none;"></div>
-                </div>
+                <!-- Profile area removed; header uses default icon and text only -->
                 <div class="dukops-title-area">
-                    <div class="dukops-header-title">KORAMIL 1609-05/SUKASADA</div>
-                    <div class="dukops-header-address">
-                        <i class="fas fa-map-marker-alt"></i> Jl. Jelantik Gingsir No. 32 Sukasada Singaraja-Bali 81161
-                    </div>
-                    <div><span class="counter-value" id="submissionCounter" data-count="0">0</span></div>
+                    <div class="dukops-header-title"></div>
                 </div>
             </div>
         </div>
@@ -103,9 +104,11 @@
             <div style="width:100%; margin:0 auto;">
 
                 <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa/Kelurahan:</label>
-                <select id="selectDesa" onchange="loadSelectedDesa()">
-                    <option value="">--Pilih desa/Kelurahan--</option>
-                </select>
+                <div class="select-wrapper" style="position:relative;">
+                    <select id="selectDesa" onchange="loadSelectedDesa()">
+                        <option value="">--Pilih desa/Kelurahan--</option>
+                    </select>
+                </div>
                 <div id="loadingDesa" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
                 <div class="previewBox" id="previewDesa" style="display:none;"></div>
 
@@ -115,7 +118,6 @@
 
                 <label id="labelFotoKegiatan"><i class="fas fa-camera"></i> Foto Kegiatan:</label>
                 <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
-                <div class="previewBox" id="previewGambar"></div>
 
                 <label id="labelTanggalWaktu"><i class="fas fa-calendar-alt"></i> Tanggal & Waktu: <span id="tanggalWaktuLabelText">Pilih tanggal & waktu</span></label>
                 <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
@@ -176,11 +178,6 @@
                         <select id="absenBulanSelect" disabled><option>Pilih tahun</option></select>
                     </div>
                 </div>
-                <div class="absen-btn-download-container">
-                    <button onclick="shareAsPNGAbsen()" class="absen-btn-download" id="downloadAbsenBtn">
-                        <i class="fas fa-download"></i> DOWNLOAD ABSEN PNG
-                    </button>
-                </div>
             </div>
             <div id="absenResultContainer"></div>
             <div class="absen-info-text">✨ Mangsatria@2026</div>
@@ -196,7 +193,19 @@
     <div id="absenScreenshotArea" style="position: fixed; left: -9999px; top: 0; width: 500px; background: white;"></div>
 
     <!-- ====== SATU SCRIPT EKSTERNAL ====== -->
+    <!-- runtime error capture removed for production -->
     <script src="app.js"></script>
+    <script>
+        // Ensure desa list loads after app.js is available
+        (function(){
+            try {
+                const run = () => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch(e){} };
+                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else setTimeout(run, 50);
+                // retry triggers: on focus and when tab becomes visible
+                try { window.addEventListener('focus', run); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') run(); }); } catch(e) {}
+            } catch (e) {}
+        })();
+    </script>
 
 </body>
 </html>
