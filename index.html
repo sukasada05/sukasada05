@@ -27,7 +27,6 @@
     </script>
 
     <!-- Library eksternal -->
-    <!-- Removed failing polyfill CDN: net::ERR_NAME_NOT_RESOLVED -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -40,9 +39,34 @@
     <style>
         .indicator-tooltip { display: none !important; }
         .supabase-indicator { cursor: default; }
-    </style>
 
-    
+        /* Gaya untuk tab CanvasPRO dengan iframe */
+        #canvasproContent {
+            display: none;
+            padding: 0;
+            background: #0f1b2f;
+            border-radius: 12px;
+            margin-top: 10px;
+            height: 80vh;
+            overflow: hidden;
+        }
+        #canvasproContent.active {
+            display: block;
+        }
+        #canvasproContent iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+            background: #1a2744;
+        }
+        /* Penyesuaian untuk tampilan mobile */
+        @media (max-width: 600px) {
+            #canvasproContent {
+                height: 70vh;
+            }
+        }
+    </style>
 
 </head>
 <body>
@@ -85,7 +109,6 @@
         <!-- ===== HEADER ===== -->
         <div class="dukops-header">
             <div class="dukops-header-row">
-                <!-- Profile area removed; header uses default icon and text only -->
                 <div class="dukops-title-area">
                     <div class="dukops-header-title"></div>
                 </div>
@@ -97,6 +120,8 @@
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
+            <!-- TAB BARU: CanvasPRO dengan iframe -->
+            <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
         </div>
 
         <!-- ===== CONTENT DUKOPS ===== -->
@@ -188,12 +213,16 @@
             <iframe src="https://sukasada05.github.io/Hanpangan/" title="PIKET"></iframe>
         </div>
 
+        <!-- ===== CANVASPRO (iframe) ===== -->
+        <div id="canvasproContent">
+            <iframe src="https://canvas-pro.dukopbabinsa05.workers.dev/" title="CanvasPRO 2.1" allow="clipboard-read; clipboard-write"></iframe>
+        </div>
+
     </div>
 
     <div id="absenScreenshotArea" style="position: fixed; left: -9999px; top: 0; width: 500px; background: white;"></div>
 
     <!-- ====== SATU SCRIPT EKSTERNAL ====== -->
-    <!-- runtime error capture removed for production -->
     <script src="app.js"></script>
     <script>
         // Ensure desa list loads after app.js is available
@@ -201,10 +230,58 @@
             try {
                 const run = () => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch(e){} };
                 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else setTimeout(run, 50);
-                // retry triggers: on focus and when tab becomes visible
                 try { window.addEventListener('focus', run); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') run(); }); } catch(e) {}
             } catch (e) {}
         })();
+
+        // ===== FUNGSI NAVIGASI UNTUK TAB CanvasPRO =====
+        function showCanvaspro() {
+            document.getElementById('dukopsContent').style.display = 'none';
+            document.getElementById('absenContent').style.display = 'none';
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.getElementById('canvasproContent').style.display = 'block';
+            document.getElementById('canvasproContent').classList.add('active');
+            // set active button
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnCanvaspro').classList.add('active');
+        }
+
+        // Override fungsi show lainnya agar menutup canvaspro
+        const origShowDukops = window.showDukops || function() {};
+        window.showDukops = function() {
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('dukopsContent').style.display = 'block';
+            document.getElementById('absenContent').style.display = 'none';
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnDukops').classList.add('active');
+            if (typeof origShowDukops === 'function') origShowDukops();
+        };
+
+        const origShowAbsenTab = window.showAbsenTab || function() {};
+        window.showAbsenTab = function() {
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('dukopsContent').style.display = 'none';
+            document.getElementById('absenContent').style.display = 'block';
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnAbsen').classList.add('active');
+            if (typeof origShowAbsenTab === 'function') origShowAbsenTab();
+        };
+
+        const origShowHanpangan = window.showHanpangan || function() {};
+        window.showHanpangan = function() {
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('dukopsContent').style.display = 'none';
+            document.getElementById('absenContent').style.display = 'none';
+            document.getElementById('hanpanganContent').style.display = 'block';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnHanpangan').classList.add('active');
+            if (typeof origShowHanpangan === 'function') origShowHanpangan();
+        };
     </script>
 
 </body>
