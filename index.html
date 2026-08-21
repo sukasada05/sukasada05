@@ -60,10 +60,112 @@
             border-radius: 12px;
             background: #1a2744;
         }
-        /* Penyesuaian untuk tampilan mobile */
+        
+        /* Gaya untuk tab GPSCameraPro */
+        #gpscameraContent {
+            display: none;
+            padding: 20px;
+            background: #0f1b2f;
+            border-radius: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        #gpscameraContent.active {
+            display: block;
+        }
+        
+        .btn-gps-open {
+            background: #2b5f7a;
+            background: radial-gradient(circle at 30% 30%, #3e85aa, #1a435c);
+            border: 2px solid #7bb9e0;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 24px 30px;
+            border-radius: 80px;
+            width: 100%;
+            max-width: 400px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #0a1e2e, 0 10px 30px rgba(0, 0, 0, 0.6);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            transition: all 0.06s linear;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 20px auto;
+        }
+        .btn-gps-open:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #0a1e2e, 0 6px 20px rgba(0,0,0,0.5);
+        }
+        .btn-gps-open:hover {
+            background: #3c7fa0;
+            background: radial-gradient(circle at 30% 30%, #4f97c0, #1f4d6b);
+            border-color: #8fcaf5;
+        }
+        
+        .btn-gps-open .icon-big {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .btn-gps-open .sub-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+        
+        .gps-info-text {
+            color: #8ab4d6;
+            font-size: 0.9rem;
+            background: #1a2744;
+            padding: 12px 20px;
+            border-radius: 40px;
+            border: 1px dashed #3f7fa0;
+            display: inline-block;
+        }
+        
+        /* Tombol exit kecil di navigasi */
+        .nav-btn-exit {
+            background: #7a2a2a !important;
+            background: radial-gradient(circle at 30% 30%, #9a3a3a, #5a1a1a) !important;
+            border-color: #aa5a5a !important;
+            color: white !important;
+        }
+        .nav-btn-exit:hover {
+            background: #8a3a3a !important;
+            border-color: #ca7a7a !important;
+        }
+        .nav-btn-exit:active {
+            transform: translateY(2px);
+        }
+        
+        /* Tombol GPS di toolbar */
+        .nav-btn-gps {
+            background: #1d5a3a !important;
+            background: radial-gradient(circle at 30% 30%, #2d8a5a, #1a4a2e) !important;
+            border-color: #5bbf8a !important;
+        }
+        .nav-btn-gps:hover {
+            background: #2a7a4a !important;
+            border-color: #7adfaa !important;
+        }
+        
+        /* Penyesuaian untuk mobile */
         @media (max-width: 600px) {
             #canvasproContent {
                 height: 70vh;
+            }
+            .btn-gps-open {
+                font-size: 1.3rem;
+                padding: 18px 20px;
+            }
+            .btn-gps-open .icon-big {
+                font-size: 2.2rem;
+            }
+            .nav-btn {
+                font-size: 0.65rem !important;
+                padding: 6px 8px !important;
             }
         }
     </style>
@@ -71,7 +173,7 @@
 </head>
 <body>
 
-    <!-- ====== INDIKATOR SUPABASE (tooltip disembunyikan) ====== -->
+    <!-- ====== INDIKATOR SUPABASE ====== -->
     <div id="supabaseIndicator" class="supabase-indicator indicator-checking" title="Status Koneksi Supabase">
         <div class="indicator-dot"></div>
         <span class="indicator-tooltip"></span>
@@ -92,9 +194,7 @@
                 <div class="splash-progress-bar-center" id="splashProgressBar"></div>
             </div>
             <div class="splash-percentage-center" id="progressPercentage">20%</div>
-            <div class="splash-army">
-                <!-- Gambar army.gif dihapus untuk kompatibilitas lokal -->
-            </div>
+            <div class="splash-army"></div>
         </div>
     </div>
 
@@ -120,8 +220,15 @@
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
-            <!-- TAB BARU: CanvasPRO dengan iframe -->
             <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
+            <!-- TOMBOL GPS CAMERA PRO -->
+            <button class="nav-btn nav-btn-gps" id="btnGpscamera" onclick="showGpscamera()">
+                <i class="fas fa-satellite-dish"></i> GPS
+            </button>
+            <!-- TOMBOL EXIT -->
+            <button class="nav-btn nav-btn-exit" id="btnExit" onclick="exitApp()">
+                <i class="fas fa-sign-out-alt"></i> EXIT
+            </button>
         </div>
 
         <!-- ===== CONTENT DUKOPS ===== -->
@@ -208,14 +315,41 @@
             <div class="absen-info-text">✨ Mangsatria@2026</div>
         </div>
 
-        <!-- ===== PIKET (FULLSCREEN) ===== -->
+        <!-- ===== PIKET ===== -->
         <div id="hanpanganContent">
             <iframe src="https://sukasada05.github.io/Hanpangan/" title="PIKET"></iframe>
         </div>
 
-        <!-- ===== CANVASPRO (iframe) ===== -->
+        <!-- ===== CANVASPRO ===== -->
         <div id="canvasproContent">
             <iframe src="https://canvas-pro.dukopbabinsa05.workers.dev/" title="CanvasPRO 2.1" allow="clipboard-read; clipboard-write"></iframe>
+        </div>
+
+        <!-- ===== GPS CAMERA PRO ===== -->
+        <div id="gpscameraContent">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:50vh; padding:20px;">
+                <div style="font-size:4rem; margin-bottom:10px;">📷</div>
+                <div style="font-family:'Courier New',monospace; font-size:2rem; font-weight:bold; color:#b3e4ff; text-shadow:0 0 20px #0088ff; margin-bottom:8px;">
+                    GPS Camera Pro
+                </div>
+                <div style="color:#88bce6; font-size:1rem; margin-bottom:20px;">@MangSatria</div>
+                
+                <button class="btn-gps-open" onclick="openGpsCamera()">
+                    <span class="icon-big">📸</span>
+                    AMBIL FOTO
+                    <span class="sub-label">Buka GPS Camera Pro</span>
+                </button>
+                
+                <div class="gps-info-text">
+                    <i class="fas fa-map-pin"></i> Aplikasi akan terbuka di tab baru & halaman ini otomatis tertutup
+                </div>
+                
+                <div style="margin-top:20px; font-size:0.8rem; color:#5a7a8a;">
+                    <a href="https://camera-pro-gps.dukopbabinsa05.workers.dev/" target="_blank" rel="noopener noreferrer" style="color:#6a9aba; text-decoration:underline;">
+                        camera-pro-gps.dukopbabinsa05.workers.dev
+                    </a>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -225,32 +359,135 @@
     <!-- ====== SATU SCRIPT EKSTERNAL ====== -->
     <script src="app.js"></script>
     <script>
-        // Ensure desa list loads after app.js is available
-        (function(){
-            try {
-                const run = () => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch(e){} };
-                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else setTimeout(run, 50);
-                try { window.addEventListener('focus', run); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') run(); }); } catch(e) {}
-            } catch (e) {}
-        })();
+        // ===== FUNGSI UNTUK GPS CAMERA PRO =====
+        var gpsTargetUrl = 'https://camera-pro-gps.dukopbabinsa05.workers.dev/';
 
-        // ===== FUNGSI NAVIGASI UNTUK TAB CanvasPRO =====
+        function showGpscamera() {
+            document.getElementById('dukopsContent').style.display = 'none';
+            document.getElementById('absenContent').style.display = 'none';
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('gpscameraContent').style.display = 'block';
+            document.getElementById('gpscameraContent').classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnGpscamera').classList.add('active');
+        }
+
+        function openGpsCamera() {
+            var statusEl = document.querySelector('.gps-info-text');
+            if (statusEl) {
+                statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Membuka GPS Camera Pro...';
+            }
+            
+            try {
+                var win = window.open(gpsTargetUrl, '_blank');
+                if (win && !win.closed && typeof win.closed !== 'undefined') {
+                    if (statusEl) {
+                        statusEl.innerHTML = '✅ Tab berhasil dibuka! Menutup halaman...';
+                    }
+                    try { win.focus(); } catch(e) {}
+                    setTimeout(function() {
+                        closeAppWindow();
+                    }, 500);
+                    return;
+                }
+            } catch (e) {
+                console.log('window.open gagal:', e);
+            }
+
+            // Fallback: link click
+            try {
+                var link = document.createElement('a');
+                link.href = gpsTargetUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                var clickEvent = document.createEvent('MouseEvents');
+                clickEvent.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                link.dispatchEvent(clickEvent);
+                document.body.removeChild(link);
+                if (statusEl) {
+                    statusEl.innerHTML = '✅ Halaman dibuka! Menutup...';
+                }
+                setTimeout(function() {
+                    closeAppWindow();
+                }, 500);
+                return;
+            } catch (e) {
+                console.log('link.click gagal:', e);
+            }
+
+            // Fallback redirect
+            try {
+                if (statusEl) {
+                    statusEl.innerHTML = '⏳ Mengalihkan halaman...';
+                }
+                setTimeout(function() {
+                    window.location.href = gpsTargetUrl;
+                }, 300);
+            } catch (e) {
+                console.log('redirect gagal:', e);
+                if (statusEl) {
+                    statusEl.innerHTML = '⚠️ Gagal membuka. Klik tautan manual di bawah.';
+                }
+            }
+        }
+
+        // ===== FUNGSI EXIT / TUTUP APLIKASI =====
+        function exitApp() {
+            var statusEl = document.querySelector('.gps-info-text');
+            if (statusEl) {
+                statusEl.innerHTML = '🚪 Menutup aplikasi...';
+            }
+            closeAppWindow();
+        }
+
+        function closeAppWindow() {
+            try {
+                window.close();
+                setTimeout(function() {
+                    try {
+                        window.open('', '_self', '');
+                        window.close();
+                    } catch(e) {
+                        console.log('Metode close alternatif gagal:', e);
+                    }
+                }, 100);
+            } catch (e) {
+                console.log('window.close gagal:', e);
+            }
+
+            setTimeout(function() {
+                if (!window.closed) {
+                    var statusEl = document.querySelector('.gps-info-text');
+                    if (statusEl) {
+                        statusEl.innerHTML = 'ℹ️ Tutup tab ini secara manual jika tidak tertutup otomatis.';
+                    }
+                }
+            }, 1200);
+        }
+
+        // ===== OVERRIDE NAVIGASI LAINNYA =====
         function showCanvaspro() {
             document.getElementById('dukopsContent').style.display = 'none';
             document.getElementById('absenContent').style.display = 'none';
             document.getElementById('hanpanganContent').style.display = 'none';
+            document.getElementById('gpscameraContent').style.display = 'none';
+            document.getElementById('gpscameraContent').classList.remove('active');
             document.getElementById('canvasproContent').style.display = 'block';
             document.getElementById('canvasproContent').classList.add('active');
-            // set active button
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btnCanvaspro').classList.add('active');
         }
 
-        // Override fungsi show lainnya agar menutup canvaspro
         const origShowDukops = window.showDukops || function() {};
         window.showDukops = function() {
             document.getElementById('canvasproContent').style.display = 'none';
             document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('gpscameraContent').style.display = 'none';
+            document.getElementById('gpscameraContent').classList.remove('active');
             document.getElementById('dukopsContent').style.display = 'block';
             document.getElementById('absenContent').style.display = 'none';
             document.getElementById('hanpanganContent').style.display = 'none';
@@ -263,6 +500,8 @@
         window.showAbsenTab = function() {
             document.getElementById('canvasproContent').style.display = 'none';
             document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('gpscameraContent').style.display = 'none';
+            document.getElementById('gpscameraContent').classList.remove('active');
             document.getElementById('dukopsContent').style.display = 'none';
             document.getElementById('absenContent').style.display = 'block';
             document.getElementById('hanpanganContent').style.display = 'none';
@@ -275,6 +514,8 @@
         window.showHanpangan = function() {
             document.getElementById('canvasproContent').style.display = 'none';
             document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('gpscameraContent').style.display = 'none';
+            document.getElementById('gpscameraContent').classList.remove('active');
             document.getElementById('dukopsContent').style.display = 'none';
             document.getElementById('absenContent').style.display = 'none';
             document.getElementById('hanpanganContent').style.display = 'block';
@@ -282,6 +523,15 @@
             document.getElementById('btnHanpangan').classList.add('active');
             if (typeof origShowHanpangan === 'function') origShowHanpangan();
         };
+
+        // ===== LOAD DESA LIST =====
+        (function(){
+            try {
+                const run = () => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch(e){} };
+                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else setTimeout(run, 50);
+                try { window.addEventListener('focus', run); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') run(); }); } catch(e) {}
+            } catch (e) {}
+        })();
     </script>
 
 </body>
