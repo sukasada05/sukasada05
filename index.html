@@ -71,6 +71,7 @@
             background: linear-gradient(135deg, #1a0a2a, #3a1a4a);
             border-color: #6a3a8a;
             color: #b88ad8;
+            animation: pulse-camera 2s infinite;
         }
         .nav-btn.nav-btn-cameramap:hover {
             background: linear-gradient(135deg, #2a1a3a, #4a2a5a);
@@ -88,6 +89,11 @@
         }
         .nav-btn.nav-btn-cameramap.active i {
             color: #ffffff;
+        }
+
+        @keyframes pulse-camera {
+            0%, 100% { box-shadow: 0 0 5px rgba(106, 58, 138, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(106, 58, 138, 0.6); }
         }
 
         /* Gaya untuk tombol EXIT */
@@ -164,8 +170,8 @@
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
-            <!-- TAB CameraMap -->
-            <button class="nav-btn nav-btn-cameramap" id="btnCameramap" onclick="showCameramapTab()">
+            <!-- TAB CameraMap - EXIT + BUKA LINK -->
+            <button class="nav-btn nav-btn-cameramap" id="btnCameramap" onclick="openCameraMap()">
                 <i class="fas fa-camera"></i> CameraMap
             </button>
             <!-- TAB CanvasPRO -->
@@ -265,11 +271,6 @@
             <iframe src="https://sukasada05.github.io/Hanpangan/" title="PIKET"></iframe>
         </div>
 
-        <!-- ===== CAMERAMAP ===== -->
-        <div id="cameramapContent" class="tab-iframe-content">
-            <iframe src="https://campro-ramil-05.dukopbabinsa05.workers.dev/" title="CameraMap"></iframe>
-        </div>
-
         <!-- ===== CANVASPRO ===== -->
         <div id="canvasproContent" class="tab-iframe-content">
             <iframe src="https://canvas-pro.dukopbabinsa05.workers.dev/" title="CanvasPRO 2.1" allow="clipboard-read; clipboard-write"></iframe>
@@ -323,20 +324,6 @@
             document.getElementById('btnHanpangan').classList.add('active');
         }
 
-        function showCameramapTab() {
-            document.getElementById('dukopsContent').style.display = 'none';
-            document.getElementById('absenContent').style.display = 'none';
-            document.querySelectorAll('.tab-iframe-content').forEach(el => {
-                el.style.display = 'none';
-                el.classList.remove('active');
-            });
-            const el = document.getElementById('cameramapContent');
-            el.style.display = 'block';
-            el.classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btnCameramap').classList.add('active');
-        }
-
         function showCanvaspro() {
             document.getElementById('dukopsContent').style.display = 'none';
             document.getElementById('absenContent').style.display = 'none';
@@ -351,24 +338,38 @@
             document.getElementById('btnCanvaspro').classList.add('active');
         }
 
+        // ===== FUNGSI CAMERAMAP =====
+        function openCameraMap() {
+            // Tampilkan konfirmasi
+            if (confirm('Buka CameraMap dan keluar dari aplikasi?')) {
+                // Bersihkan data
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Tutup aplikasi DUKOPS
+                document.body.innerHTML = `
+                    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a1a3a;color:#ffffff;font-family:sans-serif;flex-direction:column;">
+                        <i class="fas fa-camera" style="font-size:48px;color:#b88ad8;margin-bottom:20px;"></i>
+                        <h2>Membuka CameraMap...</h2>
+                        <p style="color:#8ab4f8;">Aplikasi DUKOPS ditutup</p>
+                        <div style="margin-top:20px;">
+                            <i class="fas fa-spinner fa-spin" style="font-size:24px;color:#b88ad8;"></i>
+                        </div>
+                    </div>
+                `;
+
+                // Redirect ke link CameraMap
+                setTimeout(function() {
+                    window.location.href = 'https://campro-ramil-05.dukopbabinsa05.workers.dev/';
+                }, 500);
+            }
+        }
+
         // ===== FUNGSI EXIT =====
         function exitApp() {
             if (confirm('Yakin ingin keluar dari aplikasi?')) {
-                if (window.close) {
-                    window.close();
-                }
-                document.body.innerHTML = `
-                    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a1a3a;color:#ffffff;font-family:sans-serif;flex-direction:column;">
-                        <i class="fas fa-check-circle" style="font-size:48px;color:#28a745;margin-bottom:20px;"></i>
-                        <h2>Terima Kasih</h2>
-                        <p style="color:#8ab4f8;">Aplikasi DUKOPS telah ditutup</p>
-                        <button onclick="location.reload()" style="margin-top:20px;padding:10px 30px;background:#1a3a5a;border:none;border-radius:8px;color:#fff;cursor:pointer;">
-                            <i class="fas fa-redo"></i> Buka Lagi
-                        </button>
-                    </div>
-                `;
-                localStorage.clear();
-                sessionStorage.clear();
+                // Redirect ke halaman exit
+                window.location.href = 'https://sukasada05.github.io/sukasada05/';
             }
         }
 
