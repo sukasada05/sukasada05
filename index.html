@@ -66,27 +66,27 @@
             }
         }
 
-        /* Gaya khusus untuk tab GPS */
-        .nav-btn.nav-btn-gps {
-            background: linear-gradient(135deg, #0a2a1a, #1a4a2a);
-            border-color: #2a8a4a;
-            color: #7ad8a0;
+        /* Gaya khusus untuk tab CameraMap */
+        .nav-btn.nav-btn-cameramap {
+            background: linear-gradient(135deg, #1a0a2a, #3a1a4a);
+            border-color: #6a3a8a;
+            color: #b88ad8;
         }
-        .nav-btn.nav-btn-gps:hover {
-            background: linear-gradient(135deg, #1a3a2a, #2a5a3a);
-            border-color: #4aaa6a;
-            color: #aaf8c0;
+        .nav-btn.nav-btn-cameramap:hover {
+            background: linear-gradient(135deg, #2a1a3a, #4a2a5a);
+            border-color: #8a5aaa;
+            color: #d8aaf8;
         }
-        .nav-btn.nav-btn-gps.active {
-            background: linear-gradient(135deg, #2a8a4a, #4aaa6a);
-            border-color: #6aca8a;
+        .nav-btn.nav-btn-cameramap.active {
+            background: linear-gradient(135deg, #6a3a8a, #8a5aaa);
+            border-color: #aa7aca;
             color: #ffffff;
-            box-shadow: 0 0 20px rgba(42, 138, 74, 0.4);
+            box-shadow: 0 0 20px rgba(106, 58, 138, 0.4);
         }
-        .nav-btn.nav-btn-gps i {
-            color: #7ad8a0;
+        .nav-btn.nav-btn-cameramap i {
+            color: #b88ad8;
         }
-        .nav-btn.nav-btn-gps.active i {
+        .nav-btn.nav-btn-cameramap.active i {
             color: #ffffff;
         }
 
@@ -164,9 +164,9 @@
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
-            <!-- TAB GPS -->
-            <button class="nav-btn nav-btn-gps" id="btnGps" onclick="showGpsTab()">
-                <i class="fas fa-satellite-dish"></i> GPS
+            <!-- TAB CameraMap -->
+            <button class="nav-btn nav-btn-cameramap" id="btnCameramap" onclick="showCameramapTab()">
+                <i class="fas fa-camera"></i> CameraMap
             </button>
             <!-- TAB CanvasPRO -->
             <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
@@ -265,9 +265,9 @@
             <iframe src="https://sukasada05.github.io/Hanpangan/" title="PIKET"></iframe>
         </div>
 
-        <!-- ===== GPS ===== -->
-        <div id="gpsContent" class="tab-iframe-content">
-            <iframe src="https://campro-ramil-05.dukopbabinsa05.workers.dev/" title="GPS Campro"></iframe>
+        <!-- ===== CAMERAMAP ===== -->
+        <div id="cameramapContent" class="tab-iframe-content">
+            <iframe src="https://campro-ramil-05.dukopbabinsa05.workers.dev/" title="CameraMap"></iframe>
         </div>
 
         <!-- ===== CANVASPRO ===== -->
@@ -323,18 +323,18 @@
             document.getElementById('btnHanpangan').classList.add('active');
         }
 
-        function showGpsTab() {
+        function showCameramapTab() {
             document.getElementById('dukopsContent').style.display = 'none';
             document.getElementById('absenContent').style.display = 'none';
             document.querySelectorAll('.tab-iframe-content').forEach(el => {
                 el.style.display = 'none';
                 el.classList.remove('active');
             });
-            const el = document.getElementById('gpsContent');
+            const el = document.getElementById('cameramapContent');
             el.style.display = 'block';
             el.classList.add('active');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btnGps').classList.add('active');
+            document.getElementById('btnCameramap').classList.add('active');
         }
 
         function showCanvaspro() {
@@ -354,11 +354,9 @@
         // ===== FUNGSI EXIT =====
         function exitApp() {
             if (confirm('Yakin ingin keluar dari aplikasi?')) {
-                // Coba tutup aplikasi
                 if (window.close) {
                     window.close();
                 }
-                // Fallback: redirect ke halaman kosong
                 document.body.innerHTML = `
                     <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a1a3a;color:#ffffff;font-family:sans-serif;flex-direction:column;">
                         <i class="fas fa-check-circle" style="font-size:48px;color:#28a745;margin-bottom:20px;"></i>
@@ -369,7 +367,6 @@
                         </button>
                     </div>
                 `;
-                // Hapus semua state
                 localStorage.clear();
                 sessionStorage.clear();
             }
