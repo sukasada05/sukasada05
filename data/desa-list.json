@@ -3,7 +3,6 @@
         "Gitgit",
         "Panji",
         "Panji Anom",
-        "Sukasada",
         "Pancasari",
         "Wanagiri",
         "Ambengan",
@@ -15,5 +14,8 @@
         "Selat",
         "Silangjana",
         "Tegallinggah"
+    ],
+    "kelurahanList": [
+        "Sukasada"
     ]
 }

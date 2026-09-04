@@ -5,17 +5,16 @@
 
 /* ---------- ROOT VARIABLES ---------- */
 :root {
-    --cursor-path: '../cursors/';
-    --cursor-default: var(--cursor-path) 'cursor1.cur', auto;
-    --cursor-pointer: var(--cursor-path) 'cursor2.cur', pointer;
-    --cursor-text: var(--cursor-path) 'cursor7.cur', text;
-    --cursor-wait: var(--cursor-path) 'cursor3.ani', wait;
-    --cursor-progress: var(--cursor-path) 'cursor4.ani', progress;
-    --cursor-help: var(--cursor-path) 'cursor8.cur', help;
-    --cursor-grab: var(--cursor-path) 'cursor5.ani', grab;
-    --cursor-grabbing: var(--cursor-path) 'cursor6.ani', grabbing;
-    --cursor-not-allowed: var(--cursor-path) 'cursor10.cur', not-allowed;
-    --cursor-zoom-in: var(--cursor-path) 'cursor9.ani', zoom-in;
+    --cursor-default: url('../cursor/1.cur'), auto;
+    --cursor-pointer: url('../cursor/2.cur'), pointer;
+    --cursor-text: url('../cursor/7.cur'), text;
+    --cursor-wait: wait;
+    --cursor-progress: progress;
+    --cursor-help: url('../cursor/8.cur'), help;
+    --cursor-grab: grab;
+    --cursor-grabbing: grabbing;
+    --cursor-not-allowed: url('../cursor/10.cur'), not-allowed;
+    --cursor-zoom-in: zoom-in;
 }
 
 /* ========== DESKTOP CURSOR ========== */
@@ -68,6 +67,49 @@
 /* ========== ANDROID / TOUCH ========== */
 @media (hover: none) and (pointer: coarse) {
     * { cursor: default !important; }
+
+    .download-cursor {
+        position: fixed;
+        z-index: 9999;
+        display: none;
+        width: 54px;
+        height: 54px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45));
+    }
+
+    .download-cursor.is-visible {
+        display: grid;
+        place-items: center;
+        animation: downloadCursorPulse 1s ease-in-out infinite;
+    }
+
+    .download-cursor img {
+        position: relative;
+        z-index: 1;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+    }
+
+    .download-cursor-ring {
+        position: absolute;
+        inset: 0;
+        border: 3px solid rgba(255, 215, 0, 0.35);
+        border-top-color: #ffd700;
+        border-radius: 50%;
+        animation: downloadCursorSpin 0.8s linear infinite;
+    }
+
+    @keyframes downloadCursorSpin {
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes downloadCursorPulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
     
     button, .btn, [onclick], .nav-btn, .tab {
         transition: transform 0.15s, opacity 0.15s;

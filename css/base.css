@@ -60,8 +60,12 @@
 }
 
 /* ================================================================
-   3. BODY
-   ================================================================ */
+    3. BODY
+    ================================================================ */
+html {
+     background: #081008;
+}
+
 body {
     font-family: var(--sys-font);
     background: #081008;
@@ -73,6 +77,13 @@ body {
         radial-gradient(ellipse at 90% 80%, rgba(54, 106, 56, 0.15) 0%, transparent 52%),
         linear-gradient(180deg, rgba(8, 24, 8, 0.95) 0%, rgba(14, 42, 14, 0.95) 45%, rgba(6, 18, 6, 1) 100%);
     background-blend-mode: screen, screen, normal;
+    background-attachment: fixed;
+    background-size: 100% 100vh;
+    background-repeat: no-repeat;
+}
+
+.container {
+    background: #ffffff;
 }
 
 /* ================================================================

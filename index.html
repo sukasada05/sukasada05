@@ -34,14 +34,15 @@
 
     <!-- CSS MODULAR -->
     <link rel="stylesheet" href="css/main.css">
+    <script src="js/cursor.js"></script>
 
     <!-- Sembunyikan tooltip indikator Supabase -->
     <style>
         .indicator-tooltip { display: none !important; }
         .supabase-indicator { cursor: default; }
 
-        /* Gaya untuk tab dengan iframe */
-        .tab-iframe-content {
+        /* Gaya untuk tab CanvasPRO dengan iframe */
+        #canvasproContent {
             display: none;
             padding: 0;
             background: #0f1b2f;
@@ -50,81 +51,28 @@
             height: 80vh;
             overflow: hidden;
         }
-        .tab-iframe-content.active {
+        #canvasproContent.active {
             display: block;
         }
-        .tab-iframe-content iframe {
+        #canvasproContent iframe {
             width: 100%;
             height: 100%;
             border: none;
             border-radius: 12px;
             background: #1a2744;
         }
+        /* Penyesuaian untuk tampilan mobile */
         @media (max-width: 600px) {
-            .tab-iframe-content {
+            #canvasproContent {
                 height: 70vh;
             }
-        }
-
-        /* Gaya khusus untuk tab CameraMap */
-        .nav-btn.nav-btn-cameramap {
-            background: linear-gradient(135deg, #1a0a2a, #3a1a4a);
-            border-color: #6a3a8a;
-            color: #b88ad8;
-            animation: pulse-camera 2s infinite;
-        }
-        .nav-btn.nav-btn-cameramap:hover {
-            background: linear-gradient(135deg, #2a1a3a, #4a2a5a);
-            border-color: #8a5aaa;
-            color: #d8aaf8;
-        }
-        .nav-btn.nav-btn-cameramap.active {
-            background: linear-gradient(135deg, #6a3a8a, #8a5aaa);
-            border-color: #aa7aca;
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(106, 58, 138, 0.4);
-        }
-        .nav-btn.nav-btn-cameramap i {
-            color: #b88ad8;
-        }
-        .nav-btn.nav-btn-cameramap.active i {
-            color: #ffffff;
-        }
-
-        @keyframes pulse-camera {
-            0%, 100% { box-shadow: 0 0 5px rgba(106, 58, 138, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(106, 58, 138, 0.6); }
-        }
-
-        /* Gaya untuk tombol EXIT */
-        .nav-btn.nav-btn-exit {
-            background: linear-gradient(135deg, #2a0a0a, #4a1a1a);
-            border-color: #8a2a2a;
-            color: #f87a7a;
-        }
-        .nav-btn.nav-btn-exit:hover {
-            background: linear-gradient(135deg, #3a1a1a, #5a2a2a);
-            border-color: #aa4a4a;
-            color: #ff9a9a;
-        }
-        .nav-btn.nav-btn-exit.active {
-            background: linear-gradient(135deg, #8a2a2a, #aa4a4a);
-            border-color: #ca6a6a;
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(138, 42, 42, 0.4);
-        }
-        .nav-btn.nav-btn-exit i {
-            color: #f87a7a;
-        }
-        .nav-btn.nav-btn-exit.active i {
-            color: #ffffff;
         }
     </style>
 
 </head>
 <body>
 
-    <!-- ====== INDIKATOR SUPABASE ====== -->
+    <!-- ====== INDIKATOR SUPABASE (tooltip disembunyikan) ====== -->
     <div id="supabaseIndicator" class="supabase-indicator indicator-checking" title="Status Koneksi Supabase">
         <div class="indicator-dot"></div>
         <span class="indicator-tooltip"></span>
@@ -145,41 +93,27 @@
                 <div class="splash-progress-bar-center" id="splashProgressBar"></div>
             </div>
             <div class="splash-percentage-center" id="progressPercentage">20%</div>
-            <div class="splash-army"></div>
+            <div class="splash-army">
+                <!-- Gambar army.gif dihapus untuk kompatibilitas lokal -->
+            </div>
         </div>
     </div>
 
     <!-- ====== APP CONTAINER ====== -->
     <div id="appContainer" class="container" style="display: none; opacity: 0;">
 
+        <!-- Install Button -->
         <button id="installButton" style="display:none;">
             <i class="fas fa-download"></i> Install App
         </button>
-
-        <!-- ===== HEADER ===== -->
-        <div class="dukops-header">
-            <div class="dukops-header-row">
-                <div class="dukops-title-area">
-                    <div class="dukops-header-title"></div>
-                </div>
-            </div>
-        </div>
 
         <!-- ===== NAVIGASI ===== -->
         <div class="nav-buttons">
             <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
             <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
-            <!-- TAB CameraMap - EXIT + BUKA LINK -->
-            <button class="nav-btn nav-btn-cameramap" id="btnCameramap" onclick="openCameraMap()">
-                <i class="fas fa-camera"></i> CameraMap
-            </button>
-            <!-- TAB CanvasPRO -->
+            <!-- TAB BARU: CanvasPRO dengan iframe -->
             <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
-            <!-- TOMBOL EXIT -->
-            <button class="nav-btn nav-btn-exit" id="btnExit" onclick="exitApp()">
-                <i class="fas fa-power-off"></i> EXIT
-            </button>
         </div>
 
         <!-- ===== CONTENT DUKOPS ===== -->
@@ -200,7 +134,11 @@
                 <div class="previewBox" id="previewKordinat"><span style="color:#6a7a8a;">Pilih desa/Kelurahan untuk melihat koordinat</span></div>
 
                 <label id="labelFotoKegiatan"><i class="fas fa-camera"></i> Foto Kegiatan:</label>
-                <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
+                <div class="file-input-wrapper">
+                    <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
+                    <label class="file-input-button" for="gambar"><i class="fas fa-folder-open"></i> Pilih Foto</label>
+                    <span id="gambarNama">Belum ada foto dipilih</span>
+                </div>
 
                 <label id="labelTanggalWaktu"><i class="fas fa-calendar-alt"></i> Tanggal & Waktu: <span id="tanggalWaktuLabelText">Pilih tanggal & waktu</span></label>
                 <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
@@ -217,9 +155,7 @@
                         <i class="fas fa-download"></i> KIRIM dan DOWNLOAD
                     </button>
                     <button id="resetBtn" onclick="resetAll()"><i class="fas fa-redo"></i> RESET</button>
-                    <button id="showAttendanceBtn" onclick="showAttendance()" class="btn-attendance btn-compact" title="Laporan Absensi" disabled>
-                        <i class="fas fa-chart-bar"></i> LAPORAN
-                    </button>
+                    <!-- Tombol LAPORAN telah dihapus -->
                 </div>
 
                 <div id="attendancePanel" style="display: none;">
@@ -266,13 +202,13 @@
             <div class="absen-info-text">✨ Mangsatria@2026</div>
         </div>
 
-        <!-- ===== PIKET ===== -->
-        <div id="hanpanganContent" class="tab-iframe-content">
+        <!-- ===== PIKET (FULLSCREEN) ===== -->
+        <div id="hanpanganContent">
             <iframe src="https://sukasada05.github.io/Hanpangan/" title="PIKET"></iframe>
         </div>
 
-        <!-- ===== CANVASPRO ===== -->
-        <div id="canvasproContent" class="tab-iframe-content">
+        <!-- ===== CANVASPRO (iframe) ===== -->
+        <div id="canvasproContent">
             <iframe src="https://canvas-pro.dukopbabinsa05.workers.dev/" title="CanvasPRO 2.1" allow="clipboard-read; clipboard-write"></iframe>
         </div>
 
@@ -280,143 +216,66 @@
 
     <div id="absenScreenshotArea" style="position: fixed; left: -9999px; top: 0; width: 500px; background: white;"></div>
 
-    <!-- ====== SCRIPT ====== -->
+    <!-- ====== SATU SCRIPT EKSTERNAL ====== -->
     <script src="app.js"></script>
     <script>
-        // ===== FUNGSI NAVIGASI =====
+        // Ensure desa list loads after app.js is available
+        (function(){
+            try {
+                const run = () => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch(e){} };
+                if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else setTimeout(run, 50);
+                try { window.addEventListener('focus', run); document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible') run(); }); } catch(e) {}
+            } catch (e) {}
+        })();
 
-        function showDukops() {
-            document.querySelectorAll('.tab-iframe-content').forEach(el => {
-                el.style.display = 'none';
-                el.classList.remove('active');
-            });
-            document.getElementById('dukopsContent').style.display = 'block';
-            document.getElementById('absenContent').style.display = 'none';
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btnDukops').classList.add('active');
-        }
-
-        function showAbsenTab() {
-            document.querySelectorAll('.tab-iframe-content').forEach(el => {
-                el.style.display = 'none';
-                el.classList.remove('active');
-            });
-            document.getElementById('dukopsContent').style.display = 'none';
-            document.getElementById('absenContent').style.display = 'block';
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btnAbsen').classList.add('active');
-            if (typeof loadAbsenData === 'function') {
-                setTimeout(loadAbsenData, 100);
-            }
-        }
-
-        function showHanpangan() {
-            document.getElementById('dukopsContent').style.display = 'none';
-            document.getElementById('absenContent').style.display = 'none';
-            document.querySelectorAll('.tab-iframe-content').forEach(el => {
-                el.style.display = 'none';
-                el.classList.remove('active');
-            });
-            const el = document.getElementById('hanpanganContent');
-            el.style.display = 'block';
-            el.classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btnHanpangan').classList.add('active');
-        }
-
+        // ===== FUNGSI NAVIGASI UNTUK TAB CanvasPRO =====
         function showCanvaspro() {
             document.getElementById('dukopsContent').style.display = 'none';
             document.getElementById('absenContent').style.display = 'none';
-            document.querySelectorAll('.tab-iframe-content').forEach(el => {
-                el.style.display = 'none';
-                el.classList.remove('active');
-            });
-            const el = document.getElementById('canvasproContent');
-            el.style.display = 'block';
-            el.classList.add('active');
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.getElementById('canvasproContent').style.display = 'block';
+            document.getElementById('canvasproContent').classList.add('active');
+            // set active button
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btnCanvaspro').classList.add('active');
         }
 
-        // ===== FUNGSI CAMERAMAP =====
-        function openCameraMap() {
-            // Tampilkan konfirmasi
-            if (confirm('Buka CameraMap dan keluar dari aplikasi?')) {
-                // Bersihkan data
-                localStorage.clear();
-                sessionStorage.clear();
-                
-                // Tutup aplikasi DUKOPS
-                document.body.innerHTML = `
-                    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a1a3a;color:#ffffff;font-family:sans-serif;flex-direction:column;">
-                        <i class="fas fa-camera" style="font-size:48px;color:#b88ad8;margin-bottom:20px;"></i>
-                        <h2>Membuka CameraMap...</h2>
-                        <p style="color:#8ab4f8;">Aplikasi DUKOPS ditutup</p>
-                        <div style="margin-top:20px;">
-                            <i class="fas fa-spinner fa-spin" style="font-size:24px;color:#b88ad8;"></i>
-                        </div>
-                    </div>
-                `;
+        // Override fungsi show lainnya agar menutup canvaspro
+        const origShowDukops = window.showDukops || function() {};
+        window.showDukops = function() {
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('dukopsContent').style.display = 'block';
+            document.getElementById('absenContent').style.display = 'none';
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnDukops').classList.add('active');
+            if (typeof origShowDukops === 'function') origShowDukops();
+        };
 
-                // Redirect ke link CameraMap
-                setTimeout(function() {
-                    window.location.href = 'https://campro-ramil-05.dukopbabinsa05.workers.dev/';
-                }, 500);
-            }
-        }
+        const origShowAbsenTab = window.showAbsenTab || function() {};
+        window.showAbsenTab = function() {
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('dukopsContent').style.display = 'none';
+            document.getElementById('absenContent').style.display = 'block';
+            document.getElementById('hanpanganContent').style.display = 'none';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnAbsen').classList.add('active');
+            if (typeof origShowAbsenTab === 'function') origShowAbsenTab();
+        };
 
-        // ===== FUNGSI EXIT =====
-        function exitApp() {
-            if (confirm('Yakin ingin keluar dari aplikasi?')) {
-                // Redirect ke halaman exit
-                window.location.href = 'https://sukasada05.github.io/sukasada05/';
-            }
-        }
-
-        // Override fungsi-fungsi original jika ada
-        if (typeof window.originalShowHanpangan === 'undefined') {
-            window.originalShowHanpangan = window.showHanpangan;
-        }
-        window.showHanpangan = showHanpangan;
-
-        if (typeof window.originalShowAbsenTab === 'undefined') {
-            window.originalShowAbsenTab = window.showAbsenTab;
-        }
-        window.showAbsenTab = showAbsenTab;
-
-        if (typeof window.originalShowDukops === 'undefined') {
-            window.originalShowDukops = window.showDukops;
-        }
-        window.showDukops = showDukops;
-
-        // Load desa list
-        (function(){
-            try {
-                const run = () => { 
-                    try { 
-                        if (typeof loadDesaList === 'function') {
-                            loadDesaList().catch(()=>{});
-                        }
-                    } catch(e){}
-                };
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', run);
-                } else {
-                    setTimeout(run, 50);
-                }
-                try { 
-                    window.addEventListener('focus', run); 
-                    document.addEventListener('visibilitychange', function(){ 
-                        if (document.visibilityState === 'visible') run(); 
-                    }); 
-                } catch(e) {}
-            } catch (e) {}
-        })();
-
-        // Set default tab
-        document.addEventListener('DOMContentLoaded', function() {
-            showDukops();
-        });
+        const origShowHanpangan = window.showHanpangan || function() {};
+        window.showHanpangan = function() {
+            document.getElementById('canvasproContent').style.display = 'none';
+            document.getElementById('canvasproContent').classList.remove('active');
+            document.getElementById('dukopsContent').style.display = 'none';
+            document.getElementById('absenContent').style.display = 'none';
+            document.getElementById('hanpanganContent').style.display = 'block';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('btnHanpangan').classList.add('active');
+            if (typeof origShowHanpangan === 'function') origShowHanpangan();
+        };
     </script>
 
 </body>

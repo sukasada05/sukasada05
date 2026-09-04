@@ -14,6 +14,10 @@
    PREVIEW KOORDINAT - DITAMPILKAN
    ================================================================ */
 #previewKordinat {
+    display: none !important;
+}
+
+#previewKordinat {
     color: #0a1a2e !important;
     font-weight: 600 !important;
     min-height: 30px !important;
