@@ -1,6 +1,6 @@
 /* ================================================================
    BASE.CSS - RESET & BASE DUKOPS
-   VERSI DIPERBAIKI - TANPA MEMATIKAN ANIMASI
+   VERSI DIPERBAIKI - TANPA MEMATIKAN ANIMASI + FIX LAYAR PUTIH
    ================================================================ */
 
 /* ================================================================
@@ -10,6 +10,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* FIX 1: Menghilangkan efek highlight putih saat tombol diklik di Android */
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* ================================================================
@@ -77,13 +79,15 @@ body {
     background-image: url("../header/header-background.png");
     background-position: center;
     background-size: cover;
-    background-attachment: fixed;
+    /* FIX 2: Mengubah 'fixed' menjadi 'scroll' agar WebView Android tidak glitch/putih saat ganti tab */
+    background-attachment: scroll; 
     background-repeat: no-repeat;
     overflow: auto;
 }
 
 .container {
-    background: rgba(24, 59, 36, 0.88);
+    /* FIX 3: Mengubah warna semi-transparan (rgba) menjadi solid (hex) agar tidak ada warna putih yang menembus */
+    background: #183b24; 
     background-image: none;
     width: 100%;
     min-height: 100vh;
