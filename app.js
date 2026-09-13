@@ -56,6 +56,11 @@ function setWaitingServiceWorker(worker) {
 
 let currentApp = null;
 let isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isAndroidDevice = /Android/i.test(navigator.userAgent);
+
+if (isAndroidDevice) {
+    document.documentElement.classList.add('android-device');
+}
 
 // ================= PEMILIHAN WILAYAH AWAL =================
 document.addEventListener('DOMContentLoaded', function () {
@@ -300,17 +305,11 @@ async function initializeApp() {
         try { loadLastSubmittedDates(); } catch(e){ console.error('initializeApp: loadLastSubmittedDates error', e); }
         try { loadDesaCounter(); } catch(e){ console.error('initializeApp: loadDesaCounter error', e); }
 
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
         try {
             const tanggalEl = document.getElementById('tanggalWaktu');
-            if (tanggalEl) tanggalEl.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            if (tanggalEl) tanggalEl.value = '';
             updateDatePreview();
-            console.log('initializeApp: set tanggalWaktu and updated preview');
+            console.log('initializeApp: waiting for date input');
         } catch (e) {
             console.error('initializeApp: error setting tanggalWaktu/updateDatePreview', e);
         }
@@ -578,7 +577,7 @@ function updateDatePreview() {
         if (display) display.textContent = displayText;
         updateNarrativePrefix();
     } else {
-        if (display) display.textContent = 'TANGGAL & WAKTU';
+        if (display) display.textContent = 'INPUT TANGGAL';
         if (!tglEl) {
             if (tanggalWaktu) {
                 try {

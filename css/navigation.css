@@ -20,10 +20,7 @@
     visibility: visible !important;
     opacity: 1 !important;
     background-color: #163b2a !important;
-    background-image: url("../header/header-background.png") !important;
-    background-position: center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+    background-image: none !important;
     border: none !important;
     box-shadow: none !important;
     min-height: 108px;
@@ -78,6 +75,7 @@
 .nav-btn-dukops {
     background: #d96b00;
     color: #ffffff;
+    font-family: Georgia, "Times New Roman", serif;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -90,17 +88,20 @@
 .nav-btn-hanpangan {
     background: #0f8a3a;
     color: #ffffff;
+    font-family: "Trebuchet MS", Arial, sans-serif;
 }
 
 .nav-btn-canvaspro {
     background: #1a4a1a;
     color: #ffffff;
+    font-family: "Courier New", monospace;
 }
 
 /* ABSEN - Biru */
 .nav-btn-absen {
     background: #0066cc;
     color: #ffffff;
+    font-family: Verdana, Arial, sans-serif;
 }
 
 .nav-btn {
@@ -115,9 +116,10 @@
 }
 
 .nav-btn.active {
-    background: #5b1018;
-    color: #ffffff;
-    box-shadow: none;
+    background: #173d25 !important;
+    color: #d9f2dc !important;
+    font-weight: 800;
+    box-shadow: inset 0 0 0 2px #6fba78, 0 0 10px rgba(111, 186, 120, 0.35);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -147,29 +149,8 @@
    ACTIVE STATE - FLAT
    ================================================================ */
 .nav-btn-dukops.active {
-    background: #f7971e;
-    color: #ffffff;
-    box-shadow: 0 0 0 2px rgba(247, 151, 30, 0.2);
-}
-
-/* PIKET Active */
-.nav-btn-hanpangan.active {
-    background: #1db954;
-    color: #ffffff;
-    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
-}
-
-.nav-btn-canvaspro.active {
-    background: #2d6a2d;
-    color: #ffffff;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-}
-
-/* ABSEN Active */
-.nav-btn-absen.active {
-    background: #4facfe;
-    color: #ffffff;
-    box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
+    background: #173d25 !important;
+    color: #d9f2dc !important;
 }
 
 /* ================================================================

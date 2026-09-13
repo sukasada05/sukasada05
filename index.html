@@ -71,7 +71,11 @@
         .village-start-screen .splash-content {
             width: min(92vw, 430px);
             padding: 34px 20px 24px;
-            background: linear-gradient(160deg, #18263a, #0b1625);
+            background-image:
+                linear-gradient(rgba(11, 22, 10, 0.78), rgba(11, 22, 10, 0.88)),
+                url('header/header-background.png');
+            background-size: cover;
+            background-position: center;
             border: 1px solid rgba(135, 187, 255, 0.7);
             border-radius: 22px;
             box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55);
@@ -243,7 +247,7 @@
                 <div class="datetime-picker-area" role="button" tabindex="0" onclick="openDatePicker(event)" onkeydown="if (event.key === 'Enter' || event.key === ' ') openDatePicker(event)">
                     <div class="datetime-input-shell">
                         <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
-                        <span id="tanggalWaktuDisplay" class="datetime-input-display">TANGGAL &amp; WAKTU</span>
+                        <span id="tanggalWaktuDisplay" class="datetime-input-display">INPUT TANGGAL</span>
                     </div>
                 </div>
 

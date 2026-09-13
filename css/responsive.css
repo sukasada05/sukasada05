@@ -11,8 +11,10 @@
     /* ----- CONTAINER ----- */
     #appContainer.container {
         padding: 14px;
-        border-radius: 12px;
-        margin: 10px;
+        width: 100%;
+        min-height: 100vh;
+        border-radius: 0;
+        margin: 0;
     }
     
     /* ----- HEADER ----- */
@@ -537,6 +539,21 @@
     .counter-value {
         color: #000 !important;
         border: 1px solid #ccc !important;
+    }
+}
+
+/* ================================================================
+   6. ANDROID - SKALA TEKS UNTUK LAYAR MOBILE/FULLSCREEN
+   ================================================================ */
+@media (max-width: 768px) {
+    /*
+     * Android browsers render the fixed-size mobile labels smaller than
+     * their desktop equivalents. A small layout scale keeps all text,
+     * controls, and fullscreen content readable without changing widths
+     * or typography on other platforms.
+     */
+    html.android-device body {
+        zoom: 1.16;
     }
 }
 
