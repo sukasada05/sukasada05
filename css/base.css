@@ -40,7 +40,7 @@
     --text-light: #e6ffe6;
     --text-muted: #889988;
     --text-dark: #0a1a0a;
-    --app-bg: #0b1f3a;
+    --app-bg: #26351f;
     
     /* Borders */
     --border-color: rgba(255, 255, 255, 0.06);
@@ -75,18 +75,26 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     background-image:
+        linear-gradient(rgba(8, 24, 8, 0.72), rgba(6, 18, 6, 0.82)),
+        url("../header/header-background.png"),
         radial-gradient(ellipse at 10% 20%, rgba(26, 58, 26, 0.2) 0%, transparent 45%),
         radial-gradient(ellipse at 90% 80%, rgba(54, 106, 56, 0.15) 0%, transparent 52%),
         linear-gradient(180deg, rgba(8, 24, 8, 0.95) 0%, rgba(14, 42, 14, 0.95) 45%, rgba(6, 18, 6, 1) 100%);
-    background-blend-mode: screen, screen, normal;
+    background-blend-mode: multiply, normal, screen, screen, normal;
     background-attachment: fixed;
-    background-size: 100% 100vh;
+    background-size: cover, cover, 100% 100vh, 100% 100vh, 100% 100vh;
+    background-position: center, center, 0 0, 0 0, 0 0;
     background-repeat: no-repeat;
     overflow: auto;
 }
 
 .container {
     background: var(--app-bg);
+    background-image:
+        linear-gradient(rgba(38, 53, 31, 0.78), rgba(38, 53, 31, 0.78)),
+        url("../header/header-background.png");
+    background-size: cover;
+    background-position: center;
     width: min(100% - 32px, 900px);
     margin: 16px auto;
     padding: 24px;

@@ -26,7 +26,8 @@
     background-repeat: no-repeat;
     border: none !important;
     box-shadow: none !important;
-    min-height: 96px;
+    min-height: 108px;
+    margin-top: -6px;
     align-items: flex-end;
 }
 

@@ -9,7 +9,7 @@
 @media (max-width: 768px) {
     
     /* ----- CONTAINER ----- */
-    .container {
+    #appContainer.container {
         padding: 14px;
         border-radius: 12px;
         margin: 10px;
@@ -380,6 +380,14 @@
         padding: 6px;
         border-radius: 8px;
         margin: 4px;
+    }
+
+    /* App container mengikuti ukuran halaman penuh */
+    .container {
+        width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        border-radius: 0;
     }
     
     /* ----- HEADER ----- */
