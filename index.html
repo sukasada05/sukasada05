@@ -67,6 +67,117 @@
                 height: 70vh;
             }
         }
+
+        .village-start-screen .splash-content {
+            width: min(92vw, 430px);
+            padding: 34px 20px 24px;
+            background: linear-gradient(160deg, #18263a, #0b1625);
+            border: 1px solid rgba(135, 187, 255, 0.7);
+            border-radius: 22px;
+            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.55);
+        }
+
+        .village-start-screen {
+            background: rgba(5, 15, 30, 0.68);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+
+        .village-start-screen .startup-logo {
+            display: block;
+            width: min(220px, 72vw);
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+            margin: 0 auto 28px;
+        }
+
+        .village-start-screen select {
+            width: 100% !important;
+            min-height: 54px;
+            padding: 10px 42px 10px 16px !important;
+            border-radius: 40px !important;
+            border: 1px solid rgba(191, 220, 255, 0.8) !important;
+            background: linear-gradient(110deg, #4d96ff, #21469d) !important;
+            color: #ffffff !important;
+            font-size: clamp(15px, 2.8vw, 20px) !important;
+            font-weight: 500 !important;
+            line-height: 1.2;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-shadow: 0 12px 22px rgba(32, 102, 224, 0.3);
+            text-align: left;
+        }
+
+        .village-start-screen .splash-kodim-center {
+            margin-top: 30px;
+            color: #d9e6f5;
+            font-size: 12px;
+            font-weight: 600;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            line-height: 20px;
+            height: 20px;
+        }
+
+        .running-text span {
+            display: inline-block;
+            padding-left: 100%;
+            white-space: nowrap !important;
+            animation-name: runningText !important;
+            animation-duration: 12s !important;
+            animation-timing-function: linear !important;
+            animation-iteration-count: infinite !important;
+            animation-fill-mode: both !important;
+        }
+
+        @keyframes runningText {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+
+        .startup-dashboard {
+            filter: blur(7px);
+            transform: scale(1.015);
+            pointer-events: none;
+        }
+
+        .datetime-picker-area {
+            position: relative;
+        }
+
+        .datetime-input-shell {
+            position: relative;
+            margin-top: 4px;
+            container-type: inline-size;
+        }
+
+        .datetime-picker-area input[type="datetime-local"] {
+            color: transparent !important;
+            caret-color: transparent;
+            margin-top: 0;
+        }
+
+        .datetime-picker-area input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        .datetime-input-display {
+            position: absolute;
+            inset: 0 10px;
+            display: flex;
+            align-items: center;
+            color: #0a1a2e;
+            font-size: clamp(9px, 2cqw, 14px);
+            font-weight: 500;
+            letter-spacing: -0.4px;
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
     </style>
 
 </head>
@@ -78,29 +189,23 @@
         <span class="indicator-tooltip"></span>
     </div>
 
-    <!-- ====== SPLASH SCREEN ====== -->
-    <div id="splashScreen" class="splash-container-modern">
+    <!-- ====== PEMILIHAN DESA AWAL ====== -->
+    <div id="splashScreen" class="splash-container-modern village-start-screen">
         <div class="splash-content">
-            <div class="splash-logo-center">
-                <img src="icons/favicon-96x96.png" alt="Lambang Kodam Udayana">
+            <img class="startup-logo" src="logo/logo-1.png" alt="Logo DUKOPS BABINSA">
+            <select id="startupDesa">
+                <option value="">Memuat daftar wilayah...</option>
+            </select>
+            <div class="splash-kodim-center running-text" aria-label="Informasi aplikasi">
+                <span id="runningTextContent">Sistem Pelaporan Digitalisasi Babinsa</span>
             </div>
-            <div class="splash-title-center">DUKOPS</div>
-            <div class="splash-title-center">BABINSA SUKASADA</div>
-            <div class="splash-divider-center"></div>
-            <div class="splash-subtitle-center">KODIM 1609/BULELENG</div>
-            <div class="splash-kodim-center">Sistem Pelaporan Digitalisasi Babinsa</div>
-            <div class="splash-progress-center">
-                <div class="splash-progress-bar-center" id="splashProgressBar"></div>
-            </div>
-            <div class="splash-percentage-center" id="progressPercentage">20%</div>
             <div class="splash-army">
-                <!-- Gambar army.gif dihapus untuk kompatibilitas lokal -->
             </div>
         </div>
     </div>
 
     <!-- ====== APP CONTAINER ====== -->
-    <div id="appContainer" class="container" style="display: none; opacity: 0;">
+    <div id="appContainer" class="container startup-dashboard" style="display: block; opacity: 1;">
 
         <!-- Install Button -->
         <button id="installButton" style="display:none;">
@@ -120,11 +225,13 @@
         <div id="dukopsContent">
             <div style="width:100%; margin:0 auto;">
 
-                <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa/Kelurahan:</label>
-                <div class="select-wrapper" style="position:relative;">
+                <div id="dashboardDesaSelection" style="display:none;">
+                    <label id="labelPilihDesa"><i class="fas fa-city"></i> Pilih Desa/Kelurahan:</label>
+                    <div class="select-wrapper" style="position:relative;">
                     <select id="selectDesa" onchange="loadSelectedDesa()">
                         <option value="">--Pilih desa/Kelurahan--</option>
                     </select>
+                    </div>
                 </div>
                 <div id="loadingDesa" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
                 <div class="previewBox" id="previewDesa" style="display:none;"></div>
@@ -133,28 +240,30 @@
                 <div id="loadingKoordinat" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Memuat koordinat...</div>
                 <div class="previewBox" id="previewKordinat"><span style="color:#6a7a8a;">Pilih desa/Kelurahan untuk melihat koordinat</span></div>
 
-                <label id="labelFotoKegiatan"><i class="fas fa-camera"></i> Foto Kegiatan:</label>
+                <div class="datetime-picker-area" role="button" tabindex="0" onclick="openDatePicker(event)" onkeydown="if (event.key === 'Enter' || event.key === ' ') openDatePicker(event)">
+                    <div class="datetime-input-shell">
+                        <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
+                        <span id="tanggalWaktuDisplay" class="datetime-input-display">TANGGAL &amp; WAKTU</span>
+                    </div>
+                </div>
+
                 <div class="file-input-wrapper">
                     <input type="file" id="gambar" accept="image/*" onchange="previewImage()">
                     <label class="file-input-button" for="gambar"><i class="fas fa-folder-open"></i> Pilih Foto</label>
-                    <span id="gambarNama">Belum ada foto dipilih</span>
                 </div>
 
-                <label id="labelTanggalWaktu"><i class="fas fa-calendar-alt"></i> Tanggal & Waktu: <span id="tanggalWaktuLabelText">Pilih tanggal & waktu</span></label>
-                <input type="datetime-local" id="tanggalWaktu" onchange="updateDatePreview()">
+                <canvas id="canvas" style="display:none;" aria-label="Preview foto kegiatan"></canvas>
 
-                <label><i class="fas fa-file-alt"></i> Narasi Kegiatan:</label>
+                <label id="labelNarasiKegiatan">Kegiatan: Babinsa</label>
                 <div class="narasi-wrapper">
                     <textarea id="narasi" class="auto-height-textarea" rows="6" placeholder="Masukkan narasi kegiatan...✍️" oninput="checkInputCompletion(); autoResizeNarasi()"></textarea>
                 </div>
 
-                <canvas id="canvas"></canvas>
-
                 <div class="action-buttons">
                     <button id="submitBtn" onclick="processSubmission()" disabled>
-                        <i class="fas fa-download"></i> KIRIM dan DOWNLOAD
+                        <i class="fas fa-download"></i> KIRIM
                     </button>
-                    <button id="resetBtn" onclick="resetAll()"><i class="fas fa-redo"></i> RESET</button>
+                    <button id="btnExit" class="action-exit-btn" onclick="exitApp()"><i class="fas fa-right-from-bracket"></i> KELUAR</button>
                     <!-- Tombol LAPORAN telah dihapus -->
                 </div>
 
