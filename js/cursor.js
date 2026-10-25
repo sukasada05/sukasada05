@@ -16,29 +16,6 @@
     let downloadCursor = null;
     let lastTouchPosition = { x: 0, y: 0 };
     
-    // ========== LOAD CURSOR (DESKTOP) ==========
-    function loadCursors() {
-        if (!isDesktop) return;
-        
-        const style = document.createElement('style');
-        style.id = 'cursor-style';
-        style.textContent = `
-            :root {
-                --cursor-default: url('../cursor/1.cur'), auto;
-                --cursor-pointer: url('../cursor/2.cur'), pointer;
-                --cursor-text: url('../cursor/7.cur'), text;
-                --cursor-wait: wait;
-                --cursor-progress: progress;
-                --cursor-help: url('../cursor/8.cur'), help;
-                --cursor-grab: grab;
-                --cursor-grabbing: grabbing;
-                --cursor-not-allowed: url('../cursor/10.cur'), not-allowed;
-                --cursor-zoom-in: zoom-in;
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
     // ========== TOUCH FEEDBACK (ANDROID) ==========
     function enableTouchFeedback() {
         if (!isTouch && !isAndroid) return;
@@ -78,24 +55,12 @@
     window.setCursor = function(element, type) {
         if (!isDesktop) return;
         
-        const cursors = {
-            'default': '1.cur',
-            'pointer': '2.cur',
-            'text': '7.cur',
-            'wait': null,
-            'progress': null,
-            'help': '8.cur',
-            'grab': null,
-            'grabbing': null,
-            'not-allowed': '10.cur',
-            'zoom-in': null
-        };
-        const fallbackCursors = ['wait', 'progress', 'grab', 'grabbing', 'zoom-in'];
-        
+        const cursorTypes = new Set([
+            'default', 'pointer', 'text', 'wait', 'progress',
+            'help', 'grab', 'grabbing', 'not-allowed', 'zoom-in'
+        ]);
         const el = typeof element === 'string' ? document.querySelector(element) : element;
-        if (el && cursors[type]) {
-            el.style.cursor = `url('cursor/${cursors[type]}'), ${type}`;
-        } else if (el && fallbackCursors.includes(type)) {
+        if (el && cursorTypes.has(type)) {
             el.style.cursor = type;
         }
     };
@@ -126,7 +91,6 @@
     
     // ========== INISIALISASI ==========
     function init() {
-        loadCursors();
         enableTouchFeedback();
         
         // Export status

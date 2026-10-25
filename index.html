@@ -96,6 +96,35 @@
             margin: 0 auto 28px;
         }
 
+        .village-start-screen .startup-title {
+            margin: 0 0 6px;
+            color: #f4d878;
+            font-size: clamp(32px, 8vw, 46px);
+            font-weight: 800;
+            letter-spacing: 4px;
+            line-height: 1.2;
+            text-shadow:
+                1px 1px 0 #b18428,
+                2px 2px 0 #8a651e,
+                3px 3px 0 #634714,
+                4px 5px 0 rgba(28, 24, 10, 0.8),
+                0 8px 14px rgba(0, 0, 0, 0.65);
+        }
+
+        .village-start-screen .startup-branch {
+            display: table;
+            margin: 0 auto 18px;
+            padding: 3px 12px;
+            border-top: 1px solid rgba(244, 216, 120, 0.8);
+            border-bottom: 1px solid rgba(244, 216, 120, 0.8);
+            color: #f2f4ed;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 5px;
+            line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
         .village-start-screen select {
             width: 100% !important;
             min-height: 54px;
@@ -123,6 +152,23 @@
             white-space: nowrap;
             line-height: 20px;
             height: 20px;
+        }
+
+        .datetime-picker-area input[type="datetime-local"] {
+            color: transparent !important;
+            color-scheme: dark;
+            background: #183b24 !important;
+            border: 2px solid #4caf50 !important;
+            box-shadow: none !important;
+        }
+
+        .datetime-picker-area input[type="datetime-local"]:focus {
+            border-color: #81c784 !important;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2) !important;
+        }
+
+        .datetime-picker-area .datetime-input-display {
+            color: #e6ffe6;
         }
 
         .running-text span {
@@ -174,12 +220,15 @@
             align-items: center;
             color: #0a1a2e;
             font-size: clamp(9px, 2cqw, 14px);
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: -0.4px;
             line-height: 1;
             white-space: nowrap;
             overflow: hidden;
             pointer-events: none;
+            text-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.9),
+                0 0 1px rgba(0, 0, 0, 0.95);
         }
 
     </style>
@@ -196,6 +245,8 @@
     <!-- ====== PEMILIHAN DESA AWAL ====== -->
     <div id="splashScreen" class="splash-container-modern village-start-screen">
         <div class="splash-content">
+            <h1 class="startup-title">DUKOPS 05</h1>
+            <div class="startup-branch" aria-label="TNI-AD">TNI-AD</div>
             <img class="startup-logo" src="logo/logo-1.png" alt="Logo DUKOPS BABINSA">
             <select id="startupDesa">
                 <option value="">Memuat daftar wilayah...</option>
@@ -330,6 +381,7 @@
     <div id="absenScreenshotArea" style="position: fixed; left: -9999px; top: 0; width: 500px; background: white;"></div>
 
     <!-- ====== SATU SCRIPT EKSTERNAL ====== -->
+    <script src="js/indonesian-voice.js"></script>
     <script src="app.js"></script>
     <script>
         // Ensure desa list loads after app.js is available

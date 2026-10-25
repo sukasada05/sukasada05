@@ -106,7 +106,7 @@ textarea {
     background: var(--form-bg);
     color: var(--form-color);
     font-size: var(--form-font-size);
-    font-family: var(--sys-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif);
+    font-family: var(--sys-font, Roboto, "Droid Sans", "Noto Sans", Arial, sans-serif);
 }
 
 select:focus,

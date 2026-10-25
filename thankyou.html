@@ -16,13 +16,43 @@
         <section class="thankyou-content">
             <i class="fas fa-trophy" aria-hidden="true"></i>
             <h1 id="thankyou-title">Terima Kasih</h1>
-            <p>Laporan kegiatan Anda telah berhasil dikirim.</p>
-            <div class="highlight">Data sudah tersimpan dengan aman.</div>
+            <p id="thankyou-message">Laporan kegiatan Anda telah berhasil dikirim.</p>
+            <div class="highlight" id="thankyou-count">Data sudah tersimpan dengan aman.</div>
             <p class="sub">DUKOPS BABINSA SUKASADA<br>KODIM 1609/BULELENG</p>
             <a class="thankyou-button" href="index.html">
                 <i class="fas fa-arrow-left" aria-hidden="true"></i> Kembali ke halaman utama
             </a>
         </section>
     </main>
+    <script src="js/indonesian-voice.js"></script>
+    <script>
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const savedReport = JSON.parse(localStorage.getItem('dukopsLastSuccessfulReport') || 'null');
+            const report = {
+                desaName: params.get('desa') || (savedReport && savedReport.desaName),
+                count: params.has('count') ? Number(params.get('count')) : savedReport && savedReport.count,
+                monthYear: params.get('month') || (savedReport && savedReport.monthYear)
+            };
+
+            if (report && typeof report.desaName === 'string' &&
+                Number.isInteger(report.count) && report.count > 0 &&
+                typeof report.monthYear === 'string' && report.monthYear) {
+                document.getElementById('thankyou-message').textContent =
+                    `Terima kasih Babinsa ${report.desaName} telah mengirim ${report.count} laporan.`;
+                document.getElementById('thankyou-count').textContent =
+                    `Jumlah laporan terkirim bulan ${report.monthYear}: ${report.count} laporan.`;
+
+                if (typeof window.speakIndonesian === 'function') {
+                    window.speakIndonesian(
+                        `Terima kasih Babinsa ${report.desaName} telah mengirim laporan. ` +
+                        `Jumlah laporan terkirim bulan ${report.monthYear}: ${report.count} laporan.`
+                    );
+                }
+            }
+        } catch (error) {
+            console.error('Gagal memuat ringkasan laporan terakhir:', error);
+        }
+    </script>
 </body>
 </html>

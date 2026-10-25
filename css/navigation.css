@@ -23,9 +23,9 @@
     background-image: none !important;
     border: none !important;
     box-shadow: none !important;
-    min-height: 108px;
-    margin-top: -6px;
-    align-items: flex-end;
+    min-height: 56px;
+    margin-top: -10px;
+    align-items: center;
 }
 
 /* ================================================================
@@ -75,7 +75,7 @@
 .nav-btn-dukops {
     background: #d96b00;
     color: #ffffff;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--sys-font);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -88,20 +88,20 @@
 .nav-btn-hanpangan {
     background: #0f8a3a;
     color: #ffffff;
-    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-family: var(--sys-font);
 }
 
 .nav-btn-canvaspro {
     background: #1a4a1a;
     color: #ffffff;
-    font-family: "Courier New", monospace;
+    font-family: var(--sys-font);
 }
 
 /* ABSEN - Biru */
 .nav-btn-absen {
     background: #0066cc;
     color: #ffffff;
-    font-family: Verdana, Arial, sans-serif;
+    font-family: var(--sys-font);
 }
 
 .nav-btn {

@@ -832,21 +832,20 @@ async function processSubmission() {
         // Upload Drive
         const driveUploaded = await uploadToGoogleDrive(content, zipFileNameForBackend, selectedDesa, date);
 
-        // Update counter
-        const desaData = updateDesaCounter(selectedDesa, zipFileNameForBackend);
-
         if (driveUploaded) {
-            showNotification(`✔ Laporan berhasil disimpan (${desaData.count}/${TARGET_LAPORAN} laporan)`, "success");
+            const desaData = updateDesaCounter(selectedDesa, zipFileNameForBackend);
+            saveLastSuccessfulReport(desaInfo.original, desaData.count, monthYear);
+            saveSubmittedDate(tanggalWaktu);
+            const thankYouParams = new URLSearchParams({
+                desa: desaInfo.original,
+                count: String(desaData.count),
+                month: monthYear
+            });
+            window.location.href = `thankyou.html?${thankYouParams.toString()}`;
         } else {
             showNotification(`⚠ Laporan hanya didownload, gagal simpan ke Drive`, "warning");
+            saveSubmittedDate(tanggalWaktu);
         }
-
-        if (desaData.count === TARGET_LAPORAN) {
-            speakTargetReached(selectedDesa, monthYear);
-            showThankYouPopup(desaInfo.cleanName, desaData.count);
-        }
-
-        saveSubmittedDate(tanggalWaktu);
 
     } catch (error) {
         console.error("Error:", error);
@@ -963,6 +962,14 @@ function updateDesaCounter(desaName, fileName) {
     return desaCounter[desaName];
 }
 
+function saveLastSuccessfulReport(desaName, count, monthYear) {
+    localStorage.setItem('dukopsLastSuccessfulReport', JSON.stringify({
+        desaName,
+        count,
+        monthYear
+    }));
+}
+
 function saveSubmittedDate(dateStr) {
     submittedDates.push(dateStr);
     localStorage.setItem('dukopsSubmittedDates', JSON.stringify(submittedDates));
@@ -1000,24 +1007,22 @@ function updateDesaHeaderImage(desaName) {
     headerImage.src = defaultUrl;
 }
 
-function speakTargetReached(wilayahName, monthYear) {
-    if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
-
+function speakTargetReached(wilayahName, count, monthYear) {
     const wilayahInfo = normalizeDesaName(wilayahName);
-    const speech = new SpeechSynthesisUtterance(
-        `Babinsa ${wilayahInfo.original}, target laporan bulan ${monthYear}, tercapai.`
-    );
-    speech.lang = 'id-ID';
-    speech.rate = 0.9;
-    speech.pitch = 1;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(speech);
+    const message =
+        `Terima kasih Babinsa ${wilayahInfo.original} telah mengirim ${count} laporan untuk ${monthYear}. ` +
+        (count >= TARGET_LAPORAN
+            ? `Target ${TARGET_LAPORAN} laporan bulan ini tercapai.`
+            : `Jumlah laporan terkirim bulan ini ${count} dari ${TARGET_LAPORAN}.`);
+    if (typeof window.speakIndonesian === 'function') window.speakIndonesian(message);
 }
 
 // ================= POPUP UCAPAN TERIMA KASIH =================
 function showThankYouPopup(desaName, count) {
     const date = new Date(tanggalWaktu);
     const monthYear = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    const desaInfo = normalizeDesaName(desaName);
+    const targetReached = count >= TARGET_LAPORAN;
     
     const modal = document.createElement('div');
     modal.className = 'thankyou-popup';
@@ -1035,14 +1040,17 @@ function showThankYouPopup(desaName, count) {
             <div style="font-size: 80px; color: #4CAF50; margin-bottom: 20px;">
                 <i class="fas fa-trophy"></i>
             </div>
-            <h2 style="color: #9fd49f; margin-bottom: 15px; font-size: 28px;">🎉 SELAMAT! 🎉</h2>
+            <h2 style="color: #9fd49f; margin-bottom: 15px; font-size: 28px;">Terima Kasih</h2>
             <p style="color: #f5f5f5; font-size: 18px; line-height: 1.5; margin-bottom: 20px;">
-                <strong>Babinsa ${desaName}</strong><br>
-                Telah menyelesaikan <strong>${count} laporan</strong> untuk <strong>${monthYear}</strong>!
+                Terima kasih <strong>Babinsa ${desaInfo.original}</strong> telah mengirim
+                <strong>${count} laporan</strong> untuk <strong>${monthYear}</strong>.
             </p>
             <div style="background: rgba(76, 175, 80, 0.2); border: 2px solid #4CAF50;
                 border-radius: 10px; padding: 15px; margin: 20px 0; font-size: 16px; color: #b2d8b2;">
-                <i class="fas fa-check-circle"></i> Target 9 laporan per bulan TERCAPAI!
+                <i class="fas fa-check-circle"></i>
+                ${targetReached
+                    ? `Target ${TARGET_LAPORAN} laporan bulan ini tercapai!`
+                    : `Jumlah laporan terkirim bulan ${monthYear}: ${count}/${TARGET_LAPORAN}.`}
             </div>
             <button onclick="this.closest('.thankyou-popup').remove()"
                 style="background: linear-gradient(135deg, #4CAF50, #2b4d2b); color: white;
@@ -1053,6 +1061,7 @@ function showThankYouPopup(desaName, count) {
         </div>
     `;
     document.body.appendChild(modal);
+    speakTargetReached(desaInfo.original, count, monthYear);
     setTimeout(() => { if (modal.parentNode) modal.remove(); }, 10000);
 }
 

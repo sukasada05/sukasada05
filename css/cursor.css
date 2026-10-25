@@ -5,15 +5,15 @@
 
 /* ---------- ROOT VARIABLES ---------- */
 :root {
-    --cursor-default: url('../cursor/1.cur'), auto;
-    --cursor-pointer: url('../cursor/2.cur'), pointer;
-    --cursor-text: url('../cursor/7.cur'), text;
+    --cursor-default: auto;
+    --cursor-pointer: pointer;
+    --cursor-text: text;
     --cursor-wait: wait;
     --cursor-progress: progress;
-    --cursor-help: url('../cursor/8.cur'), help;
+    --cursor-help: help;
     --cursor-grab: grab;
     --cursor-grabbing: grabbing;
-    --cursor-not-allowed: url('../cursor/10.cur'), not-allowed;
+    --cursor-not-allowed: not-allowed;
     --cursor-zoom-in: zoom-in;
 }
 

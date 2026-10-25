@@ -1,17 +1,14 @@
 // sw.js - Service Worker untuk DUKOPS
-const CACHE_NAME = 'dukops-v5';
+const CACHE_NAME = 'dukops-v12';
 
 const urlsToCache = [
     'index.html',
     'app.js',
+    'thankyou.html',
+    'js/indonesian-voice.js',
     'js/cursor.js',
     'css/main.css',
     'css/cursor.css',
-    'cursor/1.cur',
-    'cursor/2.cur',
-    'cursor/7.cur',
-    'cursor/8.cur',
-    'cursor/10.cur',
     'icons/favicon-96x96.png',
     'icons/favicon.svg',
     'site.webmanifest',
@@ -106,7 +103,7 @@ self.addEventListener('fetch', event => {
                                 <style>
                                     * { margin:0; padding:0; box-sizing:border-box; }
                                     body {
-                                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+                                        font-family: Roboto, 'Droid Sans', 'Noto Sans', Arial, sans-serif;
                                         background: #0a1a0a;
                                         color: #e0e8e0;
                                         display: flex;
