@@ -1,18 +1,17 @@
 // sw.js - Service Worker untuk DUKOPS
-const CACHE_NAME = 'dukops-v12';
+const CACHE_NAME = 'dukops-v25';
 
 const urlsToCache = [
     'index.html',
     'app.js',
     'thankyou.html',
     'js/indonesian-voice.js',
-    'js/cursor.js',
+    'header/header-background.png',
+    'kamuflase.png',
     'css/main.css',
-    'css/cursor.css',
     'icons/favicon-96x96.png',
     'icons/favicon.svg',
-    'site.webmanifest',
-    'LOGO KOREM163 Wirasatya.png'
+    'site.webmanifest'
 ];
 
 // ============================================================
@@ -132,7 +131,6 @@ self.addEventListener('fetch', event => {
                                         border-radius: 8px;
                                         font-size: 16px;
                                         font-weight: bold;
-                                        cursor: pointer;
                                     }
                                     .btn-retry:hover { background: #66bb6a; }
                                     .status { font-size: 12px; color: #556655; margin-top: 15px; }

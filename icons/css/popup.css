@@ -80,7 +80,6 @@
     background: none;
     border: none;
     font-size: 24px;
-    cursor: pointer;
     color: #9fd49f;
     width: 36px;
     height: 36px;
@@ -113,7 +112,6 @@
     color: #e6ffe6;
     border: 1px solid rgba(46, 204, 113, 0.12);
     font-size: 13px;
-    cursor: pointer;
     font-family: var(--sys-font);
 }
 
@@ -164,7 +162,6 @@
     background: #0f1a12;
     border-radius: 10px;
     padding: 10px 14px;
-    cursor: pointer;
     border: 1px solid rgba(46, 204, 113, 0.06);
 }
 
@@ -268,7 +265,6 @@
     color: #ffffff;
     font-weight: 600;
     font-size: 14px;
-    cursor: pointer;
     width: 100%;
     font-family: var(--sys-font);
 }

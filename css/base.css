@@ -18,9 +18,8 @@
    2. ROOT VARIABLES
    ================================================================ */
 :root {
-    /* Android system fonts with a generic sans-serif fallback for broad compatibility. */
     --sys-font: Roboto, "Droid Sans", "Noto Sans", Arial, sans-serif;
-    font-family: var(--sys-font);
+    font-family: Roboto, "Droid Sans", "Noto Sans", Arial, sans-serif;
     
     /* Colors - Dark Green Theme (Koramil) */
     --primary: #0a1a0a;
@@ -69,10 +68,11 @@
 html {
      background: #263a24;
      overflow: auto;
+     font-family: Roboto, "Droid Sans", "Noto Sans", Arial, sans-serif;
 }
 
 body {
-    font-family: var(--sys-font);
+    font-family: Roboto, "Droid Sans", "Noto Sans", Arial, sans-serif;
     background: #263a24;
     color: var(--text-light);
     line-height: 1.6;
@@ -90,7 +90,7 @@ button,
 input,
 select,
 textarea {
-    font-family: inherit;
+    font-family: Roboto, "Droid Sans", "Noto Sans", Arial, sans-serif;
 }
 
 .container {

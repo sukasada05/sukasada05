@@ -23,7 +23,6 @@ button {
     color: var(--btn-color);
     border: 1px solid rgba(76, 175, 80, 0.15);
     border-radius: var(--btn-radius);
-    cursor: pointer;
     width: 100%;
     font-weight: 600;
     font-size: var(--btn-font-size);
@@ -39,7 +38,6 @@ button:hover:not(:disabled) {
 
 button:disabled {
     background: #333;
-    cursor: not-allowed;
     opacity: 0.4;
     border-color: transparent;
 }
@@ -165,7 +163,6 @@ button i {
     border-radius: 50px;
     padding: 10px 18px;
     font-weight: 600;
-    cursor: pointer;
     z-index: 1000;
     display: none;
     align-items: center;

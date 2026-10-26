@@ -49,7 +49,6 @@
     font-size: 12px;
     font-weight: 700;
     width: auto;
-    cursor: pointer;
     transition: background 0.2s ease;
 }
 
@@ -65,7 +64,6 @@
     border-radius: 8px;
     padding: 6px 14px;
     font-weight: 700;
-    cursor: pointer;
     transition: background 0.2s ease;
 }
 
@@ -87,7 +85,6 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    cursor: pointer;
     transition: background 0.2s ease;
 }
 
@@ -97,7 +94,6 @@
 
 .btn-attendance:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .btn-compact {
@@ -194,7 +190,6 @@
     align-items: center;
     border-radius: 8px;
     padding: 6px 10px;
-    cursor: pointer;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--attendance-border);
 }
@@ -216,7 +211,6 @@
     color: #ffffff;
     font-weight: 600;
     border: 1px solid var(--attendance-border);
-    cursor: pointer;
 }
 
 #attendanceMonthFilter:hover,
@@ -257,7 +251,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: default;
 }
 
 .desa-name {

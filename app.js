@@ -7,6 +7,10 @@ let img = new Image();
 let selectedDesa = "";
 let kordinatList = [];
 let currentKoordinat = "";
+let desaCoordinatesRequestId = 0;
+let driveReportRequestId = 0;
+let activeDriveReportKey = "";
+let loadedDriveReportKey = "";
 let tanggalWaktu = "";
 let narrativeDatePrefix = "";
 let submittedDates = [];
@@ -198,6 +202,7 @@ async function sendToBackend(action, data = {}) {
                 if (data.monthFilter) url += `&monthFilter=${encodeURIComponent(data.monthFilter)}`;
             }
             const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } else {
             const formData = new FormData();
@@ -221,6 +226,124 @@ async function sendToBackend(action, data = {}) {
         console.error(`Error in ${action}:`, error);
         return { success: false, error: error.message };
     }
+}
+
+async function updateDriveReportLog(force = false) {
+    const countElement = document.getElementById('driveReportCount');
+    const logElement = document.getElementById('driveReportLog');
+    if (!countElement || !logElement) return;
+
+    const dateInput = document.getElementById('tanggalWaktu');
+    const selectedDate = dateInput && dateInput.value ? new Date(dateInput.value) : null;
+    const desaInfo = normalizeDesaName(selectedDesa);
+    if (!desaInfo.cleanName || !selectedDate || Number.isNaN(selectedDate.getTime())) {
+        driveReportRequestId++;
+        activeDriveReportKey = "";
+        loadedDriveReportKey = "";
+        countElement.textContent = "0";
+        logElement.innerHTML = '<li class="drive-report-empty">Pilih desa/kelurahan dan tanggal untuk melihat file terkirim.</li>';
+        return null;
+    }
+
+    const monthName = selectedDate.toLocaleDateString('id-ID', { month: 'long' });
+    const monthYear = selectedDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    const reportKey = `${desaInfo.cleanName.toLowerCase()}|${monthName.toLowerCase()}`;
+    if (!force && (activeDriveReportKey === reportKey || loadedDriveReportKey === reportKey)) return null;
+
+    const requestId = ++driveReportRequestId;
+    activeDriveReportKey = reportKey;
+    countElement.textContent = "…";
+    logElement.innerHTML = '<li class="drive-report-empty">Memuat daftar file terkirim dari Google Drive...</li>';
+
+    try {
+        const result = await sendToBackend('listFiles', {
+            desaFilter: desaInfo.cleanName,
+            monthFilter: monthName
+        });
+        if (requestId !== driveReportRequestId) return null;
+        if (!result || result.success === false) {
+            throw new Error(result && result.error ? result.error : "Daftar file tidak dapat dimuat.");
+        }
+
+        let files = null;
+        if (Array.isArray(result)) files = result;
+        else if (Array.isArray(result.files)) files = result.files;
+        else if (Array.isArray(result.data)) files = result.data;
+        else if (Array.isArray(result.items)) files = result.items;
+        else if (result.data && Array.isArray(result.data.files)) files = result.data.files;
+        else if (result.result && Array.isArray(result.result.files)) files = result.result.files;
+        if (!files) throw new Error("Format daftar file dari Google Drive tidak dikenali.");
+
+        const zipFiles = files.map(file => {
+            const name = typeof file === 'string'
+                ? file
+                : file && (file.name || file.fileName || file.filename || file.title);
+            if (!name) return null;
+            const cleanName = String(name).trim();
+            const dateMatch = cleanName.match(
+                /^(?:\d+\.\s*)?.+?\s+(\d{1,2})\s+(\d{1,2})\s+(\d{4})\.zip$/i
+            );
+            const dateValue = dateMatch
+                ? new Date(Number(dateMatch[3]), Number(dateMatch[2]) - 1, Number(dateMatch[1])).getTime()
+                : Number.POSITIVE_INFINITY;
+            return { file, name: cleanName, dateValue };
+        }).filter(item =>
+            item &&
+            /\.zip$/i.test(item.name) &&
+            item.name.toLowerCase().startsWith(`${desaInfo.cleanName.toLowerCase()} `)
+        );
+        zipFiles.sort((a, b) => a.dateValue - b.dateValue || a.name.localeCompare(b.name, 'id'));
+
+        countElement.textContent = String(zipFiles.length);
+        while (logElement.firstChild) logElement.removeChild(logElement.firstChild);
+        if (zipFiles.length === 0) {
+            logElement.innerHTML = '<li class="drive-report-empty">Belum ada file terkirim untuk desa/kelurahan dan bulan ini.</li>';
+        } else {
+            zipFiles.forEach(({ name }, index) => {
+                const item = document.createElement('li');
+                item.textContent = `${index + 1}. ${name.replace(/\.zip$/i, '')}`;
+                logElement.appendChild(item);
+            });
+        }
+
+        desaCounter[selectedDesa] = {
+            count: zipFiles.length,
+            files: zipFiles.map(item => item.name).slice(-TARGET_LAPORAN),
+            month: monthYear
+        };
+        try {
+            localStorage.setItem('dukopsDesaCounter', JSON.stringify(desaCounter));
+        } catch (error) {
+            console.warn("Counter laporan Google Drive tidak dapat disimpan secara lokal:", error);
+        }
+        loadedDriveReportKey = reportKey;
+        if (zipFiles.length >= TARGET_LAPORAN) {
+            redirectToThankYou(desaInfo.original, zipFiles.length, monthYear);
+        }
+        return zipFiles.length;
+    } catch (error) {
+        if (requestId !== driveReportRequestId) return null;
+        loadedDriveReportKey = "";
+        console.error("Gagal memuat log file Google Drive:", error);
+        countElement.textContent = "—";
+        logElement.innerHTML = '<li class="drive-report-error">Gagal memuat log Google Drive. Periksa koneksi lalu pilih kembali desa atau bulan.</li>';
+        return null;
+    } finally {
+        if (requestId === driveReportRequestId) activeDriveReportKey = "";
+    }
+}
+
+function redirectToThankYou(desaName, count, monthYear) {
+    if (!Number.isInteger(count) || count < TARGET_LAPORAN) return false;
+
+    saveLastSuccessfulReport(desaName, count, monthYear);
+    const thankYouParams = new URLSearchParams({
+        desa: desaName,
+        count: String(count),
+        month: monthYear
+    });
+    window.location.href = `thankyou.html?${thankYouParams.toString()}`;
+    return true;
 }
 
 async function uploadToGoogleDrive(zipBlob, zipFileName, desaName, date) {
@@ -441,11 +564,17 @@ function updateKegiatanLabel() {
     const label = document.getElementById('labelNarasiKegiatan');
     if (!label) return;
     label.textContent = selectedDesa
-        ? `Kegiatan: Babinsa ${selectedDesa}`
+        ? `Kegiatan: Babinsa  ${normalizeDesaName(selectedDesa).cleanName}.`
         : 'Kegiatan: Babinsa';
 }
 
+function showDesaActivationPopup(previewElement) {
+    if (previewElement) previewElement.textContent = "Koordinat belum tersedia";
+    window.alert("Hubungi admin untuk aktivasi desa/kelurahan.");
+}
+
 async function loadSelectedDesa() {
+    const requestId = ++desaCoordinatesRequestId;
     const select = document.getElementById('selectDesa');
     const jsonPath = select.value;
     const loading = document.getElementById('loadingKoordinat');
@@ -454,6 +583,8 @@ async function loadSelectedDesa() {
 
     const selectedOption = select.options[select.selectedIndex];
     selectedDesa = selectedOption.getAttribute('data-raw-name') || selectedOption.text;
+    kordinatList = [];
+    currentKoordinat = "";
     updateKegiatanLabel();
     updateNarrativePrefix();
 
@@ -465,6 +596,7 @@ async function loadSelectedDesa() {
         previewDesaEl.textContent = desaInfo.cleanName;
         previewDesaEl.style.display = 'block';
     }
+    updateDriveReportLog();
 
     const fotoLabel = document.getElementById('labelFotoKegiatan');
     if (fotoLabel) fotoLabel.innerHTML = `<i class="fas fa-camera"></i> Foto Kegiatan: ${desaInfo.cleanName}`;
@@ -476,25 +608,50 @@ async function loadSelectedDesa() {
     try {
         console.log(`📂 Fetching coordinates from: ${jsonPath}`);
         const response = await fetch(jsonPath);
-        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        const jsonData = await response.json();
-        if (!jsonData.coordinates || !Array.isArray(jsonData.coordinates)) {
-            throw new Error("Format JSON koordinat tidak valid");
+        if (requestId !== desaCoordinatesRequestId) return;
+        if (response.status === 404) {
+            showDesaActivationPopup(previewKordinatEl);
+            return;
         }
-        kordinatList = jsonData.coordinates.map(coord => `${coord.lat},${coord.lon},${coord.elevation}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        let jsonData;
+        try {
+            jsonData = await response.json();
+        } catch (error) {
+            if (!(error instanceof SyntaxError)) throw error;
+            if (requestId !== desaCoordinatesRequestId) return;
+            showDesaActivationPopup(previewKordinatEl);
+            return;
+        }
+        if (requestId !== desaCoordinatesRequestId) return;
+        const coordinates = Array.isArray(jsonData.coordinates)
+            ? jsonData.coordinates.filter(coord =>
+                coord &&
+                coord.lat !== null && coord.lat !== undefined && String(coord.lat).trim() !== '' &&
+                coord.lon !== null && coord.lon !== undefined && String(coord.lon).trim() !== '' &&
+                Number.isFinite(Number(coord.lat)) &&
+                Number.isFinite(Number(coord.lon)))
+            : [];
+        if (coordinates.length === 0) {
+            showDesaActivationPopup(previewKordinatEl);
+            return;
+        }
+        kordinatList = coordinates.map(coord => `${coord.lat},${coord.lon},${coord.elevation || ''}`);
         console.log(`📌 Loaded ${kordinatList.length} coordinates`);
-        if (kordinatList.length === 0) throw new Error("File koordinat kosong");
         pickRandomKoordinat();
         showNotification(`Koordinat ${desaInfo.cleanName} dimuat (${kordinatList.length} titik)`, "success");
     } catch (error) {
+        if (requestId !== desaCoordinatesRequestId) return;
         console.error("❌ Error loading coordinates:", error);
         if (previewKordinatEl) previewKordinatEl.textContent = "Gagal memuat koordinat";
         showNotification("Gagal memuat koordinat: " + error.message, "error");
     } finally {
-        if (loading) loading.style.display = 'none';
-        updatePreview();
-        updateNarrativePrefix();
-        checkInputCompletion();
+        if (requestId === desaCoordinatesRequestId) {
+            if (loading) loading.style.display = 'none';
+            updatePreview();
+            updateNarrativePrefix();
+            checkInputCompletion();
+        }
     }
 }
 
@@ -596,6 +753,7 @@ function updateDatePreview() {
             if (display) display.textContent = 'TANGGAL & WAKTU';
         }
     }
+    updateDriveReportLog();
     updatePreview();
     checkInputCompletion();
 }
@@ -771,6 +929,14 @@ function updatePreview() {
     }
 }
 
+function showLoading() {
+    document.body.classList.add('loading');
+}
+
+function hideLoading() {
+    document.body.classList.remove('loading');
+}
+
 async function processSubmission() {
     if (!validateSubmission()) return;
     if (isSameDateMonthSubmission()) {
@@ -833,15 +999,20 @@ async function processSubmission() {
         const driveUploaded = await uploadToGoogleDrive(content, zipFileNameForBackend, selectedDesa, date);
 
         if (driveUploaded) {
-            const desaData = updateDesaCounter(selectedDesa, zipFileNameForBackend);
+            let desaData = updateDesaCounter(selectedDesa, zipFileNameForBackend);
+            const driveCount = await updateDriveReportLog(true);
+            if (Number.isInteger(driveCount)) {
+                desaData = desaCounter[selectedDesa];
+            }
             saveLastSuccessfulReport(desaInfo.original, desaData.count, monthYear);
             saveSubmittedDate(tanggalWaktu);
-            const thankYouParams = new URLSearchParams({
-                desa: desaInfo.original,
-                count: String(desaData.count),
-                month: monthYear
-            });
-            window.location.href = `thankyou.html?${thankYouParams.toString()}`;
+            if (!redirectToThankYou(desaInfo.original, desaData.count, monthYear)) {
+                showNotification(
+                    `✅ Laporan berhasil dikirim (${desaData.count}/${TARGET_LAPORAN}). Silakan kirim laporan berikutnya.`,
+                    "success"
+                );
+                clearInputsAfterSuccessfulSend();
+            }
         } else {
             showNotification(`⚠ Laporan hanya didownload, gagal simpan ke Drive`, "warning");
             saveSubmittedDate(tanggalWaktu);
@@ -855,6 +1026,20 @@ async function processSubmission() {
         button.disabled = false;
         button.innerHTML = originalText;
     }
+}
+
+function clearInputsAfterSuccessfulSend() {
+    img = new Image();
+    const narasiEl = document.getElementById('narasi');
+    if (narasiEl) narasiEl.value = "";
+    narrativeDatePrefix = "";
+    const gambarEl = document.getElementById('gambar');
+    if (gambarEl) gambarEl.value = "";
+    const gambarNama = document.getElementById('gambarNama');
+    if (gambarNama) gambarNama.textContent = "Belum ada foto dipilih";
+    updatePreview();
+    resetCanvas();
+    checkInputCompletion();
 }
 
 function validateSubmission() {
@@ -910,6 +1095,7 @@ function resetCanvas() {
 }
 
 function resetForm() {
+    desaCoordinatesRequestId++;
     selectedDesa = "";
     kordinatList = [];
     currentKoordinat = "";
@@ -1055,7 +1241,7 @@ function showThankYouPopup(desaName, count) {
             <button onclick="this.closest('.thankyou-popup').remove()"
                 style="background: linear-gradient(135deg, #4CAF50, #2b4d2b); color: white;
                 border: none; padding: 12px 25px; border-radius: 8px; font-size: 16px;
-                font-weight: bold; cursor: pointer; width: 100%;">
+                font-weight: bold; width: 100%;">
                 <i class="fas fa-thumbs-up"></i> TERIMA KASIH
             </button>
         </div>

@@ -34,12 +34,9 @@
 
     <!-- CSS MODULAR -->
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/cursor.js"></script>
-
     <!-- Sembunyikan tooltip indikator Supabase -->
     <style>
         .indicator-tooltip { display: none !important; }
-        .supabase-indicator { cursor: default; }
 
         /* Gaya untuk tab CanvasPRO dengan iframe */
         #canvasproContent {
@@ -68,12 +65,31 @@
             }
         }
 
+        .app-banner {
+            width: 100%;
+            margin: 0 0 8px;
+            overflow: hidden;
+            border-radius: 6px;
+        }
+        .app-banner img {
+            display: block;
+            width: 100%;
+            height: 52px;
+            object-fit: fill;
+        }
+        .app-banner + .nav-buttons {
+            margin-top: 0 !important;
+        }
+
         .village-start-screen .splash-content {
+            width: 92vw;
+            max-width: 430px;
             width: min(92vw, 430px);
             padding: 34px 20px 24px;
+            box-sizing: border-box;
             background-image:
                 linear-gradient(rgba(11, 22, 10, 0.78), rgba(11, 22, 10, 0.88)),
-                url('header/header-background.png');
+                url('kamuflase.png');
             background-size: cover;
             background-position: center;
             border: 1px solid rgba(135, 187, 255, 0.7);
@@ -89,6 +105,8 @@
 
         .village-start-screen .startup-logo {
             display: block;
+            width: 72vw;
+            max-width: 220px;
             width: min(220px, 72vw);
             height: auto;
             max-height: 150px;
@@ -99,6 +117,7 @@
         .village-start-screen .startup-title {
             margin: 0 0 6px;
             color: #f4d878;
+            font-size: 8vw;
             font-size: clamp(32px, 8vw, 46px);
             font-weight: 800;
             letter-spacing: 4px;
@@ -133,6 +152,7 @@
             border: 1px solid rgba(191, 220, 255, 0.8) !important;
             background: linear-gradient(110deg, #4d96ff, #21469d) !important;
             color: #ffffff !important;
+            font-size: 16px !important;
             font-size: clamp(15px, 2.8vw, 20px) !important;
             font-weight: 500 !important;
             line-height: 1.2;
@@ -200,7 +220,6 @@
         .datetime-input-shell {
             position: relative;
             margin-top: 4px;
-            container-type: inline-size;
         }
 
         .datetime-picker-area input[type="datetime-local"] {
@@ -215,20 +234,55 @@
 
         .datetime-input-display {
             position: absolute;
+            top: 0;
+            right: 10px;
+            bottom: 0;
+            left: 10px;
             inset: 0 10px;
             display: flex;
             align-items: center;
-            color: #0a1a2e;
-            font-size: clamp(9px, 2cqw, 14px);
+            color: #ffffff;
+            font-size: 12px;
             font-weight: 600;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.2px;
             line-height: 1;
             white-space: nowrap;
             overflow: hidden;
             pointer-events: none;
-            text-shadow:
-                0 1px 2px rgba(0, 0, 0, 0.9),
-                0 0 1px rgba(0, 0, 0, 0.95);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .village-start-screen .splash-content {
+                width: 92vw;
+                max-height: calc(100vh - 16px);
+                padding: 28px 18px 20px;
+                overflow-y: auto;
+            }
+
+            .datetime-input-display {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .village-start-screen .splash-content {
+                padding: 24px 16px 18px;
+            }
+
+            .datetime-input-display {
+                font-size: 10px;
+            }
+        }
+
+        @supports (font-size: 3.6cqw) {
+            .datetime-input-shell {
+                container-type: inline-size;
+            }
+
+            .datetime-input-display {
+                font-size: clamp(10px, 3.6cqw, 14px);
+            }
         }
 
     </style>
@@ -266,6 +320,10 @@
         <button id="installButton" style="display:none;">
             <i class="fas fa-download"></i> Install App
         </button>
+
+        <div class="app-banner">
+            <img src="header/header-background.png" alt="Koramil 1609-05/Sukasada">
+        </div>
 
         <!-- ===== NAVIGASI ===== -->
         <div class="nav-buttons">
@@ -321,6 +379,19 @@
                     <button id="btnExit" class="action-exit-btn" onclick="exitApp()"><i class="fas fa-right-from-bracket"></i> KELUAR</button>
                     <!-- Tombol LAPORAN telah dihapus -->
                 </div>
+
+                <section id="driveReportPanel" class="drive-report-panel" aria-live="polite">
+                    <div class="drive-report-counter">
+                        <span><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Jumlah terkirim</span>
+                        <strong id="driveReportCount">0</strong>
+                    </div>
+                    <div class="drive-report-log">
+                        <h3><i class="fas fa-file-zipper" aria-hidden="true"></i> File Terkirim :</h3>
+                        <ul id="driveReportLog">
+                            <li class="drive-report-empty">Pilih desa/kelurahan dan tanggal untuk melihat file terkirim.</li>
+                        </ul>
+                    </div>
+                </section>
 
                 <div id="attendancePanel" style="display: none;">
                     <div class="attendance-header">

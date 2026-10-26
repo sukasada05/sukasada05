@@ -70,7 +70,6 @@ label i {
     color: #0a1a2e !important;
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
 }
 
 .file-input-wrapper span {
@@ -164,12 +163,10 @@ textarea {
 .datetime-picker-area {
     display: block;
     width: 100%;
-    cursor: pointer;
 }
 
 .datetime-picker-area label,
 .datetime-picker-area input {
-    cursor: pointer;
 }
 
 .datetime-wrapper input[type="datetime-local"] {
@@ -226,7 +223,6 @@ textarea {
     color: #ffffff;
     font-weight: 600;
     font-size: 12px;
-    cursor: pointer;
     margin-top: 0;
     width: auto;
     font-family: var(--sys-font);
