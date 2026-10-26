@@ -26,33 +26,116 @@
     </main>
     <script src="js/indonesian-voice.js"></script>
     <script>
-        try {
-            const params = new URLSearchParams(window.location.search);
-            const savedReport = JSON.parse(localStorage.getItem('dukopsLastSuccessfulReport') || 'null');
-            const report = {
-                desaName: params.get('desa') || (savedReport && savedReport.desaName),
-                count: params.has('count') ? Number(params.get('count')) : savedReport && savedReport.count,
-                monthYear: params.get('month') || (savedReport && savedReport.monthYear)
-            };
+        /* ====== SUARA LANGSUNG + CEPAT + VOICE LAKI-LAKI ====== */
+        (function () {
+            'use strict';
 
-            if (report && typeof report.desaName === 'string' &&
-                Number.isInteger(report.count) && report.count > 0 &&
-                typeof report.monthYear === 'string' && report.monthYear) {
-                document.getElementById('thankyou-message').textContent =
-                    `Terima kasih Babinsa ${report.desaName} telah mengirim ${report.count} laporan.`;
-                document.getElementById('thankyou-count').textContent =
-                    `Jumlah laporan terkirim bulan ${report.monthYear} ${report.count} laporan.`;
+            var sudahBicara = false;
+            var teksTertunda = '';
+            var timerSuara = null;
 
-                if (typeof window.speakIndonesian === 'function') {
-                    window.speakIndonesian(
-                        `Terima kasih Babinsa ${report.desaName} telah mengirim laporan. ` +
-                        `Jumlah laporan terkirim bulan ${report.monthYear} ${report.count} laporan.`
-                    );
+            function pilihSuaraLakiLaki() {
+                if (!('speechSynthesis' in window)) return null;
+                var semua = window.speechSynthesis.getVoices() || [];
+                var suaraID = semua.filter(function (v) {
+                    var lang = (v.lang || '').toLowerCase();
+                    var nama = (v.name || '').toLowerCase();
+                    return lang.indexOf('id') === 0 || lang.indexOf('id-') === 0 || nama.indexOf('indonesia') !== -1;
+                });
+
+                var namaLaki = /(male|pria|laki|andika|ardi|budi|dimas|reza|surya|google.*male)/i;
+                var namaWanita = /(female|wanita|perempuan|gadis|sari|damayanti|dewi|putri)/i;
+
+                var laki = suaraID.filter(function (v) {
+                    var n = v.name || '';
+                    return namaLaki.test(n) && !namaWanita.test(n);
+                })[0];
+
+                return laki || suaraID[0] || null;
+            }
+
+            function bicaraSekarang(teks) {
+                if (sudahBicara) return;
+                if (!('speechSynthesis' in window)) {
+                    if (typeof window.speakIndonesian === 'function') window.speakIndonesian(teks);
+                    return;
+                }
+                try {
+                    window.speechSynthesis.cancel();   // hentikan sisa antrean agar langsung bunyi
+                    window.speechSynthesis.resume();
+                    var u = new SpeechSynthesisUtterance(teks);
+                    u.lang = 'id-ID';
+                    u.rate = 1.05;   // sedikit lebih cepat
+                    u.pitch = 0.85;  // lebih berat -> kesan suara laki-laki
+                    u.volume = 1;
+                    var v = pilihSuaraLakiLaki();
+                    if (v) u.voice = v;
+                    sudahBicara = true;
+                    window.speechSynthesis.speak(u);
+                } catch (e) {
+                    console.error('Gagal memutar suara:', e);
                 }
             }
-        } catch (error) {
-            console.error('Gagal memuat ringkasan laporan terakhir:', error);
-        }
+
+            function mulaiBicara(teks) {
+                teksTertunda = teks;
+                if (!('speechSynthesis' in window)) { bicaraSekarang(teks); return; }
+                if (window.speechSynthesis.getVoices().length) { bicaraSekarang(teks); return; }
+
+                var sekali = function () { bicaraSekarang(teksTertunda); };
+                window.speechSynthesis.addEventListener('voiceschanged', sekali, { once: true });
+                clearTimeout(timerSuara);
+                timerSuara = setTimeout(sekali, 200); // jangan menunggu lama
+            }
+
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var savedReport = JSON.parse(localStorage.getItem('dukopsLastSuccessfulReport') || 'null');
+                var report = {
+                    desaName: params.get('desa') || (savedReport && savedReport.desaName),
+                    count: params.has('count') ? Number(params.get('count')) : savedReport && savedReport.count,
+                    monthYear: params.get('month') || (savedReport && savedReport.monthYear)
+                };
+
+                var teksSuara;
+
+                if (report && typeof report.desaName === 'string' &&
+                    Number.isInteger(report.count) && report.count > 0 &&
+                    typeof report.monthYear === 'string' && report.monthYear) {
+
+                    document.getElementById('thankyou-message').textContent =
+                        `Terima kasih Babinsa ${report.desaName} telah mengirim ${report.count} laporan.`;
+                    document.getElementById('thankyou-count').textContent =
+                        `Jumlah laporan terkirim bulan ${report.monthYear} ${report.count} laporan.`;
+
+                    teksSuara =
+                        `Terima kasih Babinsa ${report.desaName} telah mengirim laporan. ` +
+                        `Kerja bagus, tetap semangat dan terus tingkatkan pengabdian Anda! ` +
+                        `Jumlah laporan terkirim bulan ${report.monthYear} sebanyak ${report.count} laporan. ` +
+                        `Pertahankan kinerja terbaik Anda.`;
+                } else {
+                    teksSuara =
+                        `Terima kasih. Laporan kegiatan Anda telah berhasil dikirim. ` +
+                        `Kerja bagus, tetap semangat dan terus tingkatkan kinerja Anda.`;
+                }
+
+                // Langsung bunyi, jangan menunggu apa pun
+                mulaiBicara(teksSuara);
+
+                // Cadangan: sebagian browser HP butuh sentuhan pertama
+                document.addEventListener('pointerdown', function () {
+                    if (!sudahBicara) {
+                        mulaiBicara(teksSuara);
+                    } else if ('speechSynthesis' in window) {
+                        window.speechSynthesis.resume();
+                    }
+                }, { once: true });
+
+            } catch (error) {
+                console.error('Gagal memuat ringkasan laporan terakhir:', error);
+                mulaiBicara('Terima kasih. Laporan Anda telah berhasil dikirim. Tetap semangat!');
+            }
+        })();
     </script>
 </body>
 </html>
