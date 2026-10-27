@@ -72,12 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!splashScreen) return;
     const startupDesa = document.getElementById('startupDesa');
     if (!startupDesa) return;
-
-    startupDesa.addEventListener('change', () => {
-        if (!startupDesa.value) return;
-        window.startupDesaValue = startupDesa.value;
-        loadDukopsApp();
-    });
     loadDesaList();
     loadRunningText();
 });
@@ -112,6 +106,26 @@ async function loadDukopsApp() {
         window.startupDesaValue = '';
     }
 }
+
+window.continueToDashboard = async function() {
+    const startupDesa = document.getElementById('startupDesa');
+    const startupContinue = document.getElementById('startupContinue');
+    if (!startupDesa || !startupContinue) return;
+
+    if (!startupDesa.value) {
+        showNotification('Pilih desa/kelurahan terlebih dahulu.', 'error');
+        startupDesa.focus();
+        return;
+    }
+
+    window.startupDesaValue = startupDesa.value;
+    startupContinue.disabled = true;
+    try {
+        await loadDukopsApp();
+    } finally {
+        startupContinue.disabled = false;
+    }
+};
 
 function showApp() {
     const splash = document.getElementById('splashScreen');

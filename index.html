@@ -117,17 +117,21 @@
         .village-start-screen .startup-title {
             margin: 0 0 6px;
             color: #f4d878;
-            font-size: 8vw;
-            font-size: clamp(32px, 8vw, 46px);
+            font-size: clamp(22px, 7vw, 40px);
             font-weight: 800;
-            letter-spacing: 4px;
-            line-height: 1.2;
+            letter-spacing: clamp(1px, 0.8vw, 3px);
+            line-height: 1.15;
             text-shadow:
                 1px 1px 0 #b18428,
                 2px 2px 0 #8a651e,
                 3px 3px 0 #634714,
                 4px 5px 0 rgba(28, 24, 10, 0.8),
                 0 8px 14px rgba(0, 0, 0, 0.65);
+        }
+
+        .village-start-screen .startup-title span {
+            display: block;
+            white-space: nowrap;
         }
 
         .village-start-screen .startup-branch {
@@ -299,12 +303,20 @@
     <!-- ====== PEMILIHAN DESA AWAL ====== -->
     <div id="splashScreen" class="splash-container-modern village-start-screen">
         <div class="splash-content">
-            <h1 class="startup-title">DUKOPS 05</h1>
+            <h1 class="startup-title"><span>KORAMIL 05</span><span>SUKASADA</span></h1>
             <div class="startup-branch" aria-label="TNI-AD">TNI-AD</div>
             <img class="startup-logo" src="logo/logo-1.png" alt="Logo DUKOPS BABINSA">
             <select id="startupDesa">
                 <option value="">Memuat daftar wilayah...</option>
             </select>
+            <div class="startup-actions">
+                <button id="startupContinue" class="startup-button startup-button-continue" type="button" onclick="continueToDashboard()">
+                    <i class="fas fa-arrow-right"></i> Lanjut
+                </button>
+                <button id="startupExit" class="startup-button startup-button-exit" type="button" onclick="exitApp()">
+                    <i class="fas fa-right-from-bracket"></i> Keluar Aplikasi
+                </button>
+            </div>
             <div class="splash-kodim-center running-text" aria-label="Informasi aplikasi">
                 <span id="runningTextContent">Sistem Pelaporan Digitalisasi Babinsa</span>
             </div>
@@ -332,6 +344,9 @@
             <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
             <!-- TAB BARU: CanvasPRO dengan iframe -->
             <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
+            <button class="nav-btn nav-btn-exit" id="appExitButton" type="button" onclick="exitApp()">
+                <i class="fas fa-right-from-bracket" aria-hidden="true"></i> KELUAR
+            </button>
         </div>
 
         <!-- ===== CONTENT DUKOPS ===== -->
@@ -376,7 +391,6 @@
                     <button id="submitBtn" onclick="processSubmission()" disabled>
                         <i class="fas fa-download"></i> KIRIM
                     </button>
-                    <button id="btnExit" class="action-exit-btn" onclick="exitApp()"><i class="fas fa-right-from-bracket"></i> KELUAR</button>
                     <!-- Tombol LAPORAN telah dihapus -->
                 </div>
 

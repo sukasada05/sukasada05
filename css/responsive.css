@@ -557,4 +557,15 @@
     }
 }
 
+.nav-buttons {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+}
+
+.nav-buttons > .nav-btn.nav-btn-exit {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+}
+
 /* ===== End of responsive.css ===== */

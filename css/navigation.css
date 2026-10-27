@@ -103,6 +103,16 @@
     font-family: var(--sys-font);
 }
 
+.nav-btn.nav-btn-exit {
+    background: #b71c1c;
+    color: #ffffff;
+}
+
+.nav-btn.nav-btn-exit:hover,
+.nav-btn.nav-btn-exit:focus-visible {
+    background: #d32f2f;
+}
+
 .nav-btn {
     background: #2d6a2d;
     color: #ffffff;
@@ -140,6 +150,10 @@
 
     .nav-btn-absen:hover {
         background: #0066cc;
+    }
+
+    .nav-btn.nav-btn-exit:hover {
+        background: #d32f2f;
     }
 
 }
