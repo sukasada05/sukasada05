@@ -1182,6 +1182,9 @@ async function processSubmission() {
 
 function clearInputsAfterSuccessfulSend() {
     img = new Image();
+    tanggalWaktu = "";
+    const tanggalWaktuEl = document.getElementById('tanggalWaktu');
+    if (tanggalWaktuEl) tanggalWaktuEl.value = "";
     const narasiEl = document.getElementById('narasi');
     if (narasiEl) narasiEl.value = "";
     narrativeDatePrefix = "";
@@ -1236,6 +1239,7 @@ function resetForm() {
     selectedDesa = "";
     kordinatList = [];
     currentKoordinat = "";
+    tanggalWaktu = "";
     const selectEl = document.getElementById('selectDesa');
     if (selectEl) selectEl.value = "";
     const previewDesaEl = document.getElementById('previewDesa');
