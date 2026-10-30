@@ -1,5 +1,11 @@
 // ================= KONFIGURASI AMAN =================
-const GOOGLE_APPS_SCRIPT_WEBHOOK = "https://script.google.com/macros/s/AKfycbyiJ0uO36CdtGUiy8m03jzwMAUWWMwIILpdBLt5J41ne6aQWHYIp_Cr_Ke6K8iqn4gZ/exec";
+const APP_CONFIG = {
+    googleAppsScriptWebhook: "https://script.google.com/macros/s/AKfycbyiJ0uO36CdtGUiy8m03jzwMAUWWMwIILpdBLt5J41ne6aQWHYIp_Cr_Ke6K8iqn4gZ/exec",
+    absenScriptUrl: "https://script.google.com/macros/s/AKfycbxcKBFM8Mm0A8e_hWfl48uEUuDhlmxK8okgXF4M-102HLEuROZPN9YZlpmKnkRo8b_SKA/exec",
+    allowedImageTypes: ['image/png', 'image/jpeg', 'image/webp'],
+    maxImageSize: 10 * 1024 * 1024
+};
+
 const TARGET_LAPORAN = 9;
 
 // ================= VARIABEL GLOBAL =================
@@ -66,6 +72,24 @@ if (isAndroidDevice) {
     document.documentElement.classList.add('android-device');
 }
 
+function isValidImageFile(file) {
+    if (!file) return false;
+    const type = (file.type || '').toLowerCase();
+    if (!APP_CONFIG.allowedImageTypes.includes(type)) return false;
+    if (typeof file.size === 'number' && file.size > APP_CONFIG.maxImageSize) return false;
+    return true;
+}
+
+function parseLocalDateTime(value) {
+    if (!value) return null;
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function getIsFileProtocol() {
+    return window.location.protocol === 'file:';
+}
+
 // ================= PEMILIHAN WILAYAH AWAL =================
 document.addEventListener('DOMContentLoaded', function () {
     const splashScreen = document.getElementById('splashScreen');
@@ -130,15 +154,21 @@ window.continueToDashboard = async function() {
 function showApp() {
     const splash = document.getElementById('splashScreen');
     const app = document.getElementById('appContainer');
-    splash.style.display = 'none';
-    app.classList.remove('startup-dashboard');
-    app.style.display = 'block';
-    app.style.opacity = '1';
-    document.getElementById('btnDukops').classList.add('active');
-    document.getElementById('dukopsContent').style.display = 'block';
-    document.getElementById('absenContent').style.display = 'none';
-    document.getElementById('hanpanganContent').style.display = 'none';
-    document.getElementById('hanpanganContent').classList.remove('active');
+    if (splash) splash.style.display = 'none';
+    if (app) {
+        app.classList.remove('startup-dashboard');
+        app.style.display = 'block';
+        app.style.opacity = '1';
+    }
+    const dukopsBtn = document.getElementById('btnDukops');
+    if (dukopsBtn) dukopsBtn.classList.add('active');
+    const dukopsContent = document.getElementById('dukopsContent');
+    const absenContent = document.getElementById('absenContent');
+    const hanpanganContent = document.getElementById('hanpanganContent');
+    if (dukopsContent) dukopsContent.style.display = 'block';
+    if (absenContent) absenContent.style.display = 'none';
+    if (hanpanganContent) hanpanganContent.style.display = 'none';
+    if (hanpanganContent) hanpanganContent.classList.remove('active');
 }
 
 window.exitApp = function() {
@@ -208,7 +238,7 @@ async function sendToBackend(action, data = {}) {
         }
         
         if (action === 'listFiles' || action === 'getConfig' || action === 'test') {
-            let url = `${GOOGLE_APPS_SCRIPT_WEBHOOK}?action=${action}`;
+            let url = `${APP_CONFIG.googleAppsScriptWebhook}?action=${action}`;
             if (action === 'listFiles') {
                 if (data.desaFilter) url += `&desaFilter=${encodeURIComponent(data.desaFilter)}`;
                 if (data.monthFilter) url += `&monthFilter=${encodeURIComponent(data.monthFilter)}`;
@@ -228,7 +258,7 @@ async function sendToBackend(action, data = {}) {
                     }
                 }
             });
-            const response = await fetch(GOOGLE_APPS_SCRIPT_WEBHOOK, {
+            const response = await fetch(APP_CONFIG.googleAppsScriptWebhook, {
                 method: 'POST',
                 body: formData
             });
@@ -566,12 +596,6 @@ if (document.readyState === 'loading') document.addEventListener('DOMContentLoad
 
 setTimeout(() => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch (e) {} }, 120);
 
-function parseLocalDateTime(value) {
-    if (!value) return null;
-    const date = new Date(value);
-    return Number.isNaN(date.getTime()) ? null : date;
-}
-
 function normalizeDesaName(desaName) {
     if (!desaName) return { original: "", normalized: "", forTelegram: "", cleanName: "" };
     let normalized = desaName.replace(/^Desa\s+/i, '').replace(/^Kelurahan\s+/i, '').replace(/Kel\.\s*/gi, '').replace(/Kel\s/gi, '').trim();
@@ -709,6 +733,16 @@ function previewImage() {
     if (gambarNama) gambarNama.textContent = file ? file.name : "Belum ada foto dipilih";
 
     if (file) {
+        if (!isValidImageFile(file)) {
+            gambarInput.value = "";
+            if (gambarNama) gambarNama.textContent = "Belum ada foto dipilih";
+            showNotification('Format gambar tidak valid. Gunakan JPG, PNG, atau WebP dengan ukuran maksimal 10MB.', 'warning');
+            img = new Image();
+            updatePreview();
+            checkInputCompletion();
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = function(e) {
             img = new Image();
@@ -876,48 +910,31 @@ function updatePreview() {
         const lineHeight = 44;
         const rightMargin = 10;
 
-        // Fungsi untuk menggambar teks dengan shadow dan outline
         function drawTextWithShadow(text, x, y, color = "#FFFFFF") {
-            // Simpan state ctx
             ctx.save();
-            
-            // Shadow untuk efek bayangan
             ctx.shadowColor = "rgba(0, 0, 0, 0.85)";
             ctx.shadowBlur = 10;
             ctx.shadowOffsetX = 3;
             ctx.shadowOffsetY = 3;
-            
-            // Gambar teks dengan shadow
             ctx.fillStyle = color;
             ctx.fillText(text, x, y);
-            
-            // Reset shadow
             ctx.shadowColor = "transparent";
             ctx.shadowBlur = 0;
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 0;
-            
-            // Gambar outline hitam di sekeliling teks
             ctx.strokeStyle = "rgba(0, 0, 0, 0.8)";
             ctx.lineWidth = 3;
             ctx.strokeText(text, x, y);
-            
-            // Gambar ulang teks di atas outline
             ctx.fillStyle = color;
             ctx.fillText(text, x, y);
-            
-            // Tambahkan shadow tipis di sisi lain untuk efek 3D
             ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
             ctx.shadowBlur = 4;
             ctx.shadowOffsetX = -1;
             ctx.shadowOffsetY = -1;
             ctx.fillText(text, x, y);
-            
-            // Restore state ctx
             ctx.restore();
         }
 
-        // Teks desa
         if (selectedDesa) {
             const desaInfo = normalizeDesaName(selectedDesa);
             const displayDesaName = desaInfo.cleanName;
@@ -932,7 +949,6 @@ function updatePreview() {
             );
         }
 
-        // Teks koordinat
         if (currentKoordinat) {
             drawTextWithShadow(
                 currentKoordinat, 
@@ -941,7 +957,6 @@ function updatePreview() {
             );
         }
 
-        // Teks tanggal
         if (tanggalWaktu) {
             const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
             let dateText = date.toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" }) +
@@ -1019,7 +1034,6 @@ async function processSubmission() {
 
         const content = await zip.generateAsync({ type: "blob" });
 
-        // Download
         const a = document.createElement("a");
         a.href = URL.createObjectURL(content);
         a.download = zipFileNameForDownload;
@@ -1027,7 +1041,6 @@ async function processSubmission() {
         a.click();
         document.body.removeChild(a);
 
-        // Upload Drive
         const driveUploaded = await uploadToGoogleDrive(content, zipFileNameForBackend, selectedDesa, date);
 
         if (driveUploaded) {
@@ -1083,7 +1096,7 @@ function validateSubmission() {
     if (!narasi) { showNotification("Isi narasi kegiatan", "warning"); return false; }
 
     const desaInfo = normalizeDesaName(selectedDesa);
-    const date = new Date(tanggalWaktu);
+    const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
     const day = String(date.getDate()).padStart(2, '0');
     const monthName = date.toLocaleDateString('id-ID', { month: 'long' });
     const monthNum = String(date.getMonth() + 1).padStart(2, '0');
@@ -1159,7 +1172,7 @@ function loadDesaCounter() {
 }
 
 function updateDesaCounter(desaName, fileName) {
-    const date = new Date(tanggalWaktu);
+    const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
     const monthYear = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 
     if (!desaCounter[desaName]) {
@@ -1237,7 +1250,7 @@ function speakTargetReached(wilayahName, count, monthYear) {
 
 // ================= POPUP UCAPAN TERIMA KASIH =================
 function showThankYouPopup(desaName, count) {
-    const date = new Date(tanggalWaktu);
+    const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
     const monthYear = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
     const desaInfo = normalizeDesaName(desaName);
     const targetReached = count >= TARGET_LAPORAN;
@@ -1298,7 +1311,7 @@ function showNotification(message, type) {
 
 // ================= TAB ABSEN (Google Apps Script) =================
 (function() {
-    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxcKBFM8Mm0A8e_hWfl48uEUuDhlmxK8okgXF4M-102HLEuROZPN9YZlpmKnkRo8b_SKA/exec';
+    var SCRIPT_URL = APP_CONFIG.absenScriptUrl;
     var CACHE_KEY_ABSEN = 'absensi_dukops_data';
     var CACHE_EXPIRY = 30 * 60 * 1000;
     var isOnlineAbsen = navigator.onLine;
@@ -1500,9 +1513,9 @@ function showNotification(message, type) {
 })();
 
 // ================= SERVICE WORKER =================
-const isFileProtocol = window.location.protocol === 'file:';
+const isFileProtocol = getIsFileProtocol();
 
-if ('serviceWorker' in navigator && !isFileProtocol) {
+if (!isFileProtocol && 'serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         console.log('🔧 Registering Service Worker...');
         navigator.serviceWorker.register('sw.js')
@@ -1531,7 +1544,7 @@ if ('serviceWorker' in navigator && !isFileProtocol) {
             });
     });
 } else if (isFileProtocol) {
-    console.log('⚠️ Service Worker skipped on file:// origin.');
+    console.log('⚠️ Service Worker skipped on file:// origin. PWA mode requires local HTTP server.');
 } else {
     console.log('⚠️ Service Worker not supported in this browser.');
 }
