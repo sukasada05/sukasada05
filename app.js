@@ -127,9 +127,23 @@ if (isAndroidDevice) {
 
 function isValidImageFile(file) {
     if (!file) return false;
+
     const type = (file.type || '').toLowerCase();
-    if (!APP_CONFIG.allowedImageTypes.includes(type)) return false;
-    if (typeof file.size === 'number' && file.size > APP_CONFIG.maxImageSize) return false;
+    const fileName = (file.name || '').toLowerCase();
+    const extension = fileName.includes('.') ? fileName.split('.').pop() : '';
+    const validExtensions = ['png', 'jpg', 'jpeg', 'webp'];
+
+    const hasValidType = APP_CONFIG.allowedImageTypes.includes(type);
+    const hasValidExtension = validExtensions.includes(extension);
+
+    if (!hasValidType && !hasValidExtension) {
+        return false;
+    }
+
+    if (typeof file.size === 'number' && file.size > APP_CONFIG.maxImageSize) {
+        return false;
+    }
+
     return true;
 }
 
@@ -145,6 +159,17 @@ function getIsFileProtocol() {
 
 function hasValidDataUrl(value) {
     return typeof value === 'string' && /^data:image\//i.test(value);
+}
+
+function createAbortSignal(timeoutMs = 15000) {
+    if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+        return AbortSignal.timeout(timeoutMs);
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    controller.signal.addEventListener('abort', () => clearTimeout(timer), { once: true });
+    return controller.signal;
 }
 
 // ================= PEMILIHAN WILAYAH AWAL =================
@@ -166,7 +191,7 @@ async function loadRunningText() {
     const target = document.getElementById('runningTextContent');
     if (!target) return;
     try {
-        const response = await fetch('running-txt/running.txt?t=' + Date.now());
+        const response = await fetch('running-txt/running.txt?t=' + Date.now(), { signal: createAbortSignal(15000) });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = (await response.text()).trim();
         if (text) target.textContent = text;
@@ -318,7 +343,7 @@ async function sendToBackend(action, data = {}) {
                 if (data.desaFilter) url += `&desaFilter=${encodeURIComponent(data.desaFilter)}`;
                 if (data.monthFilter) url += `&monthFilter=${encodeURIComponent(data.monthFilter)}`;
             }
-            const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+            const response = await fetch(url, { signal: createAbortSignal(15000) });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } else {
@@ -336,7 +361,7 @@ async function sendToBackend(action, data = {}) {
             const response = await fetch(APP_CONFIG.googleAppsScriptWebhook, {
                 method: 'POST',
                 body: formData,
-                signal: AbortSignal.timeout(15000)
+                signal: createAbortSignal(15000)
             });
             return await response.json();
         }
@@ -580,7 +605,7 @@ async function loadDesaList() {
     if (loading) loading.style.display = 'block';
 
     try {
-        const response = await fetch('data/desa-list.json?t=' + Date.now(), { signal: AbortSignal.timeout(15000) });
+        const response = await fetch('data/desa-list.json?t=' + Date.now(), { signal: createAbortSignal(15000) });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         const desaList = (data.desaList || []).map(name => ({ name, type: 'Desa' }));
@@ -695,15 +720,25 @@ function showDesaActivationPopup(previewElement) {
 }
 
 async function loadSelectedDesa() {
-    const requestId = ++desaCoordinatesRequestId;
     const select = document.getElementById('selectDesa');
+    const requestId = ++desaCoordinatesRequestId;
+
+    if (!select) return;
+    if (!select.value) {
+        resetForm();
+        return;
+    }
+
+    const selectedOption = select.options[select.selectedIndex];
+    if (!selectedOption) {
+        resetForm();
+        return;
+    }
+
     const jsonPath = select.value;
     const loading = document.getElementById('loadingKoordinat');
 
-    if (!jsonPath) { resetForm(); return; }
-
-    const selectedOption = select.options[select.selectedIndex];
-    selectedDesa = selectedOption.getAttribute('data-raw-name') || selectedOption.text;
+    selectedDesa = selectedOption.getAttribute('data-raw-name') || selectedOption.textContent || '';
     kordinatList = [];
     currentKoordinat = "";
     updateKegiatanLabel();
@@ -728,7 +763,7 @@ async function loadSelectedDesa() {
 
     try {
         console.log(`📂 Fetching coordinates from: ${jsonPath}`);
-        const response = await fetch(jsonPath, { signal: AbortSignal.timeout(15000) });
+        const response = await fetch(jsonPath, { signal: createAbortSignal(15000) });
         if (requestId !== desaCoordinatesRequestId) return;
         if (response.status === 404) {
             showDesaActivationPopup(previewKordinatEl);
@@ -801,7 +836,7 @@ function pickRandomKoordinat() {
 
 function previewImage() {
     const gambarInput = document.getElementById("gambar");
-    const file = gambarInput.files[0];
+    const file = gambarInput && gambarInput.files ? gambarInput.files[0] : null;
     const gambarNama = document.getElementById("gambarNama");
 
     if (gambarNama) gambarNama.textContent = file ? file.name : "Belum ada foto dipilih";
@@ -1210,11 +1245,13 @@ function validateSubmission() {
 function isSameDateMonthSubmission() {
     if (!tanggalWaktu) return false;
     const currentDate = new Date(tanggalWaktu);
-    const currentDay = currentDate.getDate();
-    const currentMonth = currentDate.getMonth();
+    if (Number.isNaN(currentDate.getTime())) return false;
     return submittedDates.some(dateStr => {
-        const date = new Date(dateStr);
-        return date.getDate() === currentDay && date.getMonth() === currentMonth;
+        const prevDate = new Date(dateStr);
+        if (Number.isNaN(prevDate.getTime())) return false;
+        return prevDate.getFullYear() === currentDate.getFullYear() &&
+               prevDate.getMonth() === currentDate.getMonth() &&
+               prevDate.getDate() === currentDate.getDate();
     });
 }
 
@@ -1294,6 +1331,7 @@ function saveLastSuccessfulReport(desaName, count, monthYear) {
 }
 
 function saveSubmittedDate(dateStr) {
+    if (!dateStr) return;
     submittedDates.push(dateStr);
     safeLocalStorageSet('dukopsSubmittedDates', submittedDates);
 }
@@ -1417,7 +1455,7 @@ function showThankYouPopup(desaName, count) {
             if (!cached || !cached.years) tahunSelect.innerHTML = '<option>❌ Offline - no data</option>';
             return;
         }
-        fetch(SCRIPT_URL + '?action=getYears', { signal: AbortSignal.timeout(15000) }).then(function(r) {
+        fetch(SCRIPT_URL + '?action=getYears', { signal: createAbortSignal(15000) }).then(function(r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
             return r.json();
         }).then(function(y) {
@@ -1461,7 +1499,7 @@ function showThankYouPopup(desaName, count) {
             bulanSelect.disabled = false;
             return;
         }
-        fetch(SCRIPT_URL + '?action=getMonths&tahun=' + encodeURIComponent(t), { signal: AbortSignal.timeout(15000) }).then(function(r) {
+        fetch(SCRIPT_URL + '?action=getMonths&tahun=' + encodeURIComponent(t), { signal: createAbortSignal(15000) }).then(function(r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
             return r.json();
         }).then(function(m) {
@@ -1509,7 +1547,7 @@ function showThankYouPopup(desaName, count) {
             }
         }
         if (!isOnlineAbsen) { showErrorAbsen('Tidak ada koneksi'); return; }
-        fetch(SCRIPT_URL + '?action=getData&tahun=' + encodeURIComponent(t) + '&bulan=' + encodeURIComponent(b), { signal: AbortSignal.timeout(15000) })
+        fetch(SCRIPT_URL + '?action=getData&tahun=' + encodeURIComponent(t) + '&bulan=' + encodeURIComponent(b), { signal: createAbortSignal(15000) })
             .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
             .then(function(d) {
                 currentDataAbsen = d;
