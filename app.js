@@ -26,6 +26,59 @@ let swWaiting = null;
 const canvasPlaceholderImage = new Image();
 canvasPlaceholderImage.src = 'icons/favicon-96x96.png';
 
+function safeLocalStorageGet(key, fallback = null) {
+    try {
+        const raw = localStorage.getItem(key);
+        return raw === null ? fallback : JSON.parse(raw);
+    } catch (error) {
+        console.warn(`localStorage unavailable for ${key}:`, error);
+        return fallback;
+    }
+}
+
+function safeLocalStorageSet(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+    } catch (error) {
+        console.warn(`Failed to save ${key} to localStorage:`, error);
+        return false;
+    }
+}
+
+function showNotification(message, type = 'info') {
+    const toast = document.getElementById('win98Toast');
+    if (toast) {
+        toast.textContent = message;
+        toast.className = 'win98-toast show';
+        if (type === 'success') toast.className += ' success';
+        else if (type === 'error') toast.className += ' error';
+        else if (type === 'warning') toast.className += ' warning';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+        return;
+    }
+
+    // fallback message if toast element doesn't exist
+    const fallback = document.createElement('div');
+    fallback.style.position = 'fixed';
+    fallback.style.bottom = '20px';
+    fallback.style.right = '20px';
+    fallback.style.zIndex = '999999';
+    fallback.style.borderRadius = '8px';
+    fallback.style.background = type === 'error' ? '#c62828' : type === 'warning' ? '#ef6c00' : '#2e7d32';
+    fallback.style.color = '#fff';
+    fallback.style.padding = '12px 16px';
+    fallback.style.boxShadow = '0 10px 30px rgba(0,0,0,0.35)';
+    fallback.style.fontSize = '14px';
+    fallback.style.fontWeight = '600';
+    fallback.textContent = message;
+    document.body.appendChild(fallback);
+    setTimeout(() => fallback.remove(), 3000);
+}
+
 canvasPlaceholderImage.onload = function() {
     const canvas = document.getElementById('canvas');
     if (canvas && (!img || !img.src)) updatePreview();
@@ -88,6 +141,10 @@ function parseLocalDateTime(value) {
 
 function getIsFileProtocol() {
     return window.location.protocol === 'file:';
+}
+
+function hasValidDataUrl(value) {
+    return typeof value === 'string' && /^data:image\//i.test(value);
 }
 
 // ================= PEMILIHAN WILAYAH AWAL =================
@@ -191,35 +248,53 @@ window.exitApp = function() {
 
 // ================= NAVIGASI TAB =================
 window.showDukops = function() {
-    document.getElementById('dukopsContent').style.display = 'block';
-    document.getElementById('absenContent').style.display = 'none';
-    document.getElementById('hanpanganContent').style.display = 'none';
-    document.getElementById('hanpanganContent').classList.remove('active');
-    document.getElementById('btnDukops').classList.add('active');
-    document.getElementById('btnAbsen').classList.remove('active');
-    document.getElementById('btnHanpangan').classList.remove('active');
+    const dukopsContent = document.getElementById('dukopsContent');
+    const absenContent = document.getElementById('absenContent');
+    const hanpanganContent = document.getElementById('hanpanganContent');
+    if (dukopsContent) dukopsContent.style.display = 'block';
+    if (absenContent) absenContent.style.display = 'none';
+    if (hanpanganContent) hanpanganContent.style.display = 'none';
+    if (hanpanganContent) hanpanganContent.classList.remove('active');
+    const btnDukops = document.getElementById('btnDukops');
+    const btnAbsen = document.getElementById('btnAbsen');
+    const btnHanpangan = document.getElementById('btnHanpangan');
+    if (btnDukops) btnDukops.classList.add('active');
+    if (btnAbsen) btnAbsen.classList.remove('active');
+    if (btnHanpangan) btnHanpangan.classList.remove('active');
     currentApp = 'dukops';
 };
 
 window.showAbsenTab = function() {
-    document.getElementById('dukopsContent').style.display = 'none';
-    document.getElementById('absenContent').style.display = 'block';
-    document.getElementById('hanpanganContent').style.display = 'none';
-    document.getElementById('hanpanganContent').classList.remove('active');
-    document.getElementById('btnDukops').classList.remove('active');
-    document.getElementById('btnAbsen').classList.add('active');
-    document.getElementById('btnHanpangan').classList.remove('active');
+    const dukopsContent = document.getElementById('dukopsContent');
+    const absenContent = document.getElementById('absenContent');
+    const hanpanganContent = document.getElementById('hanpanganContent');
+    if (dukopsContent) dukopsContent.style.display = 'none';
+    if (absenContent) absenContent.style.display = 'block';
+    if (hanpanganContent) hanpanganContent.style.display = 'none';
+    if (hanpanganContent) hanpanganContent.classList.remove('active');
+    const btnDukops = document.getElementById('btnDukops');
+    const btnAbsen = document.getElementById('btnAbsen');
+    const btnHanpangan = document.getElementById('btnHanpangan');
+    if (btnDukops) btnDukops.classList.remove('active');
+    if (btnAbsen) btnAbsen.classList.add('active');
+    if (btnHanpangan) btnHanpangan.classList.remove('active');
     if (typeof loadAbsenTahun === 'function') loadAbsenTahun();
 };
 
 window.showHanpangan = function() {
-    document.getElementById('dukopsContent').style.display = 'none';
-    document.getElementById('absenContent').style.display = 'none';
-    document.getElementById('hanpanganContent').style.display = 'block';
-    document.getElementById('hanpanganContent').classList.add('active');
-    document.getElementById('btnDukops').classList.remove('active');
-    document.getElementById('btnAbsen').classList.remove('active');
-    document.getElementById('btnHanpangan').classList.add('active');
+    const dukopsContent = document.getElementById('dukopsContent');
+    const absenContent = document.getElementById('absenContent');
+    const hanpanganContent = document.getElementById('hanpanganContent');
+    if (dukopsContent) dukopsContent.style.display = 'none';
+    if (absenContent) absenContent.style.display = 'none';
+    if (hanpanganContent) hanpanganContent.style.display = 'block';
+    if (hanpanganContent) hanpanganContent.classList.add('active');
+    const btnDukops = document.getElementById('btnDukops');
+    const btnAbsen = document.getElementById('btnAbsen');
+    const btnHanpangan = document.getElementById('btnHanpangan');
+    if (btnDukops) btnDukops.classList.remove('active');
+    if (btnAbsen) btnAbsen.classList.remove('active');
+    if (btnHanpangan) btnHanpangan.classList.add('active');
 };
 
 // ================= BACKEND =================
@@ -243,7 +318,7 @@ async function sendToBackend(action, data = {}) {
                 if (data.desaFilter) url += `&desaFilter=${encodeURIComponent(data.desaFilter)}`;
                 if (data.monthFilter) url += `&monthFilter=${encodeURIComponent(data.monthFilter)}`;
             }
-            const response = await fetch(url);
+            const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return await response.json();
         } else {
@@ -260,7 +335,8 @@ async function sendToBackend(action, data = {}) {
             });
             const response = await fetch(APP_CONFIG.googleAppsScriptWebhook, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: AbortSignal.timeout(15000)
             });
             return await response.json();
         }
@@ -353,11 +429,7 @@ async function updateDriveReportLog(force = false) {
             files: zipFiles.map(item => item.name).slice(-TARGET_LAPORAN),
             month: monthYear
         };
-        try {
-            localStorage.setItem('dukopsDesaCounter', JSON.stringify(desaCounter));
-        } catch (error) {
-            console.warn("Counter laporan Google Drive tidak dapat disimpan secara lokal:", error);
-        }
+        safeLocalStorageSet('dukopsDesaCounter', desaCounter);
         loadedDriveReportKey = reportKey;
         if (zipFiles.length >= TARGET_LAPORAN) {
             redirectToThankYou(desaInfo.original, zipFiles.length, monthYear);
@@ -496,7 +568,8 @@ async function initializeApp() {
 function buildCoordinateJsonPath(desaName) {
     const cleanName = String(desaName || '').trim();
     if (!cleanName) return 'data/coordinates/.json';
-    return `data/coordinates/${encodeURIComponent(cleanName)}.json`;
+    const encoded = encodeURIComponent(cleanName).replace(/%20/g, ' ');
+    return `data/coordinates/${encoded}.json`;
 }
 
 async function loadDesaList() {
@@ -507,7 +580,7 @@ async function loadDesaList() {
     if (loading) loading.style.display = 'block';
 
     try {
-        const response = await fetch('data/desa-list.json?t=' + Date.now());
+        const response = await fetch('data/desa-list.json?t=' + Date.now(), { signal: AbortSignal.timeout(15000) });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         const desaList = (data.desaList || []).map(name => ({ name, type: 'Desa' }));
@@ -618,7 +691,7 @@ function updateKegiatanLabel() {
 
 function showDesaActivationPopup(previewElement) {
     if (previewElement) previewElement.textContent = "Koordinat belum tersedia";
-    window.alert("Hubungi admin untuk aktivasi desa/kelurahan.");
+    showNotification('Aktivasi desa/kelurahan belum tersedia. Hubungi admin untuk konfigurasi.', 'warning');
 }
 
 async function loadSelectedDesa() {
@@ -655,7 +728,7 @@ async function loadSelectedDesa() {
 
     try {
         console.log(`📂 Fetching coordinates from: ${jsonPath}`);
-        const response = await fetch(jsonPath);
+        const response = await fetch(jsonPath, { signal: AbortSignal.timeout(15000) });
         if (requestId !== desaCoordinatesRequestId) return;
         if (response.status === 404) {
             showDesaActivationPopup(previewKordinatEl);
@@ -713,6 +786,7 @@ function pickRandomKoordinat() {
         return;
     }
     const coordElement = document.getElementById('previewKordinat');
+    if (!coordElement) return;
     coordElement.style.transition = "opacity 0.3s";
     coordElement.style.opacity = "0";
     setTimeout(() => {
@@ -822,10 +896,6 @@ function updateDatePreview() {
     updateDriveReportLog();
     updatePreview();
     checkInputCompletion();
-}
-
-function updateNarrativeDatePrefix(date) {
-    updateNarrativePrefix();
 }
 
 function formatNarrativeDateTime(date) {
@@ -984,12 +1054,47 @@ function hideLoading() {
     document.body.classList.remove('loading');
 }
 
+function confirmSubmissionDialog() {
+    return new Promise((resolve) => {
+        const confirmText = `Anda yakin ingin mengirim laporan untuk ${normalizeDesaName(selectedDesa).cleanName}?\n\nFile ZIP akan didownload dan dikirim ke Drive.`;
+        const modal = document.createElement('div');
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.right = '0';
+        modal.style.bottom = '0';
+        modal.style.background = 'rgba(0,0,0,0.72)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '999999';
+        modal.innerHTML = `
+            <div style="background:#0c1a24;border:2px solid #5bb9ff;border-radius:14px;padding:24px;width:min(440px,90vw);color:#fff;box-shadow:0 24px 60px rgba(0,0,0,0.6);">
+                <div style="font-size:22px;font-weight:700;margin-bottom:12px;">Konfirmasi Laporan</div>
+                <div style="font-size:15px;line-height:1.5;color:#d9ebff;white-space:pre-line;">${confirmText}</div>
+                <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:20px;">
+                    <button id="cancelSubmit" style="padding:10px 16px;border:none;border-radius:10px;background:#4a5568;color:#fff;font-weight:700;cursor:pointer;">Batal</button>
+                    <button id="confirmSubmit" style="padding:10px 16px;border:none;border-radius:10px;background:#2e7d32;color:#fff;font-weight:700;cursor:pointer;">Kirim</button>
+                </div>
+            </div>
+        `;
+        const cancel = modal.querySelector('#cancelSubmit');
+        const confirm = modal.querySelector('#confirmSubmit');
+        cancel.addEventListener('click', () => { modal.remove(); resolve(false); });
+        confirm.addEventListener('click', () => { modal.remove(); resolve(true); });
+        document.body.appendChild(modal);
+    });
+}
+
 async function processSubmission() {
     if (!validateSubmission()) return;
     if (isSameDateMonthSubmission()) {
         showNotification("⚠ Sudah ada laporan di tanggal dan bulan yang sama!", "warning");
         return;
     }
+
+    const confirmed = await confirmSubmissionDialog();
+    if (!confirmed) return;
 
     const button = document.getElementById("submitBtn");
     const originalText = button.innerHTML;
@@ -1035,11 +1140,13 @@ async function processSubmission() {
         const content = await zip.generateAsync({ type: "blob" });
 
         const a = document.createElement("a");
-        a.href = URL.createObjectURL(content);
+        const objectUrl = URL.createObjectURL(content);
+        a.href = objectUrl;
         a.download = zipFileNameForDownload;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
 
         const driveUploaded = await uploadToGoogleDrive(content, zipFileNameForBackend, selectedDesa, date);
 
@@ -1094,22 +1201,7 @@ function validateSubmission() {
     if (!img.src || !img.complete) { showNotification("Upload foto kegiatan", "warning"); return false; }
     const narasi = document.getElementById("narasi").value.trim();
     if (!narasi) { showNotification("Isi narasi kegiatan", "warning"); return false; }
-
-    const desaInfo = normalizeDesaName(selectedDesa);
-    const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
-    const day = String(date.getDate()).padStart(2, '0');
-    const monthName = date.toLocaleDateString('id-ID', { month: 'long' });
-    const monthNum = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    let confirmMsg = `Anda yakin ingin mengirim laporan untuk ${desaInfo.cleanName}?\n\n`;
-    confirmMsg += `File ZIP akan:\n`;
-    confirmMsg += `1. Didownload: ${desaInfo.cleanName} ${day} ${monthNum} ${year}.zip\n`;
-    confirmMsg += `2. Berisi file:\n   - ${desaInfo.cleanName} ${day} ${monthName} ${year} Dukops.png\n`;
-    confirmMsg += `   - ${desaInfo.cleanName} ${day} ${monthName} ${year} Narasi.txt\n`;
-    confirmMsg += `3. Dikirim ke Drive: ${desaInfo.cleanName} ${day} ${monthNum} ${year}.zip`;
-
-    return confirm(confirmMsg);
+    return true;
 }
 
 function isSameDateMonthSubmission() {
@@ -1167,8 +1259,8 @@ function resetForm() {
 }
 
 function loadDesaCounter() {
-    const saved = localStorage.getItem('dukopsDesaCounter');
-    desaCounter = saved ? JSON.parse(saved) : {};
+    const saved = safeLocalStorageGet('dukopsDesaCounter', {});
+    desaCounter = saved || {};
 }
 
 function updateDesaCounter(desaName, fileName) {
@@ -1189,26 +1281,22 @@ function updateDesaCounter(desaName, fileName) {
         }
     }
 
-    localStorage.setItem('dukopsDesaCounter', JSON.stringify(desaCounter));
+    safeLocalStorageSet('dukopsDesaCounter', desaCounter);
     return desaCounter[desaName];
 }
 
 function saveLastSuccessfulReport(desaName, count, monthYear) {
-    localStorage.setItem('dukopsLastSuccessfulReport', JSON.stringify({
-        desaName,
-        count,
-        monthYear
-    }));
+    safeLocalStorageSet('dukopsLastSuccessfulReport', { desaName, count, monthYear });
 }
 
 function saveSubmittedDate(dateStr) {
     submittedDates.push(dateStr);
-    localStorage.setItem('dukopsSubmittedDates', JSON.stringify(submittedDates));
+    safeLocalStorageSet('dukopsSubmittedDates', submittedDates);
 }
 
 function loadLastSubmittedDates() {
-    const saved = localStorage.getItem('dukopsSubmittedDates');
-    submittedDates = saved ? JSON.parse(saved) : [];
+    const saved = safeLocalStorageGet('dukopsSubmittedDates', []);
+    submittedDates = Array.isArray(saved) ? saved : [];
 }
 
 function checkInputCompletion() {
@@ -1234,8 +1322,7 @@ function autoResizeNarasi(target) {
 function updateDesaHeaderImage(desaName) {
     const headerImage = document.getElementById('desaProfileImgHeader');
     if (!headerImage) return;
-    const defaultUrl = 'icons/favicon-96x96.png';
-    headerImage.src = defaultUrl;
+    headerImage.src = 'icons/favicon-96x96.png';
 }
 
 function speakTargetReached(wilayahName, count, monthYear) {
@@ -1296,19 +1383,6 @@ function showThankYouPopup(desaName, count) {
     setTimeout(() => { if (modal.parentNode) modal.remove(); }, 10000);
 }
 
-function showNotification(message, type) {
-    const toast = document.getElementById('win98Toast');
-    if (!toast) return;
-    toast.textContent = message;
-    toast.className = 'win98-toast show';
-    if (type === 'success') toast.className += ' success';
-    else if (type === 'error') toast.className += ' error';
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
-}
-
 // ================= TAB ABSEN (Google Apps Script) =================
 (function() {
     var SCRIPT_URL = APP_CONFIG.absenScriptUrl;
@@ -1339,7 +1413,7 @@ function showNotification(message, type) {
             if (!cached || !cached.years) tahunSelect.innerHTML = '<option>❌ Offline - no data</option>';
             return;
         }
-        fetch(SCRIPT_URL + '?action=getYears').then(function(r) {
+        fetch(SCRIPT_URL + '?action=getYears', { signal: AbortSignal.timeout(15000) }).then(function(r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
             return r.json();
         }).then(function(y) {
@@ -1383,7 +1457,7 @@ function showNotification(message, type) {
             bulanSelect.disabled = false;
             return;
         }
-        fetch(SCRIPT_URL + '?action=getMonths&tahun=' + encodeURIComponent(t)).then(function(r) {
+        fetch(SCRIPT_URL + '?action=getMonths&tahun=' + encodeURIComponent(t), { signal: AbortSignal.timeout(15000) }).then(function(r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
             return r.json();
         }).then(function(m) {
@@ -1431,7 +1505,7 @@ function showNotification(message, type) {
             }
         }
         if (!isOnlineAbsen) { showErrorAbsen('Tidak ada koneksi'); return; }
-        fetch(SCRIPT_URL + '?action=getData&tahun=' + encodeURIComponent(t) + '&bulan=' + encodeURIComponent(b))
+        fetch(SCRIPT_URL + '?action=getData&tahun=' + encodeURIComponent(t) + '&bulan=' + encodeURIComponent(b), { signal: AbortSignal.timeout(15000) })
             .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
             .then(function(d) {
                 currentDataAbsen = d;
