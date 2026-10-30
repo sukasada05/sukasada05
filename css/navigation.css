@@ -132,14 +132,6 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .nav-btn-hanpangan {
-        background: #2d6a2d;
-    }
-
-    .nav-btn-dukops:hover {
-        background: #c87010;
-    }
-
     .nav-btn-hanpangan:hover {
         background: #0f6b2d;
     }
@@ -155,7 +147,6 @@
     .nav-btn.nav-btn-exit:hover {
         background: #d32f2f;
     }
-
 }
 
 /* ================================================================
@@ -164,6 +155,21 @@
 .nav-btn-dukops.active {
     background: #173d25 !important;
     color: #d9f2dc !important;
+}
+
+.nav-btn-hanpangan.active {
+    background: #1b5e20 !important;
+    color: #eafaf0 !important;
+}
+
+.nav-btn-canvaspro.active {
+    background: #204f26 !important;
+    color: #edfbe8 !important;
+}
+
+.nav-btn-absen.active {
+    background: #0d4d8b !important;
+    color: #edf7ff !important;
 }
 
 /* ================================================================
@@ -182,7 +188,7 @@
         gap: 8px;
         flex-wrap: nowrap;
     }
-    
+
     .nav-btn {
         padding: 10px 16px;
         font-size: 13px;
@@ -193,7 +199,7 @@
         gap: 6px;
         white-space: nowrap;
     }
-    
+
     .nav-btn i {
         font-size: 14px;
     }
@@ -207,10 +213,10 @@
         gap: 6px;
         flex-wrap: nowrap;
     }
-    
+
     .nav-btn {
         padding: 8px 12px;
-        font-size: 11px;           /* ✅ DIPERBAIKI */
+        font-size: 11px;
         border-radius: 20px;
         min-height: 36px;
         min-width: 0;
@@ -218,11 +224,11 @@
         gap: 4px;
         white-space: nowrap;
     }
-    
+
     .nav-btn i {
-        font-size: 12px;           /* ✅ DIPERKECIL */
+        font-size: 12px;
     }
-    
+
     .nav-btn.active {
         box-shadow: none;
     }
@@ -236,7 +242,7 @@
         gap: 4px;
         flex-wrap: nowrap;
     }
-    
+
     .nav-btn {
         padding: 6px 8px;
         font-size: 10px;
@@ -247,7 +253,7 @@
         gap: 3px;
         white-space: nowrap;
     }
-    
+
     .nav-btn i {
         font-size: 10px;
     }
@@ -260,7 +266,7 @@
     .nav-btn {
         transition: none !important;
     }
-    
+
     .nav-btn:active {
         transform: none !important;
     }
@@ -285,7 +291,7 @@
     .nav-btn-dukops {
         background: #a85f00;
     }
-    
+
     .nav-btn-hanpangan {
         background: #0c5523;
     }
@@ -293,7 +299,7 @@
     .nav-btn-absen {
         background: #004d99;
     }
-    
+
     .nav-btn-canvaspro {
         background: #123b1b;
     }
@@ -319,7 +325,7 @@
     .nav-btn-dukops.active {
         background: #f7971e;
     }
-    
+
     .nav-btn-hanpangan.active {
         background: #1db954;
     }
@@ -327,48 +333,10 @@
     .nav-btn-canvaspro.active {
         background: #2d6a2d;
     }
-    
+
     .nav-btn-absen.active {
         background: #4facfe;
     }
-}
-
-/* Android/touch devices keep the same tab background when switching tabs. */
-@media (hover: none) and (pointer: coarse) {
-    .nav-btn,
-    .nav-btn:hover,
-    .nav-btn:active,
-    .nav-btn.active,
-    .nav-btn-dukops,
-    .nav-btn-dukops.active,
-    .nav-btn-absen,
-    .nav-btn-absen.active,
-    .nav-btn-hanpangan,
-    .nav-btn-hanpangan.active,
-    .nav-btn-canvaspro,
-    .nav-btn-canvaspro.active {
-        background: #1a4a1a !important;
-        box-shadow: none !important;
-    }
-}
-
-/* Warna seragam untuk semua tab */
-.nav-buttons .nav-btn {
-    background: #2d6a2d !important;
-    color: #ffffff !important;
-    box-shadow: none !important;
-}
-
-.nav-buttons .nav-btn:hover,
-.nav-buttons .nav-btn:focus-visible {
-    background: #4caf50 !important;
-    color: #ffffff !important;
-}
-
-.nav-buttons .nav-btn.active,
-.nav-buttons .nav-btn:active {
-    background: #5b1018 !important;
-    color: #ffffff !important;
 }
 
 /* ===== End of navigation.css ===== */
