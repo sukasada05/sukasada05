@@ -142,23 +142,21 @@ function showApp() {
 }
 
 window.exitApp = function() {
-    window.close();
-    setTimeout(() => {
-        if (!document.hidden) {
-            const splash = document.getElementById('splashScreen');
-            const app = document.getElementById('appContainer');
-            const startupDesa = document.getElementById('startupDesa');
+    resetForm();
+    currentApp = null;
 
-            resetForm();
-            currentApp = null;
-            if (startupDesa) startupDesa.value = '';
-            if (app) {
-                app.style.display = 'none';
-                app.style.opacity = '0';
-            }
-            if (splash) splash.style.display = 'flex';
-        }
-    }, 100);
+    const splash = document.getElementById('splashScreen');
+    const app = document.getElementById('appContainer');
+    const startupDesa = document.getElementById('startupDesa');
+    if (startupDesa) startupDesa.value = '';
+
+    if (app) {
+        app.style.display = 'none';
+        app.style.opacity = '0';
+        app.classList.add('startup-dashboard');
+    }
+
+    if (splash) splash.style.display = 'flex';
 };
 
 // ================= NAVIGASI TAB =================
@@ -465,6 +463,12 @@ async function initializeApp() {
     }
 }
 
+function buildCoordinateJsonPath(desaName) {
+    const cleanName = String(desaName || '').trim();
+    if (!cleanName) return 'data/coordinates/.json';
+    return `data/coordinates/${encodeURIComponent(cleanName)}.json`;
+}
+
 async function loadDesaList() {
     const select = document.getElementById('selectDesa');
     const startupSelect = document.getElementById('startupDesa');
@@ -484,7 +488,7 @@ async function loadDesaList() {
         wilayahList.forEach(wilayah => {
             const desaName = wilayah.name;
             const option = document.createElement('option');
-            const jsonPath = `data/coordinates/${desaName}.json`;
+            const jsonPath = buildCoordinateJsonPath(desaName);
             option.value = jsonPath;
             option.textContent = `${wilayah.type} ${desaName}`;
             option.setAttribute('data-raw-name', `${wilayah.type} ${desaName}`);
@@ -561,6 +565,12 @@ function ensureDesaListLoaded(maxAttempts = 6, delayMs = 500) {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => ensureDesaListLoaded()); else ensureDesaListLoaded();
 
 setTimeout(() => { try { if (typeof loadDesaList === 'function') loadDesaList().catch(()=>{}); } catch (e) {} }, 120);
+
+function parseLocalDateTime(value) {
+    if (!value) return null;
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
 
 function normalizeDesaName(desaName) {
     if (!desaName) return { original: "", normalized: "", forTelegram: "", cleanName: "" };
@@ -740,9 +750,17 @@ function updateDatePreview() {
     const tglInput = tglEl ? tglEl.value : '';
 
     if (tglInput) {
-        let date = new Date(tglInput);
-        date.setSeconds(new Date().getSeconds());
-        tanggalWaktu = date.toISOString();
+        const date = parseLocalDateTime(tglInput);
+        if (!date) {
+            tanggalWaktu = "";
+            if (display) display.textContent = 'INPUT TANGGAL';
+            if (label) label.textContent = 'Pilih tanggal & waktu';
+            updatePreview();
+            checkInputCompletion();
+            return;
+        }
+
+        tanggalWaktu = tglInput;
         const displayText = formatNarrativeDateTime(date);
         if (label) label.textContent = displayText;
         if (display) display.textContent = displayText;
@@ -752,8 +770,8 @@ function updateDatePreview() {
         if (!tglEl) {
             if (tanggalWaktu) {
                 try {
-                    const date = new Date(tanggalWaktu);
-                    const displayText = formatNarrativeDateTime(date);
+                    const date = parseLocalDateTime(tanggalWaktu);
+                    const displayText = date ? formatNarrativeDateTime(date) : 'Pilih tanggal & waktu';
                     if (label) label.textContent = displayText;
                     if (display) display.textContent = displayText;
                 } catch (e) {}
@@ -925,7 +943,7 @@ function updatePreview() {
 
         // Teks tanggal
         if (tanggalWaktu) {
-            const date = new Date(tanggalWaktu);
+            const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
             let dateText = date.toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" }) +
                 ", " + date.toLocaleTimeString("id-ID", {
                     hour: "2-digit",
@@ -968,10 +986,10 @@ async function processSubmission() {
         const canvas = document.getElementById("canvas");
         const imgData = canvas.toDataURL("image/png");
         const narasi = document.getElementById("narasi").value;
-        const date = new Date(tanggalWaktu);
+        const date = parseLocalDateTime(tanggalWaktu) || new Date(tanggalWaktu);
 
         const day = String(date.getDate()).padStart(2, '0');
-        const monthNum = String(date.getMonth() + 1);
+        const monthNum = String(date.getMonth() + 1).padStart(2, '0');
         const monthName = date.toLocaleDateString('id-ID', { month: 'long' });
         const monthYear = date.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
         const year = date.getFullYear();
@@ -1068,7 +1086,7 @@ function validateSubmission() {
     const date = new Date(tanggalWaktu);
     const day = String(date.getDate()).padStart(2, '0');
     const monthName = date.toLocaleDateString('id-ID', { month: 'long' });
-    const monthNum = String(date.getMonth() + 1);
+    const monthNum = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
     let confirmMsg = `Anda yakin ingin mengirim laporan untuk ${desaInfo.cleanName}?\n\n`;
