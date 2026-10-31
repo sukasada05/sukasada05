@@ -19,9 +19,8 @@
             <p id="thankyou-message">Laporan kegiatan Anda telah berhasil dikirim.</p>
             <div class="highlight" id="thankyou-count">Data sudah tersimpan dengan aman.</div>
             <p class="sub">DUKOPS BABINSA SUKASADA<br>KODIM 1609/BULELENG</p>
-            <a class="thankyou-button" href="index.html">
-                <i class="fas fa-arrow-left" aria-hidden="true"></i> Kembali ke halaman utama
-            </a>
+            <button class="thankyou-button" type="button" id="close-thankyou">TUTUP</button>
+            <p class="sub" id="close-fallback" hidden>Tab tidak dapat ditutup otomatis. Silakan tutup tab ini secara manual.</p>
         </section>
     </main>
     <script src="js/indonesian-voice.js"></script>
@@ -136,6 +135,15 @@
                 mulaiBicara('Terima kasih. Laporan Anda telah berhasil dikirim. Tetap semangat!');
             }
         })();
+
+        document.getElementById('close-thankyou').addEventListener('click', function () {
+            window.close();
+            setTimeout(function () {
+                if (!window.closed) {
+                    document.getElementById('close-fallback').hidden = false;
+                }
+            }, 100);
+        });
     </script>
 </body>
 </html>
