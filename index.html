@@ -339,14 +339,19 @@
 
         <!-- ===== NAVIGASI ===== -->
         <div class="nav-buttons">
-            <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
-            <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
-            <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
-            <!-- TAB BARU: CanvasPRO dengan iframe -->
-            <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
-            <button class="nav-btn nav-btn-exit" id="appExitButton" type="button" onclick="exitApp()">
-                <i class="fas fa-right-from-bracket" aria-hidden="true"></i> KELUAR
-            </button>
+            <div class="nav-tab-buttons">
+                <button class="nav-btn nav-btn-dukops active" id="btnDukops" onclick="showDukops()">DUKOPS</button>
+                <button class="nav-btn nav-btn-hanpangan" id="btnHanpangan" onclick="showHanpangan()">PIKET</button>
+                <!-- TAB BARU: CanvasPRO dengan iframe -->
+                <button class="nav-btn nav-btn-canvaspro" id="btnCanvaspro" onclick="showCanvaspro()">CanvasPRO</button>
+                <button class="nav-btn nav-btn-absen" id="btnAbsen" onclick="showAbsenTab()">ABSEN</button>
+            </div>
+            <div class="nav-action-buttons">
+                <a class="nav-btn nav-btn-patroli" href="https://little-flower-2507.sukasada1609-05.workers.dev/" target="_blank" rel="noopener noreferrer">PATROLI</a>
+                <button class="nav-btn nav-btn-exit" id="appExitButton" type="button" onclick="exitApp()">
+                    <i class="fas fa-right-from-bracket" aria-hidden="true"></i> KELUAR
+                </button>
+            </div>
         </div>
 
         <!-- ===== CONTENT DUKOPS ===== -->

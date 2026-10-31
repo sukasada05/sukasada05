@@ -96,6 +96,10 @@
     font-family: var(--sys-font);
 }
 
+.nav-btn-patroli {
+    text-decoration: none;
+}
+
 /* ABSEN - Biru */
 .nav-btn-absen {
     background: #0066cc;

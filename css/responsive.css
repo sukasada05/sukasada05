@@ -562,10 +562,38 @@
     overflow: visible !important;
 }
 
-.nav-buttons > .nav-btn.nav-btn-exit {
-    flex: 0 0 100% !important;
-    width: 100% !important;
+.nav-tab-buttons {
+    display: grid;
+    flex: 0 0 100%;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(3px, 1vw, 8px);
+    width: 100%;
+}
+
+.nav-tab-buttons > .nav-btn,
+.nav-action-buttons > .nav-btn {
+    width: 100%;
+    min-width: 0 !important;
+    min-height: clamp(34px, 5vw, 46px) !important;
+    padding: 8px clamp(2px, 1.2vw, 14px) !important;
+    font-size: clamp(8px, calc(2.7vw + 1.5px), 14px) !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
     margin-top: 0 !important;
+}
+
+.nav-tab-buttons > .nav-btn {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.nav-action-buttons {
+    display: grid;
+    flex: 0 0 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(4px, 1vw, 8px);
+    width: 100%;
 }
 
 /* ===== End of responsive.css ===== */
