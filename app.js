@@ -1201,7 +1201,7 @@ async function processSubmission() {
                 clearInputsAfterSuccessfulSend();
             }
         } else {
-            showNotification(`⚠ Laporan hanya didownload, gagal simpan ke Drive`, "warning");
+            showNotification(`⚠ Key aktivasi kadaluwarsa. gagal simpan ke Drive`, "warning");
             saveSubmittedDate(tanggalWaktu);
         }
 
